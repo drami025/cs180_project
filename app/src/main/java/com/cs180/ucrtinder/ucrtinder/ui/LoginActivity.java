@@ -88,9 +88,9 @@ public class LoginActivity extends FragmentActivity {
                         Log.e("RESPONSE", jsonObject.toString());
 
 
-                        //if(isNewUser) {
+                        if(isNewUser) {
                             getUserDetailsFromFB(jsonObject);
-                        //}
+                        }
 
                         mActivity.runOnUiThread(new Runnable() {
                             @Override
