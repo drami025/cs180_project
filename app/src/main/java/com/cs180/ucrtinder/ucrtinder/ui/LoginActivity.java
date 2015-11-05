@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -45,8 +46,7 @@ import java.util.List;
 
 public class LoginActivity extends FragmentActivity {
 
-    private EditText mUser;
-    private EditText mPass;
+    private Bitmap mProfileImage;
     private LoginActivity mActivity;
     private Profile mProfile;
 
@@ -55,33 +55,27 @@ public class LoginActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Button signInButton = (Button) findViewById(R.id.signInButton);
-        mUser = (EditText) findViewById(R.id.emailEditText);
-        mPass = (EditText) findViewById(R.id.passwordEditText);
         mActivity = this;
 
         mProfile = Profile.getCurrentProfile();
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<String> mPermissions = Arrays.asList("user_photos", "public_profile", "email");
+        //List<String> mPermissions = Arrays.asList("user_birthday, email, user_about_me, user_photos , public_profile, email");
+        List<String> mPermissions = Arrays.asList("user_friends", "user_photos", "user_birthday", "email", "user_about_me", "user_photos" , "public_profile", "email");
 
-                ParseFacebookUtils.logInWithReadPermissionsInBackground(mActivity, mPermissions, new LogInCallback() {
-                    @Override
-                    public void done(ParseUser parseUser, ParseException e) {
-                        if(parseUser == null){
-                            Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-                        }
-                        else if(parseUser.isNew()){
-                            Log.d("MyApp", "User signed up and logged in through Facebook!");
-                            loginSuccessful(true);
-                        }
-                        else{
-                            Log.d("MyApp", "User logged in through Facebook!");
-                            loginSuccessful(false);
-                        }
-                    }
-                });
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(mActivity, mPermissions, new LogInCallback() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if(parseUser == null){
+                    Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                }
+                else if(parseUser.isNew()){
+                    Log.d("MyApp", "User signed up and logged in through Facebook!");
+                    loginSuccessful(true);
+                }
+                else{
+                    Log.d("MyApp", "User logged in through Facebook!");
+                    loginSuccessful(false);
+                }
             }
         });
     }
@@ -94,7 +88,12 @@ public class LoginActivity extends FragmentActivity {
                     @Override
                     public void onCompleted(final JSONObject jsonObject, GraphResponse graphResponse) {
 
-                        getUserDetailsFromFB(jsonObject);
+                        Log.e("RESPONSE", jsonObject.toString());
+
+
+                        //if(isNewUser) {
+                            getUserDetailsFromFB(jsonObject);
+                        //}
 
                         mActivity.runOnUiThread(new Runnable() {
                             @Override
@@ -109,10 +108,9 @@ public class LoginActivity extends FragmentActivity {
         );
 
         Bundle params = new Bundle();
-        params.putString("fields", "name,picture,birthday,id,gender,link");
+        params.putString("fields", "name,picture,birthday,id,gender,link,photos");
         request.setParameters(params);
         request.executeAsync();
-
     }
 
     public void getUserDetailsFromFB(JSONObject json){
@@ -122,17 +120,34 @@ public class LoginActivity extends FragmentActivity {
 
         try{
             String gender = json.getString("gender");
-            String name = json.getString("name");
+            String name = mProfile.getFirstName();
             String id = json.getString("id");
+            String birthday = json.getString("birthday");
 
             String picture_url = json.getJSONObject("picture").getJSONObject("data").getString("url");
+            String main_picture = mProfile.getProfilePictureUri(300, 300).toString();
+
+            boolean is_looking_for_men = false;
 
             user.put("gender", gender);
-            user.put("name", name);
-            user.put("id", id);
-            user.put("profile_picture_url", picture_url);
+            user.put(ParseConstants.KEY_NAME, name);
+            user.put("objectId", id);
+            user.put("profile_picture_url", main_picture);
+            user.put("birthday", birthday);
 
-            Log.e("FIELDS", gender + " " + name + " " + id + " " + picture_url);
+            if(gender.equals("female")){
+                is_looking_for_men = true;
+            }
+
+            user.put(ParseConstants.KEY_MEN, is_looking_for_men);
+            user.put(ParseConstants.KEY_WOMEN, !is_looking_for_men);
+
+            user.put(ParseConstants.KEY_SMALLESTAGE, 18);
+            user.put(ParseConstants.KEY_LARGESTAGE, 30);
+
+            user.put(ParseConstants.KEY_DISTANCE, 20);
+
+            Log.e("FIELDS", gender + " " + name + " " + id + " " + picture_url + " " + birthday);
 
             user.saveInBackground();
         }
@@ -170,45 +185,5 @@ public class LoginActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-    }
-
-    class ProfilePhotoAsync extends AsyncTask<String, String, String> {
-        Profile profile;
-        public Bitmap bitmap;
-
-        public ProfilePhotoAsync(Profile profile) {
-            this.profile = profile;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            // Fetching data from URI and storing in bitmap
-            bitmap = DownloadImageBitmap(profile.getProfilePictureUri(200, 200).toString());
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            //mProfileImage.setImageBitmap(bitmap);
-        }
-    }
-
-    public static Bitmap DownloadImageBitmap(String url) {
-        Bitmap bm = null;
-        try {
-            URL aURL = new URL(url);
-            URLConnection conn = aURL.openConnection();
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            bm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            is.close();
-        } catch (IOException e) {
-            Log.e("IMAGE", "Error getting bitmap", e);
-        }
-        return bm;
     }
 }
