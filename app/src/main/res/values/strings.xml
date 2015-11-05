@@ -41,6 +41,7 @@
         <item>Settings</item>
         <item>FAQ</item>
         <item>Share</item>
+        <item>Logout</item>
     </string-array>
 
     <string-array name="menu_descriptions">
@@ -51,6 +52,7 @@
         <item>Notifications, account, and more</item>
         <item>Help, contact info, and more</item>
         <item>Share will all who\'s there!</item>
+        <item>See you around!</item>
     </string-array>
 
     <string name="selected_item_color">#9FE15258</string>

@@ -21,6 +21,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -105,7 +106,7 @@ public class LoginActivity extends FragmentActivity {
         );
 
         Bundle params = new Bundle();
-        params.putString("fields", "name,picture,birthday,id,gender,link,photos");
+        params.putString("fields", "name,picture,birthday,id,gender,link,photos,albums");
         request.setParameters(params);
         request.executeAsync();
     }
@@ -122,13 +123,9 @@ public class LoginActivity extends FragmentActivity {
             String id = json.getString("id");
             String birthday = json.getString("birthday");
 
-            String picture_url = json.getJSONObject("picture").getJSONObject("data").getString("url");
-            String main_picture = mProfile.getProfilePictureUri(300, 300).toString();
-
             user.put("gender", gender);
             user.put(ParseConstants.KEY_NAME, name);
             user.put("facebookId", id);
-            user.put("profile_picture_url", main_picture);
             user.put("birthday", birthday);
 
             boolean is_looking_for_men = (gender.equals("female"));
@@ -141,15 +138,25 @@ public class LoginActivity extends FragmentActivity {
 
             user.put(ParseConstants.KEY_DISTANCE, 20);
 
-            Log.e("FIELDS", gender + " " + name + " " + id + " " + picture_url + " " + birthday);
+            Log.e("FIELDS", gender + " " + name + " " + id + " " + birthday);
 
             user.saveInBackground();
 
-            String photoIdOne = json.getJSONObject("photos").getJSONArray("data").getJSONObject(0).getString("id");
-            String photoIdTwo = json.getJSONObject("photos").getJSONArray("data").getJSONObject(1).getString("id");
+            JSONArray profileArray = json.getJSONObject("albums").getJSONArray("data");
 
-            getPhoto(photoIdOne, "secondary_photo");
-            getPhoto(photoIdTwo, "tertiary_photo");
+            String profileAlbumID = "";
+
+            for(int i = 0; i < profileArray.length(); i++) {
+                JSONObject obj = profileArray.getJSONObject(i);
+
+                if (obj.getString("name").equals("Profile Pictures")) {
+                    profileAlbumID = obj.getString("id");
+                    break;
+                }
+            }
+
+            Log.e("ALBUM ID" , profileAlbumID);
+            getPhotosFromAlbum(profileAlbumID);
 
         }
         catch(JSONException e){
@@ -157,6 +164,29 @@ public class LoginActivity extends FragmentActivity {
         }
 
 
+    }
+
+    public void getPhotosFromAlbum(String id){
+        new GraphRequest(AccessToken.getCurrentAccessToken(),
+                "/" + id + "/photos", null, HttpMethod.GET, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                Log.e("ALBUM RESPONSE", graphResponse.toString());
+
+                try {
+                    JSONObject jsonObject = graphResponse.getJSONObject();
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                    for(int i = 0; i < jsonArray.length() && i < 3; i++){
+                        String photoId = jsonArray.getJSONObject(i).getString("id");
+                        getPhoto(photoId, "photo" + i);
+                    }
+                }
+                catch(JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }).executeAsync();
     }
 
     public void getPhoto(String photoId, final String key){

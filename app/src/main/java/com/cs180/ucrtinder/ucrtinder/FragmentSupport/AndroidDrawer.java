@@ -20,6 +20,7 @@ import com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity;
+import com.parse.ParseUser;
 
 /**
  * Created by daniel on 10/23/15.
@@ -146,7 +147,8 @@ public class AndroidDrawer {
             case 4:
                 intent = new Intent(mActivity, SettingsActivity.class);
                 break;
-            case 6:
+            case 7:
+                ParseUser.logOut();
                 intent = new Intent(mActivity, LoginActivity.class);
             default:
                 break;
