@@ -62,7 +62,7 @@ public class CardProfileActivity extends AppCompatActivity {
         */
         TextView text;
         text = (TextView) this.findViewById(R.id.name_textview);
-        text.setText(currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getString(ParseConstants.KEY_AGE));
+        text.setText(currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE));
         text = (TextView) this.findViewById(R.id.Aboutyou_textview);
         text.setText(currentUser.getString(ParseConstants.KEY_ABOUTYOU));
         text = (TextView) this.findViewById(R.id.interests_textview);
