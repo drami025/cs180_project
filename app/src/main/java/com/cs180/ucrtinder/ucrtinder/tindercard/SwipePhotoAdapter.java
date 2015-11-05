@@ -1,14 +1,18 @@
 package com.cs180.ucrtinder.ucrtinder.tindercard;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.cs180.ucrtinder.ucrtinder.R;
+
+import java.net.URL;
 
 /**
  * Created by bananapanda on 10/22/15.
@@ -34,6 +38,7 @@ public class SwipePhotoAdapter extends PagerAdapter {
                 resId = R.layout.profile_photo3;
                 break;
         }
+        
         View view = inflater.inflate(resId, null);
         ((ViewPager) collection).addView(view, 0);
         return view;
@@ -51,5 +56,13 @@ public class SwipePhotoAdapter extends PagerAdapter {
     @Override
     public Parcelable saveState() {
         return null;
+    }
+
+    Drawable drawable_from_url(String url, String src_name) throws
+            java.net.MalformedURLException, java.io.IOException
+    {
+
+        return Drawable.createFromStream(((java.io.InputStream)
+                new java.net.URL(url).getContent()), src_name);
     }
 }
