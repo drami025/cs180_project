@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 //        }
 
         // Builds Fling card container
-        /*flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
         candidates = getCandidates();
         al = new ArrayList<>();
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                     myAppAdapter.notifyDataSetChanged();
                 }
             }
-        });*/
+        });
     }
 
     @Override
