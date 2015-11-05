@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2015 Layer. All rights reserved.
+    
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+        
+          http://www.apache.org/licenses/LICENSE-2.0
+          
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.    
+-->
+<resources>
+
+    <color name="atlas_delimeter_gray">#18000000</color>
+    <color name="atlas_shape_avatar_gray">#14000000</color>
+
+    <color name="atlas_bubble_blue">#21AAE1</color>
+
+    <color name="atlas_text_blue">#21AAE1</color>
+    <color name="atlas_text_blue_bright">#FF2196F3</color>
+    <color name="atlas_text_gray">#86000000</color>
+    <color name="atlas_text_black">#FF000000</color>
+    <color name="atlas_text_black87">#DD000000</color>
+    <color name="atlas_text_white">#FFFFFFFF</color>
+
+    <color name="atlas_background_white">#FFFFFFFF</color>
+    <color name="atlas_background_blue">#21AAE1</color>
+    <color name="atlas_background_blue_bright">#2196F3</color>
+    <color name="atlas_background_blue_dark">#198BB8</color>
+    <color name="atlas_background_gray">#EBEBEB</color>
+    <color name="atlas_background_transparent">#00FFFFFF</color>
+
+    <color name="atlas_qr_mask">#80000000</color>
+    <color name="atlas_qr_laser">#FF2196F3</color>
+    <color name="atlas_qr_result">#FFFFFFFF</color>
+
+    <!-- proper way to declare colors  -->
+    <color name="atlas_view_participant_picker_text_background">@color/atlas_background_white
+    </color>
+    <color name="atlas_view_participant_picker_list_background">@color/atlas_background_white
+    </color>
+
+    <!-- menu item background -->
+    <color name="atlas_menu_item_background_gray">#EDEDED</color>
+
+</resources>

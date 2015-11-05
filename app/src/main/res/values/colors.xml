@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="color0_background">#F7FFF2</color>
+    <color name="color1_light">#D7FFB7</color>
+    <color name="color2_views">#E9FFD8</color>
+    <color name="color3_controls">#B7FF84</color>
+    <color name="color4_dark">#EAEAEA</color>
+
+    <color name="messenger_background_actionbar_blue">#FF2588B7</color>
+
+</resources>

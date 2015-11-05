@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    
+
+    <color name="primaryColor">#00000000</color>
+    
+    <color name="primaryColorDark">#4b5c93</color>
+    
+    <color name="colorAccent">#00000000</color>
+    
+    <color name="colorTextPrimary">#fff</color>
+    
+    <color name="colorTextSecondary">#fff</color>
+    
+    <color name="login_box">#ec7676</color>
+    
+    <color name="button_bg">#dcb6b6</color>
+
+    
+    <color name="indicator_1">#fff</color>
+    
+    <color name="indicator_2">#fff</color>
+    
+    <color name="indicator_3">#fff</color>
+    
+    <color name="indicator_4">#fff</color>
+
+
+
+</resources>

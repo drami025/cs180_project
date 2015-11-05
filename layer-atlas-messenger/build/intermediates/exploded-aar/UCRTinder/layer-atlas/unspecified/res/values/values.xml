@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Aaron/Documents/College%20Quarters/Fall%202015/CS180/Project/UCRTinder/layer-atlas/src/main/res/values/atlas-strings.xml -->
+    <eat-comment/>
+    <string-array name="atlas_typing_indicator">
+        <item>No one is typing</item>
+        <item>%s is typing…</item>
+        <item>Two people are typing…</item>
+        <item>Three people are typing…</item>
+        <item>Many people are typing…</item>
+    </string-array>
+    <!-- From: file:/C:/Users/Aaron/Documents/College%20Quarters/Fall%202015/CS180/Project/UCRTinder/layer-atlas/src/main/res/values/atlas-styles.xml -->
+    <eat-comment/>
+    <attr format="reference" name="AtlasConversationList"/>
+    <attr format="reference" name="AtlasMessageComposer"/>
+    <attr format="reference" name="AtlasMessageList"/>
+    <attr format="reference" name="AtlasParticipantPicker"/>
+    <attr format="reference" name="AtlasTypingIndicator"/>
+    <attr format="color|reference" name="avatarBackgroundColor"/>
+    <attr format="color|reference" name="avatarTextColor"/>
+    <attr format="color|reference" name="cellBackgroundColor"/>
+    <attr format="color|reference" name="cellSubtitleTextColor"/>
+    <attr name="cellSubtitleTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="cellSubtitleTextTypeface"/>
+    <attr format="color|reference" name="cellSubtitleUnreadTextColor"/>
+    <attr name="cellSubtitleUnreadTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="cellSubtitleUnreadTextTypeface"/>
+    <attr format="color|reference" name="cellTitleTextColor"/>
+    <attr name="cellTitleTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="cellTitleTextTypeface"/>
+    <attr format="color|reference" name="cellTitleUnreadTextColor"/>
+    <attr name="cellTitleUnreadTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="cellTitleUnreadTextTypeface"/>
+    <attr format="color|reference" name="cellUnreadBackgroundColor"/>
+    <attr format="color|reference" name="chipBackgroundColor"/>
+    <attr format="color|reference" name="chipTextColor"/>
+    <attr name="chipTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="chipTextTypeface"/>
+    <attr format="color|reference" name="composerTextColor"/>
+    <attr format="dimension|reference" name="composerTextSize"/>
+    <attr name="composerTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="composerTextTypeface"/>
+    <attr format="color|reference" name="dateTextColor"/>
+    <attr format="color|reference" name="indicatorTextColor"/>
+    <attr format="dimension|reference" name="indicatorTextSize"/>
+    <attr name="indicatorTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="indicatorTextTypeface"/>
+    <attr format="color|reference" name="inputTextColor"/>
+    <attr name="inputTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="inputTextTypeface"/>
+    <attr format="color|reference" name="listTextColor"/>
+    <attr name="listTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="listTextTypeface"/>
+    <attr format="color|reference" name="myBubbleColor"/>
+    <attr format="color|reference" name="myTextColor"/>
+    <attr format="dimension|reference" name="myTextSize"/>
+    <attr name="myTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="myTextTypeface"/>
+    <attr format="color|reference" name="theirBubbleColor"/>
+    <attr format="color|reference" name="theirTextColor"/>
+    <attr format="dimension|reference" name="theirTextSize"/>
+    <attr name="theirTextStyle">
+        <flag name="normal" value="0"/>
+        <flag name="bold" value="1"/>
+        <flag name="italic" value="2"/>
+    </attr>
+    <attr format="string|reference" name="theirTextTypeface"/>
+    <!-- From: file:/C:/Users/Aaron/Documents/College%20Quarters/Fall%202015/CS180/Project/UCRTinder/layer-atlas/src/main/res/values/atlas-colors.xml -->
+    <eat-comment/>
+    <color name="atlas_background_blue">#21AAE1</color>
+    <color name="atlas_background_blue_bright">#2196F3</color>
+    <color name="atlas_background_blue_dark">#198BB8</color>
+    <color name="atlas_background_gray">#EBEBEB</color>
+    <color name="atlas_background_transparent">#00FFFFFF</color>
+    <color name="atlas_background_white">#FFFFFFFF</color>
+    <color name="atlas_bubble_blue">#21AAE1</color>
+    <color name="atlas_delimeter_gray">#18000000</color>
+    <color name="atlas_menu_item_background_gray">#EDEDED</color>
+    <color name="atlas_qr_laser">#FF2196F3</color>
+    <color name="atlas_qr_mask">#80000000</color>
+    <color name="atlas_qr_result">#FFFFFFFF</color>
+    <color name="atlas_shape_avatar_gray">#14000000</color>
+    <color name="atlas_text_black">#FF000000</color>
+    <color name="atlas_text_black87">#DD000000</color>
+    <color name="atlas_text_blue">#21AAE1</color>
+    <color name="atlas_text_blue_bright">#FF2196F3</color>
+    <color name="atlas_text_gray">#86000000</color>
+    <color name="atlas_text_white">#FFFFFFFF</color>
+    <color name="atlas_view_participant_picker_list_background">@color/atlas_background_white
+    </color>
+    <color name="atlas_view_participant_picker_text_background">@color/atlas_background_white
+    </color>
+    <declare-styleable name="AtlasConversationList"><attr name="cellTitleTextColor"/><attr name="cellTitleTextTypeface"/><attr name="cellTitleTextStyle"/><attr name="cellTitleUnreadTextColor"/><attr name="cellTitleUnreadTextTypeface"/><attr name="cellTitleUnreadTextStyle"/><attr name="cellSubtitleTextColor"/><attr name="cellSubtitleTextTypeface"/><attr name="cellSubtitleTextStyle"/><attr name="cellSubtitleUnreadTextColor"/><attr name="cellSubtitleUnreadTextTypeface"/><attr name="cellSubtitleUnreadTextStyle"/><attr name="cellBackgroundColor"/><attr name="cellUnreadBackgroundColor"/><attr name="dateTextColor"/><attr name="avatarTextColor"/><attr name="avatarBackgroundColor"/></declare-styleable>
+    <declare-styleable name="AtlasMessageComposer"><attr name="composerTextColor"/><attr name="composerTextSize"/><attr name="composerTextTypeface"/><attr name="composerTextStyle"/></declare-styleable>
+    <declare-styleable name="AtlasMessageList"><attr name="myBubbleColor"/><attr name="myTextColor"/><attr name="myTextSize"/><attr name="myTextTypeface"/><attr name="myTextStyle"/><attr name="theirBubbleColor"/><attr name="theirTextColor"/><attr name="theirTextSize"/><attr name="theirTextTypeface"/><attr name="theirTextStyle"/><attr name="dateTextColor"/><attr name="avatarTextColor"/><attr name="avatarBackgroundColor"/></declare-styleable>
+    <declare-styleable name="AtlasParticipantPicker"><attr name="inputTextColor"/><attr name="inputTextTypeface"/><attr name="inputTextStyle"/><attr name="listTextColor"/><attr name="listTextTypeface"/><attr name="listTextStyle"/><attr name="avatarBackgroundColor"/><attr name="avatarTextColor"/><attr name="chipBackgroundColor"/><attr name="chipTextColor"/><attr name="chipTextTypeface"/><attr name="chipTextStyle"/></declare-styleable>
+    <declare-styleable name="AtlasTypingIndicator"><attr name="indicatorTextColor"/><attr name="indicatorTextSize"/><attr name="indicatorTextTypeface"/><attr name="indicatorTextStyle"/></declare-styleable>
+    <!-- From: file:/C:/Users/Aaron/Documents/College%20Quarters/Fall%202015/CS180/Project/UCRTinder/layer-atlas/src/main/res/values/atlas-dimens.xml -->
+    <eat-comment/>
+    <dimen name="atlas_text_size_general">16sp</dimen>
+    <dimen name="atlas_text_size_smaller">14sp</dimen>
+    <dimen name="atlas_text_size_smaller2">12sp</dimen>
+    <dimen name="atlas_text_size_tiny">8sp</dimen>
+    <dimen name="atlas_text_size_title">20sp</dimen>
+    <!-- From: file:/C:/Users/Aaron/Documents/College%20Quarters/Fall%202015/CS180/Project/UCRTinder/layer-atlas/src/main/res/values/atlas-styles.xml -->
+    <eat-comment/>
+    <style name="AtlasConversationList">
+        <item name="cellTitleTextColor">@color/atlas_text_black</item>
+        <item name="cellTitleTextTypeface">normal</item>
+        <item name="cellTitleTextStyle">normal</item>
+        <item name="cellTitleUnreadTextColor">@color/atlas_text_black</item>
+        <item name="cellTitleUnreadTextTypeface">normal</item>
+        <item name="cellTitleUnreadTextStyle">bold</item>
+        <item name="cellSubtitleTextColor">@color/atlas_text_black</item>
+        <item name="cellSubtitleTextTypeface">normal</item>
+        <item name="cellSubtitleTextStyle">normal</item>
+        <item name="cellSubtitleUnreadTextColor">@color/atlas_text_black</item>
+        <item name="cellSubtitleUnreadTextTypeface">normal</item>
+        <item name="cellSubtitleUnreadTextStyle">bold</item>
+        <item name="cellBackgroundColor">@android:color/transparent</item>
+        <item name="cellUnreadBackgroundColor">@android:color/transparent</item>
+        <item name="dateTextColor">@color/atlas_text_blue</item>
+        <item name="avatarTextColor">@color/atlas_text_black</item>
+        <item name="avatarBackgroundColor">@color/atlas_background_gray</item>
+    </style>
+    <style name="AtlasMessageComposer">
+        <item name="composerTextColor">@color/atlas_text_black</item>
+        <item name="composerTextSize">@dimen/atlas_text_size_general</item>
+        <item name="composerTextTypeface">normal</item>
+        <item name="composerTextStyle">normal</item>
+    </style>
+    <style name="AtlasMessageList">
+        <item name="myBubbleColor">@color/atlas_bubble_blue</item>
+        <item name="myTextColor">@color/atlas_text_white</item>
+        <item name="myTextSize">@dimen/atlas_text_size_general</item>
+        <item name="myTextTypeface">normal</item>
+        <item name="myTextStyle">normal</item>
+        <item name="theirBubbleColor">@color/atlas_background_gray</item>
+        <item name="theirTextColor">@color/atlas_text_black</item>
+        <item name="theirTextSize">@dimen/atlas_text_size_general</item>
+        <item name="theirTextTypeface">normal</item>
+        <item name="theirTextStyle">normal</item>
+        <item name="dateTextColor">@color/atlas_text_gray</item>
+        <item name="avatarTextColor">@color/atlas_text_black</item>
+        <item name="avatarBackgroundColor">@color/atlas_background_gray</item>
+    </style>
+    <style name="AtlasParticipantPicker">
+        <item name="inputTextColor">@color/atlas_text_black</item>
+        <item name="inputTextTypeface">normal</item>
+        <item name="inputTextStyle">normal</item>
+        <item name="listTextColor">@color/atlas_text_black</item>
+        <item name="listTextTypeface">normal</item>
+        <item name="listTextStyle">normal</item>
+        <item name="avatarBackgroundColor">@color/atlas_background_gray</item>
+        <item name="avatarTextColor">@color/atlas_text_black</item>
+        <item name="chipBackgroundColor">@color/atlas_background_gray</item>
+        <item name="chipTextColor">@color/atlas_text_black</item>
+        <item name="chipTextTypeface">normal</item>
+        <item name="chipTextStyle">normal</item>
+    </style>
+    <style name="AtlasTypingIndicator">
+        <item name="indicatorTextColor">@color/atlas_text_black</item>
+        <item name="indicatorTextSize">@dimen/atlas_text_size_general</item>
+        <item name="indicatorTextTypeface">normal</item>
+        <item name="indicatorTextStyle">normal</item>
+    </style>
+    <style name="Theme.Atlas.Light" parent="android:Theme">
+        <item name="AtlasConversationList">@style/AtlasConversationList</item>
+        <item name="AtlasMessageComposer">@style/AtlasMessageComposer</item>
+        <item name="AtlasMessageList">@style/AtlasMessageList</item>
+        <item name="AtlasParticipantPicker">@style/AtlasParticipantPicker</item>
+        <item name="AtlasTypingIndicator">@style/AtlasTypingIndicator</item>
+    </style>
+</resources>
