@@ -28,4 +28,8 @@
     <item 								android:drawable="@drawable/atlas_ctl_switch_off_enabled" />    
 
 </selector>
+<<<<<<< Updated upstream
 <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/drawable-xhdpi/atlas_ctl_switch.xml -->
+=======
+<!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/drawable-xhdpi/atlas_ctl_switch.xml -->
+>>>>>>> Stashed changes

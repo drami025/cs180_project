@@ -27,4 +27,8 @@
     <include layout="@layout/atlas_view_message_composer_menu_convert"/>
     <include layout="@layout/atlas_view_message_composer_menu_convert"/>
      -->
+<<<<<<< Updated upstream
 </LinearLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_message_composer_menu.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_message_composer_menu.xml -->
+=======
+</LinearLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_message_composer_menu.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_message_composer_menu.xml -->
+>>>>>>> Stashed changes

@@ -81,6 +81,9 @@
     <string name="atlas_screen_settings_title">Settings</string>
     <string name="atlas_screen_messages_title">New Message</string>
     <string name="atlas_screen_qr_prompt">Scan Layer Atlas QR Code</string>
+
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
 
 </resources>

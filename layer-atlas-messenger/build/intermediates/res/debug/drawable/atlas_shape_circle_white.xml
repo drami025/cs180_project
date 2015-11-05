@@ -21,4 +21,8 @@
 	<solid android:color="@color/atlas_background_white"/>
 	
 </shape>
+<<<<<<< Updated upstream
 <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/drawable/atlas_shape_circle_white.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/drawable/atlas_shape_circle_white.xml -->
+=======
+<!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/drawable/atlas_shape_circle_white.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/drawable/atlas_shape_circle_white.xml -->
+>>>>>>> Stashed changes

@@ -158,4 +158,8 @@
 	
 	</FrameLayout>
     
+<<<<<<< Updated upstream
 </LinearLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_conversations_list_convert.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_conversations_list_convert.xml -->
+=======
+</LinearLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_conversations_list_convert.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_conversations_list_convert.xml -->
+>>>>>>> Stashed changes

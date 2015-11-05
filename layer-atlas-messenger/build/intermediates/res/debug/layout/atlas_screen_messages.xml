@@ -69,4 +69,8 @@
     
     <include layout="@layout/atlas_actionbar_layout"/>
 
+<<<<<<< Updated upstream
 </FrameLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_messages.xml -->
+=======
+</FrameLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_messages.xml -->
+>>>>>>> Stashed changes

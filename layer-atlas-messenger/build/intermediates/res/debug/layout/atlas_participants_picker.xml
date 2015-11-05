@@ -110,4 +110,8 @@
 		android:divider="@color/atlas_view_participant_picker_list_background"
 		/>
     
+<<<<<<< Updated upstream
 </LinearLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_participants_picker.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_participants_picker.xml -->
+=======
+</LinearLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_participants_picker.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_participants_picker.xml -->
+>>>>>>> Stashed changes

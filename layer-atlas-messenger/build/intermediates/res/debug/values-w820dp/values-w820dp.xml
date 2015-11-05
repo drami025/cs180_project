@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< Updated upstream
     <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/values-w820dp/dimens.xml -->
+=======
+    <!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/values-w820dp/dimens.xml -->
+>>>>>>> Stashed changes
     <eat-comment/>
     <dimen name="atlas_messenger_activity_horizontal_margin">64dp</dimen>
 </resources>

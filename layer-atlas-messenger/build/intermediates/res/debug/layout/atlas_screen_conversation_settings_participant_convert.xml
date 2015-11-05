@@ -72,4 +72,8 @@
 
     </FrameLayout>
 
+<<<<<<< Updated upstream
 </LinearLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_conversation_settings_participant_convert.xml -->
+=======
+</LinearLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_conversation_settings_participant_convert.xml -->
+>>>>>>> Stashed changes

@@ -19,4 +19,8 @@
     <!--item android:state_checked="true" 	android:drawable="@drawable/atlas_ctl_btn_search_checked" / -->
     <item 								android:drawable="@drawable/atlas_ctl_background_light_enabled" />    
 </selector>
+<<<<<<< Updated upstream
 <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/drawable-xhdpi/atlas_ctl_background_light.xml -->
+=======
+<!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/drawable-xhdpi/atlas_ctl_background_light.xml -->
+>>>>>>> Stashed changes

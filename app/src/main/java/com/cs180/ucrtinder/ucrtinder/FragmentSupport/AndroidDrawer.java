@@ -14,6 +14,7 @@ import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MatchedMessageActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.R;
+import com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity;
 
 /**
  * Created by daniel on 10/23/15.
@@ -91,6 +92,9 @@ public class AndroidDrawer {
             case 2:
                 //intent = new Intent(mActivity, MatchedMessageActivity.class);
                 intent = new Intent(mActivity, ConversationActivity.class);
+                break;
+            case 4:
+                intent = new Intent(mActivity, SettingsActivity.class);
                 break;
             default:
                 break;

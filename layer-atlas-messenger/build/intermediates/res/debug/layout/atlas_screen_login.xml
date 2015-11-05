@@ -74,4 +74,8 @@
         android:background="@android:color/transparent"
         />
 
+<<<<<<< Updated upstream
 </LinearLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_login.xml -->
+=======
+</LinearLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_login.xml -->
+>>>>>>> Stashed changes
