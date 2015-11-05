@@ -31,10 +31,16 @@ import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.FlingCardListener;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipeFlingAdapterView;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 // Daniel removed the call to the login
@@ -43,10 +49,13 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
     public static MyAppAdapter myAppAdapter;
     public static ViewHolder viewHolder;
+    private ParseUser user;
+    private List<ParseUser> candidates;
     private ArrayList<Data> al;
     private SwipeFlingAdapterView flingContainer;
     private AndroidDrawer mAndroidDrawer;
     private Toolbar mToolbar;
+    int currentCandidate = 0;
 
     private Button likebtn;
     private Button dislikebtn;
@@ -63,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        user = ParseUser.getCurrentUser();
 
         // Creating an android drawer to slide in from the left side
         mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_main, R.id.left_drawer_main);
@@ -84,13 +94,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         // Builds Fling card container
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
+        candidates = getCandidates();
         al = new ArrayList<>();
-        al.add(new Data("http://i.ytimg.com/vi/PnxsTxV8y3g/maxresdefault.jpg", "Batman, 21"));
-        al.add(new Data("http://switchboard.nrdc.org/blogs/dlashof/mission_impossible_4-1.jpg", "Tom, 35"));
-        al.add(new Data("http://i.ytimg.com/vi/PnxsTxV8y3g/maxresdefault.jpg", "Batman, 21"));
-        al.add(new Data("http://switchboard.nrdc.org/blogs/dlashof/mission_impossible_4-1.jpg", "Batman, 21"));
-        al.add(new Data("http://i.ytimg.com/vi/PnxsTxV8y3g/maxresdefault.jpg", "Batman, 21"));
-
+        for (int i = 0; i < candidates.size(); ++i) {
+            al.add(new Data(candidates.get(i).getString("profilePictureUrl"), candidates.get(i).getString("name") +
+            ", " + candidates.get(i).getNumber("age")));
+        }
         myAppAdapter = new MyAppAdapter(al, MainActivity.this);
         flingContainer.setAdapter(myAppAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -103,10 +112,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             public void onLeftCardExit(Object dataObject) {
                 al.remove(0);
                 myAppAdapter.notifyDataSetChanged();
-                //Do something on the left!
-                //You also have access to the original object.
-                //If you want to use it just cast it (String) dataObject
-
+                List<ParseUser> dislikes = user.getList("dislikes");
+                dislikes.add(candidates.get(currentCandidate++));
+                user.put("dislikes", dislikes);
+                user.saveInBackground();
             }
 
             @Override
@@ -114,6 +123,20 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
                 al.remove(0);
                 myAppAdapter.notifyDataSetChanged();
+                List<ParseUser> likes = user.getList("likes");
+                likes.add(candidates.get(currentCandidate));
+                List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
+                if (targetlikes.contains(user)) {
+                    List<ParseUser> matches = user.getList("matches");
+                    List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
+                    matches.add(candidates.get(currentCandidate));
+                    targetMatches.add(user);
+                    user.put("matches", matches);
+                    candidates.get(currentCandidate).put("matches", targetMatches);
+                    user.saveInBackground();
+                    candidates.get(currentCandidate).saveInBackground();
+                }
+                ++currentCandidate;
             }
 
             @Override
@@ -246,5 +269,73 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
             return rowView;
         }
+    }
+
+    public List<ParseUser> getCandidates()  {
+        // local variables
+        String gender = user.getString("gender");
+        boolean men = user.getBoolean("men");
+        boolean women = user.getBoolean("women");
+        int age = (int)user.getNumber("age");
+        int minAge = (int)user.getNumber("minAge");
+        int maxAge = (int)user.getNumber("maxAge");
+        int maxDist = (int)user.getNumber("maxDist");
+        ParseGeoPoint location = user.getParseGeoPoint("location");
+
+        // set up query
+        ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
+        if (men && women) {}
+        else if (men) mainQuery.whereEqualTo("gender", "male");
+        else if (women) mainQuery.whereEqualTo("gender", "female");
+        mainQuery.whereNotEqualTo("objectId", user.getObjectId());
+        mainQuery.whereGreaterThanOrEqualTo("age", minAge);
+        mainQuery.whereLessThanOrEqualTo("age", maxAge);
+        mainQuery.whereWithinMiles("location", location, maxDist);
+
+        // further filter candidates
+        List<ParseUser> candidates;
+        try {
+            candidates = mainQuery.find();
+        } catch (Exception e) {
+            return null;
+        }
+        Iterator<ParseUser> it = candidates.iterator();
+        while (it.hasNext()) {
+            ParseUser candidate = it.next();
+            if (age < (int)candidate.getNumber("minAge") || age > (int)candidate.getNumber("maxAge") ||
+                    location.distanceInMilesTo(candidate.getParseGeoPoint("location")) > (int)candidate.getNumber("maxDist") ||
+                    (gender.equals("male") && !candidate.getBoolean("men")) ||
+                    (gender.equals("female") && !candidate.getBoolean("women"))) {
+                it.remove();
+            }
+        }
+
+        // sort candidates
+        Collections.sort(candidates, new Comparator<ParseUser>() {
+            public int compare(ParseUser l, ParseUser r) {
+                double lCount = 0, rCount = 0;
+                List<String> interests = ParseUser.getCurrentUser().getList("interests");
+                List<String> lInterests = l.getList("interests");
+                List<String> rInterests = r.getList("interests");
+                for (int i = 0; i < interests.size(); ++i) {
+                    if (lInterests.contains(interests.get(i))) ++lCount;
+                    if (rInterests.contains(interests.get(i))) ++rCount;
+                }
+                double lPoints = lCount / lInterests.size() + lCount / interests.size();
+                double rPoints = rCount / rInterests.size() + rCount / interests.size();
+                if (lPoints < rPoints) return 1;
+                else if (lPoints > rPoints) return -1;
+                else return 0;
+            }
+        });
+
+        // remove likes, dislikes, matches
+        List<String> likes = user.getList("likes");
+        List<String> dislikes = user.getList("dislikes");
+        List<String> matches = user.getList("matches");
+        candidates.removeAll(likes);
+        candidates.removeAll(dislikes);
+        candidates.removeAll(matches);
+        return candidates;
     }
 }
