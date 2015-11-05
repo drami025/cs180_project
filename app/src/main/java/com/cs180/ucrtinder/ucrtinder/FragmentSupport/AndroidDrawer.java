@@ -1,11 +1,13 @@
 package com.cs180.ucrtinder.ucrtinder.FragmentSupport;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -15,6 +17,7 @@ import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MatchedMessageActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.R;
+import com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity;
 
 /**
  * Created by daniel on 10/23/15.
@@ -65,6 +68,48 @@ public class AndroidDrawer {
         });
     }
 
+    public AndroidDrawer(AppCompatActivity activity, int drawer_layout, int left_drawer, final Context context){
+
+        mActivity = activity;
+
+        mPosition = getPosition(activity);
+        mDrawerLayout = (DrawerLayout) mActivity.findViewById(drawer_layout);
+        mDrawerLayout.setBackgroundColor(Color.WHITE);
+
+        mDrawerList = (ListView) mActivity.findViewById(left_drawer);
+        String[] naviItems = mActivity.getResources().getStringArray(R.array.menu_items);
+        String[] descriptionItems = mActivity.getResources().getStringArray(R.array.menu_descriptions);
+
+        mDrawerList.setAdapter(new AndroidDrawerAdapter(mActivity, naviItems, descriptionItems, mPosition));
+
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, R.string.open, R.string.close){
+            public void onDrawerClosed(View view){
+                super.onDrawerClosed(view);
+                mActivity.invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView){
+                super.onDrawerOpened(drawerView);
+                mActivity.invalidateOptionsMenu();
+
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mDrawerLayout.post(new Runnable(){
+            @Override
+            public void run(){
+                mDrawerToggle.syncState();
+            }
+        });
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id){
@@ -95,6 +140,9 @@ public class AndroidDrawer {
                 break;
             case 6:
                 intent = new Intent(mActivity, LoginActivity.class);
+            case 4:
+                intent = new Intent(mActivity, SettingsActivity.class);
+                break;
             default:
                 break;
         }
@@ -102,6 +150,9 @@ public class AndroidDrawer {
         if(intent != null)
             mActivity.startActivity(intent);
     }
+
+
+
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;

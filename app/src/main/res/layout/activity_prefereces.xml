@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity"
+    android:background="#dddcdc">
+
+    <Switch
+        android:layout_width="fill_parent"
+        android:layout_height="8dp"
+        android:text="Discovery"
+        android:id="@+id/discoveryswitch"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:buttonTint="#f60707"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_overlay"
+        android:textSize="15sp"
+        android:text="disabling discovery prevents others from seeing you. This has no effect on your existing matches."
+        android:id="@+id/discoveryTextView"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="100">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:text="Show Me:"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:text="Sex"
+            android:layout_weight="50"/>
+    </LinearLayout>
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Men"
+        android:id="@+id/menswitch"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"/>
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Woman"
+        android:id="@+id/womanswitch"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="100">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:text="Search Distance:"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:text="dist"
+            android:layout_weight="50"/>
+    </LinearLayout>
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/distanceseekBar"
+        android:background="@android:color/white"
+        android:clickable="false"
+        android:max="100"
+        android:progressBackgroundTint="#ff7300"/>
+
+</LinearLayout>
