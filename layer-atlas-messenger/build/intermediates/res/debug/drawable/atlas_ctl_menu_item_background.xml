@@ -33,4 +33,8 @@
 </selector>
 
 
+<<<<<<< Updated upstream
 <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/drawable/atlas_ctl_menu_item_background.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/drawable/atlas_ctl_menu_item_background.xml -->
+=======
+<!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/drawable/atlas_ctl_menu_item_background.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/drawable/atlas_ctl_menu_item_background.xml -->
+>>>>>>> Stashed changes

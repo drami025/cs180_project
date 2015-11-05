@@ -19,4 +19,8 @@
               android:orientation="vertical"
               android:id="@+id/qr"
     >
+<<<<<<< Updated upstream
 </LinearLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_qr.xml -->
+=======
+</LinearLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_screen_qr.xml -->
+>>>>>>> Stashed changes

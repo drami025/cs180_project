@@ -45,4 +45,8 @@
         android:text="Item"
         />
     
+<<<<<<< Updated upstream
 </LinearLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_message_composer_menu_convert.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_message_composer_menu_convert.xml -->
+=======
+</LinearLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_message_composer_menu_convert.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_message_composer_menu_convert.xml -->
+>>>>>>> Stashed changes

@@ -73,4 +73,8 @@
         
     </LinearLayout>
 
+<<<<<<< Updated upstream
 </FrameLayout><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_participants_picker_name_convert.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_participants_picker_name_convert.xml -->
+=======
+</FrameLayout><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_view_participants_picker_name_convert.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_view_participants_picker_name_convert.xml -->
+>>>>>>> Stashed changes

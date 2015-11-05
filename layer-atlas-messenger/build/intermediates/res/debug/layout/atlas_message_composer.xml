@@ -58,4 +58,8 @@
             
 </LinearLayout>
     
+<<<<<<< Updated upstream
 <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_message_composer.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_message_composer.xml -->
+=======
+<!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/layout/atlas_message_composer.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/layout/atlas_message_composer.xml -->
+>>>>>>> Stashed changes

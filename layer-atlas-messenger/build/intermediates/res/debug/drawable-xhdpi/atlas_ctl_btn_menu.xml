@@ -20,4 +20,8 @@
     <item android:state_enabled="false" android:drawable="@drawable/atlas_ctl_btn_menu_disabled" />
     <item 								android:drawable="@drawable/atlas_ctl_btn_menu_enabled" />    
 </selector>
+<<<<<<< Updated upstream
 <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/drawable-xhdpi/atlas_ctl_btn_menu.xml -->
+=======
+<!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/drawable-xhdpi/atlas_ctl_btn_menu.xml -->
+>>>>>>> Stashed changes

@@ -20,4 +20,8 @@
     <item android:state_activated="true" android:drawable="@drawable/atlas_ctl_edit_text_activated"/>    
     <item 								android:drawable="@drawable/atlas_ctl_edit_text_enabled"/>
 </selector>
+<<<<<<< Updated upstream
 <!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/drawable-xhdpi/atlas_ctl_edit_text.xml --><!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/drawable-xhdpi/atlas_ctl_edit_text.xml -->
+=======
+<!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas/src/main/res/drawable-xhdpi/atlas_ctl_edit_text.xml --><!-- From: file:/C:/Users/huang/AndroidStudioProjects/cs180_project/layer-atlas-messenger/build/intermediates/exploded-aar/cs180_project/layer-atlas/unspecified/res/drawable-xhdpi/atlas_ctl_edit_text.xml -->
+>>>>>>> Stashed changes
