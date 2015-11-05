@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipePhotoAdapter;
@@ -35,12 +36,15 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_profile,R.id.left_drawer_profile);
+
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         toolbar.setTitle(currentUser.getString(ParseConstants.KEY_NAME));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(R.mipmap.ic_drawer);
+        toolbar.setNavigationOnClickListener(new NavigationListener(drawer));
 
-        AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_profile,R.id.left_drawer_profile);
+
 
 /*
         //this is how to update columns in parse

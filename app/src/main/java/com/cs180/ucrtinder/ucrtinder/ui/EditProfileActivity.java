@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.parse.ParseException;
@@ -32,6 +33,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnFoc
 
         AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_edit_profile,R.id.left_drawer_edit_profile);
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.my_edit_toolbar);
+        toolbar.setTitle("Edit Profile");
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(R.mipmap.ic_drawer);
+        toolbar.setNavigationOnClickListener(new NavigationListener(drawer));
+
         editButton = (Button) findViewById(R.id.edit_profilebutton);
 
         final EditText editText = (EditText)findViewById(R.id.edit_profile_edit_text);
@@ -50,7 +58,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnFoc
             public void onClick(View view) {
 
                 // hide keyboard if open
-                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                 // hide cursor
@@ -62,10 +70,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnFoc
                 currentUser.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if(e == null){
+                        if (e == null) {
                             //worked
-                        }
-                        else{
+                        } else {
                             //didn't work
                         }
                     }
