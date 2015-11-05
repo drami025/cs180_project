@@ -51,11 +51,11 @@ public class LoginActivity extends FragmentActivity {
     public void beginLogin(){
         mProfile = Profile.getCurrentProfile();
 
-        if(mProfile != null){
-            Intent intent = new Intent(mActivity, MainActivity.class);
-            startActivity(intent);
-            return;
-        }
+//        if(mProfile != null){
+//            Intent intent = new Intent(mActivity, MainActivity.class);
+//            startActivity(intent);
+//            return;
+//        }
 
         List<String> mPermissions = Arrays.asList("user_friends", "user_photos", "user_birthday", "email", "user_about_me", "user_photos" , "public_profile", "email");
 
@@ -112,6 +112,7 @@ public class LoginActivity extends FragmentActivity {
 
     public void getUserDetailsFromFB(JSONObject json){
         ParseUser user = ParseUser.getCurrentUser();
+        mProfile = Profile.getCurrentProfile();
 
         Log.e("CHECK" , json.toString());
 
