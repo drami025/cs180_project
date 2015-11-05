@@ -35,4 +35,4 @@
         android:textStyle="bold"
         android:textColor="@color/atlas_text_blue"/>
 </merge>
-<!-- From: file:/C:/Users/Aaron/Documents/College%20Quarters/Fall%202015/CS180/Project/UCRTinder/layer-atlas-messenger/src/main/res/layout/atlas_qr_scanner.xml -->
+<!-- From: file:/home/bananapanda/AndroidStudioProjects/cs180_project/layer-atlas-messenger/src/main/res/layout/atlas_qr_scanner.xml -->

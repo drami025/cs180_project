@@ -1,6 +1,8 @@
 -- Merging decision tree log ---
 manifest
 ADDED from AndroidManifest.xml:16:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:16:11
 	package
 		ADDED from AndroidManifest.xml:17:5
 		INJECTED from AndroidManifest.xml:0:0
@@ -13,11 +15,9 @@ ADDED from AndroidManifest.xml:16:1
 		ADDED from AndroidManifest.xml:18:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-	xmlns:android
-		ADDED from AndroidManifest.xml:16:11
 uses-sdk
 ADDED from AndroidManifest.xml:21:5
-MERGED from UCRTinder:layer-atlas:unspecified:21:5
+MERGED from cs180_project:layer-atlas:unspecified:21:5
 MERGED from com.layer.sdk:layer-sdk:0.16.0:7:5
 MERGED from com.google.android.gms:play-services-gcm:7.5.0:18:5
 MERGED from com.google.android.gms:play-services-base:7.5.0:18:5
@@ -119,7 +119,7 @@ ADDED from AndroidManifest.xml:53:5
 		ADDED from AndroidManifest.xml:53:22
 application
 ADDED from AndroidManifest.xml:55:5
-MERGED from UCRTinder:layer-atlas:unspecified:25:5
+MERGED from cs180_project:layer-atlas:unspecified:25:5
 MERGED from com.layer.sdk:layer-sdk:0.16.0:17:5
 MERGED from com.google.android.gms:play-services-gcm:7.5.0:19:5
 MERGED from com.google.android.gms:play-services-base:7.5.0:20:5
@@ -164,12 +164,12 @@ ADDED from AndroidManifest.xml:72:9
 		ADDED from AndroidManifest.xml:73:13
 activity#com.layer.atlas.messenger.AtlasConversationSettingsScreen
 ADDED from AndroidManifest.xml:79:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:81:13
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:83:13
 	android:label
 		ADDED from AndroidManifest.xml:84:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:81:13
 	android:configChanges
 		ADDED from AndroidManifest.xml:82:13
 	android:name
@@ -184,12 +184,12 @@ ADDED from AndroidManifest.xml:87:9
 		ADDED from AndroidManifest.xml:88:13
 activity#com.layer.atlas.messenger.AtlasLoginScreen
 ADDED from AndroidManifest.xml:93:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:95:13
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:96:13
 	android:label
 		ADDED from AndroidManifest.xml:97:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:95:13
 	android:name
 		ADDED from AndroidManifest.xml:94:13
 activity#com.layer.atlas.messenger.AtlasParticipantPickersScreen
@@ -210,16 +210,16 @@ ADDED from AndroidManifest.xml:107:9
 		ADDED from AndroidManifest.xml:108:13
 activity#com.layer.atlas.messenger.AtlasQRCaptureScreen
 ADDED from AndroidManifest.xml:113:9
-	android:clearTaskOnLaunch
-		ADDED from AndroidManifest.xml:114:19
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:115:19
-	android:stateNotNeeded
-		ADDED from AndroidManifest.xml:116:19
 	android:windowSoftInputMode
 		ADDED from AndroidManifest.xml:118:19
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:115:19
 	android:theme
 		ADDED from AndroidManifest.xml:117:19
+	android:stateNotNeeded
+		ADDED from AndroidManifest.xml:116:19
+	android:clearTaskOnLaunch
+		ADDED from AndroidManifest.xml:114:19
 	android:name
 		ADDED from AndroidManifest.xml:113:19
 receiver#com.layer.atlas.messenger.MessengerPushReceiver
@@ -269,7 +269,7 @@ MERGED from com.layer.sdk:layer-sdk:0.16.0:18:9
 		ADDED from AndroidManifest.xml:148:18
 meta-data#com.google.android.gms.version
 ADDED from com.google.android.gms:play-services-base:7.5.0:21:9
-	android:value
-		ADDED from com.google.android.gms:play-services-base:7.5.0:23:13
 	android:name
 		ADDED from com.google.android.gms:play-services-base:7.5.0:22:13
+	android:value
+		ADDED from com.google.android.gms:play-services-base:7.5.0:23:13
