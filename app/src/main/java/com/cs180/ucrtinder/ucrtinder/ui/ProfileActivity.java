@@ -67,9 +67,11 @@ public class ProfileActivity extends AppCompatActivity {
         ArrayList<String> array = (ArrayList<String>)currentUser.get(ParseConstants.KEY_INTERESTS);
         String in = "";
 
-        for(int i=0; i<array.size(); i++){
-            in = in.concat(array.get(i));
-            in = in.concat(", ");
+        if(array != null) {
+            for (int i = 0; i < array.size(); i++) {
+                in = in.concat(array.get(i));
+                in = in.concat(", ");
+            }
         }
         text.setText(in);
 
