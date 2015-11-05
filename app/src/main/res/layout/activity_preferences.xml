@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mylayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -90,9 +91,91 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/distanceseekBar"
-        android:background="@android:color/white"
+        android:background="#25864f"
         android:clickable="false"
         android:max="100"
         android:progressBackgroundTint="#ff7300"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/distancetextView"
+        android:textColor="@android:color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="100">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:text="Show Ages:"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:text="age"
+            android:layout_weight="50"/>
+    </LinearLayout>
+
+    <com.edmodo.rangebar.RangeBar
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rangebarview"
+        custom:tickCount="37"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/leftIndex"
+                style="@style/RoboTheme"
+                android:layout_marginTop="0dp"
+                android:text="@string/leftIndex" />
+
+            <EditText
+                android:id="@+id/leftIndexValue"
+                style="@style/RoboTheme"
+                android:layout_marginTop="0dp"
+                android:inputType="number"
+                android:text="@string/leftIndexValue"
+                android:textSize="35sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/rightIndex"
+                style="@style/RoboTheme"
+                android:layout_marginTop="0dp"
+                android:text="@string/rightIndex" />
+
+            <EditText
+                android:id="@+id/rightIndexValue"
+                style="@style/RoboTheme"
+                android:layout_marginTop="0dp"
+                android:inputType="number"
+                android:text="@string/rightIndexValue"
+                android:textSize="35sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
