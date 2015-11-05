@@ -16,14 +16,19 @@ import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipePhotoAdapter;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProfileActivity extends AppCompatActivity {
 
     ParseUser currentUser = ParseUser.getCurrentUser(); //need to generalize this somehow
     private ViewPager myPager;
+
+    private TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_profile,R.id.left_drawer_profile);
 
-        /*this is how to update columns in parse
+/*
+        //this is how to update columns in parse
         String[] testInterests = {"Trucks", "Cars", "Television", "Movies", "Ghosts", "Cats", "Ghostcats", "Penguins","Computers", "blah","blah"};
         currentUser.put(ParseConstants.KEY_INTERESTS, Arrays.asList(testInterests));
         currentUser.saveInBackground(new SaveCallback() {
@@ -46,8 +52,9 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-*/
-        TextView text;
+        */
+
+
         text = (TextView) this.findViewById(R.id.name_textview);
         text.setText(currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE));
         text = (TextView) this.findViewById(R.id.Aboutyou_textview);
@@ -55,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         text = (TextView) this.findViewById(R.id.interests_textview);
         ArrayList<String> array = (ArrayList<String>)currentUser.get(ParseConstants.KEY_INTERESTS);
         String in = "";
+
         for(int i=0; i<array.size(); i++){
             in = in.concat(array.get(i));
             in = in.concat(", ");
@@ -108,5 +116,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        text = (TextView) this.findViewById(R.id.Aboutyou_textview);
+        text.setText(currentUser.getString(ParseConstants.KEY_ABOUTYOU));
+
+    }
+
 
 }
