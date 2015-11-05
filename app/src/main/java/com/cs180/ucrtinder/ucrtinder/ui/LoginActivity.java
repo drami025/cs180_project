@@ -25,8 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class LoginActivity extends FragmentActivity {
 
@@ -128,6 +133,10 @@ public class LoginActivity extends FragmentActivity {
             user.put("facebookId", id);
             user.put("birthday", birthday);
 
+            int age = getAge(birthday);
+            Log.e("AGE", age + "");
+            user.put("age", age);
+
             boolean is_looking_for_men = (gender.equals("female"));
 
             user.put(ParseConstants.KEY_MEN, is_looking_for_men);
@@ -162,8 +171,21 @@ public class LoginActivity extends FragmentActivity {
         catch(JSONException e){
             e.printStackTrace();
         }
+        catch(java.text.ParseException e){
+            e.printStackTrace();
+        }
+    }
 
+    public int getAge(String birthday) throws java.text.ParseException{
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        Date birthDate = format.parse(birthday);
 
+        Date today = new Date();
+
+        long diffAsLong = today.getTime() - birthDate.getTime();
+        Calendar diffAsCalendar = Calendar.getInstance();
+        diffAsCalendar.setTimeInMillis(diffAsLong);
+        return (diffAsCalendar.get(Calendar.YEAR) - 1970);
     }
 
     public void getPhotosFromAlbum(String id){

@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 //        }
 
         // Builds Fling card container
-        flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        /*flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
         candidates = getCandidates();
         al = new ArrayList<>();
@@ -102,58 +102,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         }
         myAppAdapter = new MyAppAdapter(al, MainActivity.this);
         flingContainer.setAdapter(myAppAdapter);
-        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-            @Override
-            public void removeFirstObjectInAdapter() {
-
-            }
-
-            @Override
-            public void onLeftCardExit(Object dataObject) {
-                al.remove(0);
-                myAppAdapter.notifyDataSetChanged();
-                List<ParseUser> dislikes = user.getList("dislikes");
-                dislikes.add(candidates.get(currentCandidate++));
-                user.put("dislikes", dislikes);
-                user.saveInBackground();
-            }
-
-            @Override
-            public void onRightCardExit(Object dataObject) {
-
-                al.remove(0);
-                myAppAdapter.notifyDataSetChanged();
-                List<ParseUser> likes = user.getList("likes");
-                likes.add(candidates.get(currentCandidate));
-                List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
-                if (targetlikes.contains(user)) {
-                    List<ParseUser> matches = user.getList("matches");
-                    List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
-                    matches.add(candidates.get(currentCandidate));
-                    targetMatches.add(user);
-                    user.put("matches", matches);
-                    candidates.get(currentCandidate).put("matches", targetMatches);
-                    user.saveInBackground();
-                    candidates.get(currentCandidate).saveInBackground();
-                }
-                ++currentCandidate;
-            }
-
-            @Override
-            public void onAdapterAboutToEmpty(int itemsInAdapter) {
-
-            }
-
-            @Override
-            public void onScroll(float scrollProgressPercent) {
-
-                View view = flingContainer.getSelectedView();
-                view.findViewById(R.id.background).setAlpha(0);
-                view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
-            }
-        });
-
+        flingContainer.setFlingListener(new CardSwipeListener());
 
         // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
@@ -200,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                     myAppAdapter.notifyDataSetChanged();
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -337,5 +286,57 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         candidates.removeAll(dislikes);
         candidates.removeAll(matches);
         return candidates;
+    }
+
+    private class CardSwipeListener implements SwipeFlingAdapterView.onFlingListener{
+        @Override
+        public void removeFirstObjectInAdapter() {
+
+        }
+
+        @Override
+        public void onLeftCardExit(Object dataObject) {
+            al.remove(0);
+            myAppAdapter.notifyDataSetChanged();
+            List<ParseUser> dislikes = user.getList("dislikes");
+            dislikes.add(candidates.get(currentCandidate++));
+            user.put("dislikes", dislikes);
+            user.saveInBackground();
+        }
+
+        @Override
+        public void onRightCardExit(Object dataObject) {
+
+            al.remove(0);
+            myAppAdapter.notifyDataSetChanged();
+            List<ParseUser> likes = user.getList("likes");
+            likes.add(candidates.get(currentCandidate));
+            List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
+            if (targetlikes.contains(user)) {
+                List<ParseUser> matches = user.getList("matches");
+                List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
+                matches.add(candidates.get(currentCandidate));
+                targetMatches.add(user);
+                user.put("matches", matches);
+                candidates.get(currentCandidate).put("matches", targetMatches);
+                user.saveInBackground();
+                candidates.get(currentCandidate).saveInBackground();
+            }
+            ++currentCandidate;
+        }
+
+        @Override
+        public void onAdapterAboutToEmpty(int itemsInAdapter) {
+
+        }
+
+        @Override
+        public void onScroll(float scrollProgressPercent) {
+
+            View view = flingContainer.getSelectedView();
+            view.findViewById(R.id.background).setAlpha(0);
+            view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
+            view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+        }
     }
 }
