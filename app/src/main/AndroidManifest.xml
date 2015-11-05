@@ -164,8 +164,12 @@
         <service android:name="com.layer.sdk.services.GcmIntentService" />
 
         <activity
-            android:name=".ui.EditProfileActivity"
-            android:label="@string/title_activity_edit_profile"
+            android:name=".ui.PreferencesActivity"
+            android:label="@string/title_activity_preferences" >
+        </activity>
+        <activity
+            android:name=".ui.PreferecesActivity"
+            android:label="@string/title_activity_prefereces"
             android:theme="@style/AppTheme" >
         </activity>
     </application>
