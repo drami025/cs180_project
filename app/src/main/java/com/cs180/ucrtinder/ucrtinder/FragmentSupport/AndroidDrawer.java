@@ -3,6 +3,7 @@ package com.cs180.ucrtinder.ucrtinder.FragmentSupport;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.preference.PreferenceActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.cs180.ucrtinder.ucrtinder.ui.ConversationActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.LoginActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MatchedMessageActivity;
+import com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity;
@@ -138,11 +140,14 @@ public class AndroidDrawer {
                 //intent = new Intent(mActivity, MatchedMessageActivity.class);
                 intent = new Intent(mActivity, ConversationActivity.class);
                 break;
-            case 6:
-                intent = new Intent(mActivity, LoginActivity.class);
+            case 3:
+                intent = new Intent(mActivity, PreferencesActivity.class);
+                break;
             case 4:
                 intent = new Intent(mActivity, SettingsActivity.class);
                 break;
+            case 6:
+                intent = new Intent(mActivity, LoginActivity.class);
             default:
                 break;
         }

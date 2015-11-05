@@ -89,10 +89,10 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 14 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="slf4j-nop-1.5.8" level="project" />
+    <orderEntry type="library" exported="" name="play-services-gcm-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="slf4j-api-1.5.8" level="project" />
-    <orderEntry type="library" exported="" name="play-services-gcm-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="slf4j-nop-1.5.8" level="project" />
     <orderEntry type="library" exported="" name="layer-sdk-0.16.0" level="project" />
   </component>
 </module>
