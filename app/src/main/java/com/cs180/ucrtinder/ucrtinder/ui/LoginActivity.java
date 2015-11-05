@@ -1,10 +1,6 @@
 package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,41 +8,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
-import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
-import com.google.gson.Gson;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class LoginActivity extends FragmentActivity {
 
-    private Bitmap mProfileImage;
     private LoginActivity mActivity;
     private Profile mProfile;
 
@@ -56,10 +38,25 @@ public class LoginActivity extends FragmentActivity {
         setContentView(R.layout.activity_login);
         Button signInButton = (Button) findViewById(R.id.signInButton);
         mActivity = this;
+        beginLogin();
 
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                beginLogin();
+            }
+        });
+    }
+
+    public void beginLogin(){
         mProfile = Profile.getCurrentProfile();
 
-        //List<String> mPermissions = Arrays.asList("user_birthday, email, user_about_me, user_photos , public_profile, email");
+        if(mProfile != null){
+            Intent intent = new Intent(mActivity, MainActivity.class);
+            startActivity(intent);
+            return;
+        }
+
         List<String> mPermissions = Arrays.asList("user_friends", "user_photos", "user_birthday", "email", "user_about_me", "user_photos" , "public_profile", "email");
 
         ParseFacebookUtils.logInWithReadPermissionsInBackground(mActivity, mPermissions, new LogInCallback() {
@@ -127,17 +124,13 @@ public class LoginActivity extends FragmentActivity {
             String picture_url = json.getJSONObject("picture").getJSONObject("data").getString("url");
             String main_picture = mProfile.getProfilePictureUri(300, 300).toString();
 
-            boolean is_looking_for_men = false;
-
             user.put("gender", gender);
             user.put(ParseConstants.KEY_NAME, name);
-            user.put("objectId", id);
+            user.put("facebookId", id);
             user.put("profile_picture_url", main_picture);
             user.put("birthday", birthday);
 
-            if(gender.equals("female")){
-                is_looking_for_men = true;
-            }
+            boolean is_looking_for_men = (gender.equals("female"));
 
             user.put(ParseConstants.KEY_MEN, is_looking_for_men);
             user.put(ParseConstants.KEY_WOMEN, !is_looking_for_men);
@@ -150,12 +143,44 @@ public class LoginActivity extends FragmentActivity {
             Log.e("FIELDS", gender + " " + name + " " + id + " " + picture_url + " " + birthday);
 
             user.saveInBackground();
+
+            String photoIdOne = json.getJSONObject("photos").getJSONArray("data").getJSONObject(0).getString("id");
+            String photoIdTwo = json.getJSONObject("photos").getJSONArray("data").getJSONObject(1).getString("id");
+
+            getPhoto(photoIdOne, "secondary_photo");
+            getPhoto(photoIdTwo, "tertiary_photo");
+
         }
         catch(JSONException e){
             e.printStackTrace();
         }
 
 
+    }
+
+    public void getPhoto(String photoId, final String key){
+        GraphRequest request = new GraphRequest(AccessToken.getCurrentAccessToken(),
+                "/" + photoId, null, HttpMethod.GET, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                ParseUser user = ParseUser.getCurrentUser();
+
+                try{
+                    String photoUrl = graphResponse.getJSONObject().getString("source");
+                    Log.e("PHOTO URL", photoUrl);
+                    user.put(key, photoUrl);
+                    user.saveInBackground();
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Bundle params = new Bundle();
+        params.putString("fields", "source");
+        request.setParameters(params);
+        request.executeAsync();
     }
 
     @Override
