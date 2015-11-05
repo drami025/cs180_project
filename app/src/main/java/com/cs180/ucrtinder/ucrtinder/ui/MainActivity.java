@@ -82,27 +82,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer);
         mToolbar.setNavigationOnClickListener(new NavigationListener(mAndroidDrawer));
-        //
-
-        //Hiding actionBar - AP
-//        try {
-//            getSupportActionBar().hide();
-//        } catch(NullPointerException e){
-//            e.printStackTrace();
-//        }
 
         // Builds Fling card container
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
-        candidates = getCandidates();
-        al = new ArrayList<>();
-        for (int i = 0; i < candidates.size(); ++i) {
-            al.add(new Data(candidates.get(i).getString("profilePictureUrl"), candidates.get(i).getString("name") +
-            ", " + candidates.get(i).getNumber("age")));
-        }
-        myAppAdapter = new MyAppAdapter(al, MainActivity.this);
-        flingContainer.setAdapter(myAppAdapter);
-        flingContainer.setFlingListener(new CardSwipeListener());
+        pullCandidates();
 
         // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
@@ -150,6 +134,18 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 }
             }
         });
+    }
+
+    public void pullCandidates(){
+        candidates = getCandidates();
+        al = new ArrayList<>();
+        for (int i = 0; i < candidates.size(); ++i) {
+            al.add(new Data(candidates.get(i).getString("profilePictureUrl"), candidates.get(i).getString("name") +
+                    ", " + candidates.get(i).getNumber("age")));
+        }
+        myAppAdapter = new MyAppAdapter(al, MainActivity.this);
+        flingContainer.setAdapter(myAppAdapter);
+        flingContainer.setFlingListener(new CardSwipeListener());
     }
 
     @Override
@@ -338,5 +334,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
             view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        pullCandidates();
     }
 }
