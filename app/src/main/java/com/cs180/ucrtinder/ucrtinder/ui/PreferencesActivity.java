@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.parse.ParseUser;
@@ -44,10 +45,16 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
 
-       savedInstanceState.putInt("BAR_COLOR",mBarColor);
-       savedInstanceState.putInt("CONNECTING_LINE_COLOR", mConnectingLineColor);
-       savedInstanceState.putInt("THUMB_COLOR_NORMAL", mThumbColorNormal);
-       savedInstanceState.putInt("THUMB_COLOR_PRESSED", mThumbColorPressed);
+
+        // Creating an android drawer to slide in from the left side
+        AndroidDrawer mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_preferences, R.id.left_drawer_preferences);
+
+        if (savedInstanceState != null) {
+            savedInstanceState.putInt("BAR_COLOR", mBarColor);
+            savedInstanceState.putInt("CONNECTING_LINE_COLOR", mConnectingLineColor);
+            savedInstanceState.putInt("THUMB_COLOR_NORMAL", mThumbColorNormal);
+            savedInstanceState.putInt("THUMB_COLOR_PRESSED", mThumbColorPressed);
+        }
 
         discovery = (Switch) findViewById(R.id.discoveryswitch);
         menSwitch = (Switch) findViewById(R.id.menswitch);

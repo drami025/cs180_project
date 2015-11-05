@@ -40,27 +40,26 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
 
         Log.d(getClass().getSimpleName(), "Started geolocation in OnStartCommand");
 
+        // Get context
+        mContext = getApplicationContext();
+
+        // Start GoogleApiClient
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
-
-
-
-
         }
 
+        // Connect googleApiClient
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
 
-        mContext = getApplicationContext();
-
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
-            startLocationUpdates();
             createLocationRequest();
+            startLocationUpdates();
         }
 
 
@@ -81,18 +80,21 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
                 startLocationUpdates();
             }
 
+            // Start Parse put request
             ParseUser currentUser = ParseUser.getCurrentUser();
+            if (currentUser != null) {
 
-            Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
-            ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
+                Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
+                ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
 
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    Log.d(getClass().getSimpleName(), "Done saving geopoint");
-                }
-            });
+                currentUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.d(getClass().getSimpleName(), "Done saving geopoint");
+                    }
+                });
+            }
         }
 
     }
@@ -112,20 +114,22 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
     public void onLocationChanged(Location location) {
         mLastLocation = location;
 
+        // Start parse put request
         ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
 
-        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
+            ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
 
-        currentUser.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                Log.d(getClass().getSimpleName(), "Done saving geopoint");
-            }
-        });
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Log.d(getClass().getSimpleName(), "Done saving geopoint");
+                }
+            });
 
-
-        Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
+            Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
+        }
     }
 
     protected void startLocationUpdates() {

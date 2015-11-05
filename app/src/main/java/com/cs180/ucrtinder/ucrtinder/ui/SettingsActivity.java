@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -21,6 +22,10 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        // Creating an android drawer to slide in from the left side
+        AndroidDrawer mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_settings, R.id.left_drawer_settings);
+
 
         newMatches = (Switch) findViewById(R.id.matchesswitch);
 

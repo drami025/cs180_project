@@ -138,7 +138,6 @@ public class AndroidDrawer {
                 intent = new Intent(mActivity, MainActivity.class);
                 break;
             case 2:
-                //intent = new Intent(mActivity, MatchedMessageActivity.class);
                 intent = new Intent(mActivity, ConversationActivity.class);
                 break;
             case 3:
@@ -175,6 +174,12 @@ public class AndroidDrawer {
         }
         else if(activity instanceof ConversationActivity){
             return 2;
+        }
+        else if(activity instanceof PreferencesActivity){
+            return 3;
+        }
+        else if(activity instanceof SettingsActivity){
+            return 4;
         }
 
         return -1;
