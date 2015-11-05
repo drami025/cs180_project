@@ -144,6 +144,9 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_prefereces">PreferecesActivity</string>
+
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
 
 </resources>
