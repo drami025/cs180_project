@@ -19,7 +19,6 @@ package com.cs180.ucrtinder.ucrtinder.ui;
  * limitations under the License.
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

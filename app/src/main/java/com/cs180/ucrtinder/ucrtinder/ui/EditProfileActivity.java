@@ -19,19 +19,18 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-public class EditProfileActivity extends AppCompatActivity implements View.OnFocusChangeListener {
+public class EditProfileActivity extends AppCompatActivity{
 
     ParseUser currentUser = ParseUser.getCurrentUser();
-
-    View.OnFocusChangeListener mOnFocusChangeListener;
     Button editButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_edit_profile,R.id.left_drawer_edit_profile);
+        AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_edit_profile,R.id.left_drawer_edit_profile, getApplicationContext());
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_edit_toolbar);
         toolbar.setTitle("Edit Profile");
@@ -56,7 +55,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnFoc
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // hide keyboard if open
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -77,7 +75,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnFoc
                         }
                     }
                 });
-
                 // Go back to profile activity
                 finish();
             }
@@ -85,29 +82,5 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnFoc
 
     }
 
-    @Override
-    public void onFocusChange(View v, boolean hasFocus)
-    {
-        if (v.getId() == R.id.edit_profile_edit_text) {
-            if(!hasFocus) {
-                EditText editText = (EditText) findViewById(R.id.edit_profile_edit_text);
-                editText.setCursorVisible(false);
 
-                // save bio to parse
-                String biotext = editText.getText().toString();
-                currentUser.put(ParseConstants.KEY_ABOUTYOU, biotext);
-                currentUser.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e == null){
-                            //worked
-                        }
-                        else{
-                            //didn't work
-                        }
-                    }
-                });
-            }
-        }
-    }
 }
