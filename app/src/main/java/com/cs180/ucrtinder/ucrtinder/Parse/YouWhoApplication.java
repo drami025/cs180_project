@@ -12,6 +12,7 @@ import com.layer.sdk.LayerClient;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -56,19 +57,7 @@ public class YouWhoApplication extends Application {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "o66AszQHjZRyH1nY7XMeHL9t9oAKeSe5hWDfRYEH", "9lo4BUYpKJGmNTN6jtoPD8LoYN4R1m7TKHIaDxYG");
 
-        ParseUser testUser = new ParseUser();
-
-        ParseUser.logInInBackground("test@test.com", "test", new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (user != null) {
-                    //worked
-                } else {
-                    //didn't work
-                }
-            }
-        });
-
+        ParseFacebookUtils.initialize(this);
 
         // Messaging system through Layer.com
         LayerClient.enableLogging(this);
@@ -78,30 +67,6 @@ public class YouWhoApplication extends Application {
         }
         this.identityProvider = new AtlasIdentityProvider(this);
 
-
-        // this doesn't work here??????????????????
-          //      testUser.put(ParseConstants.KEY_ABOUTYOU, "This is a test aboutyou section for Testerson. BLAH BLAH BLAH BLAH BLaH BLAH blah.");
-                //String[] testInterests = {"Trucks", "Cars", "Television", "Movies", "Ghosts", "Cats", "Ghostcats", "Penguins","Computers", "blah","blah"};
-                //testUser.put(ParseConstants.KEY_INTERESTS, Arrays.asList(testInterests));
-                //testUser.saveInBackground();
-
-                /*testUser.setUsername("test@test.com");
-                testUser.setPassword("test");
-                testUser.put(ParseConstants.KEY_NAME, "Testerson");
-                testUser.put(ParseConstants.KEY_AGE, "55");
-                testUser.put(ParseConstants.KEY_INTERESTS, "Dirt");
-                testUser.signUpInBackground(new SignUpCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e == null){
-                            //worked
-                        }
-                        else{
-                            //didn't work
-                        }
-                    }
-                });
-        */
     }
 
 

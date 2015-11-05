@@ -78,62 +78,62 @@
             android:name=".ui.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".ui.CardProfileActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_card_profile"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".ui.MatchedMessageActivity"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".ui.ConversationActivity"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".Messenger.AtlasMessagesScreen"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".Messenger.AtlasConversationSettingsScreen"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".Messenger.AtlasParticipantPickersScreen"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".Messenger.AtlasImageViewScreen"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".Messenger.AtlasQRCaptureScreen"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
             android:name=".Messenger.AtlasLoginScreen"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/AppTheme.Base" >
         </activity>
 
 

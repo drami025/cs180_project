@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.cs180.ucrtinder.ucrtinder.ui.ConversationActivity;
+import com.cs180.ucrtinder.ucrtinder.ui.LoginActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MatchedMessageActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
@@ -92,6 +93,8 @@ public class AndroidDrawer {
                 //intent = new Intent(mActivity, MatchedMessageActivity.class);
                 intent = new Intent(mActivity, ConversationActivity.class);
                 break;
+            case 6:
+                intent = new Intent(mActivity, LoginActivity.class);
             default:
                 break;
         }
