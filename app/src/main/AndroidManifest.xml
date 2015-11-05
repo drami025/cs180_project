@@ -173,15 +173,17 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:name=".ui.PreferencesActivity"
-            android:label="@string/title_activity_preferences" >
-        </activity>
-        <activity
-            android:name=".ui.PreferecesActivity"
-            android:label="@string/title_activity_prefereces"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
 
         </activity>
+
+        <activity
+            android:name=".ui.PreferencesActivity"
+            android:label="@string/title_activity_preferences"
+            android:theme="@style/AppTheme">
+
+        </activity>
+
     </application>
 
 </manifest>
