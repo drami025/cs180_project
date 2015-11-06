@@ -362,7 +362,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             al.remove(0);
             myAppAdapter.notifyDataSetChanged();
             List<ParseUser> dislikes = user.getList("dislikes");
-            dislikes.add(candidates.get(currentCandidate++));
+            int i = currentCandidate;
+            if(i++ < candidates.size() ) {
+                dislikes.add(candidates.get(currentCandidate++));
+            }
             user.put("dislikes", dislikes);
             user.saveInBackground();
         }
@@ -373,19 +376,25 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             al.remove(0);
             myAppAdapter.notifyDataSetChanged();
             List<ParseUser> likes = user.getList("likes");
-            likes.add(candidates.get(currentCandidate));
-            List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
-            if (targetlikes.contains(user)) {
-                List<ParseUser> matches = user.getList("matches");
-                List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
-                matches.add(candidates.get(currentCandidate));
-                targetMatches.add(user);
-                user.put("matches", matches);
-                candidates.get(currentCandidate).put("matches", targetMatches);
-                user.saveInBackground();
-                candidates.get(currentCandidate).saveInBackground();
+            int i = currentCandidate;
+            if(i++ < candidates.size() ) {
+                likes.add(candidates.get(currentCandidate));
             }
-            ++currentCandidate;
+
+            if(currentCandidate < candidates.size()) {
+                List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
+                if (targetlikes.contains(user)) {
+                    List<ParseUser> matches = user.getList("matches");
+                    List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
+                    matches.add(candidates.get(currentCandidate));
+                    targetMatches.add(user);
+                    user.put("matches", matches);
+                    candidates.get(currentCandidate).put("matches", targetMatches);
+                    user.saveInBackground();
+                    candidates.get(currentCandidate).saveInBackground();
+                }
+                ++currentCandidate;
+            }
         }
 
         @Override
@@ -406,6 +415,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     @Override
     public void onResume(){
         super.onResume();
-        pullCandidates();
+        //pullCandidates();
     }
 }
