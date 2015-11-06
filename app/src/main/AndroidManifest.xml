@@ -166,24 +166,34 @@
         <activity
             android:name=".ui.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
-            android:theme="@style/AppTheme">
-
+            android:theme="@style/AppTheme" >
         </activity>
-
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme">
-
+            android:theme="@style/AppTheme" >
         </activity>
-
         <activity
             android:name=".ui.PreferencesActivity"
             android:label="@string/title_activity_preferences"
-            android:theme="@style/AppTheme">
-
+            android:theme="@style/AppTheme" >
         </activity>
 
+        <service
+            android:name=".Services.GeoLocationService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <receiver
+            android:name=".Receivers.StartupReceiver"
+            android:enabled="true"
+            android:exported="true" >
+
+            <intent-filter>
+                <action android:name="Action.MainActivity" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

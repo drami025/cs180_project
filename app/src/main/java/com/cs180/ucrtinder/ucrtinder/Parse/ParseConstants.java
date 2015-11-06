@@ -13,6 +13,7 @@ public final class ParseConstants {
     public static final String KEY_MEN = "men";
     public static final String KEY_WOMEN = "women";
     public static final String KEY_DISTANCE = "maxDist";
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_SMALLESTAGE = "minAge";
     public static final String KEY_LARGESTAGE = "maxAge";
 }

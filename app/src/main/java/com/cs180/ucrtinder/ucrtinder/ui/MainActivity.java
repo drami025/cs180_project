@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
+import com.cs180.ucrtinder.ucrtinder.Services.GeoLocationService;
 import com.cs180.ucrtinder.ucrtinder.tindercard.Data;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = ParseUser.getCurrentUser();
+
+        // Start Location when this activity is open
+        Log.d(getClass().getSimpleName(), "Started the geolocation service");
+        startService(new Intent(this, GeoLocationService.class));
 
         // Creating an android drawer to slide in from the left side
 

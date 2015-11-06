@@ -10,6 +10,8 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -30,6 +32,9 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.github.asne:asne-instagram:0.3.3'
     compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.edmodo:rangebar:1.0.0'
+
     compile files('libs/ParseFacebookUtilsV4-1.10.3.jar')
     compile files('libs/Parse-1.10.3.jar')
 }
