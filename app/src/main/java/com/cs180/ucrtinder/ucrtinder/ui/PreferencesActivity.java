@@ -113,48 +113,48 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
         });
     }
 
-   /* @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState){
-        super.onRestoreInstanceState(savedInstanceState);
-        mBarColor = savedInstanceState.getInt("BAR_COLOR");
-        mConnectingLineColor = savedInstanceState.getInt("CONNECTING_LINE_COLOR");
-        mThumbColorNormal = savedInstanceState.getInt("THUMB_COLOR_NORMAL");
-        mThumbColorPressed = savedInstanceState.getInt("THUMB_COLOR_PRESSED");
+  /* @Override
+   protected void onRestoreInstanceState(Bundle savedInstanceState){
+       super.onRestoreInstanceState(savedInstanceState);
+       mBarColor = savedInstanceState.getInt("BAR_COLOR");
+       mConnectingLineColor = savedInstanceState.getInt("CONNECTING_LINE_COLOR");
+       mThumbColorNormal = savedInstanceState.getInt("THUMB_COLOR_NORMAL");
+       mThumbColorPressed = savedInstanceState.getInt("THUMB_COLOR_PRESSED");
 
-        colorChanged(Component.BAR_COLOR, mBarColor);
-        colorChanged(Component.CONNECTING_LINE_COLOR, mConnectingLineColor);
-        colorChanged(Component.THUMB_COLOR_NORMAL, mThumbColorNormal);
-        colorChanged(Component.THUMB_COLOR_PRESSED, mThumbColorPressed);
+       colorChanged(Component.BAR_COLOR, mBarColor);
+       colorChanged(Component.CONNECTING_LINE_COLOR, mConnectingLineColor);
+       colorChanged(Component.THUMB_COLOR_NORMAL, mThumbColorNormal);
+       colorChanged(Component.THUMB_COLOR_PRESSED, mThumbColorPressed);
 
-        rangeBar = (RangeBar) findViewById(R.id.rangebarview);
+       rangeBar = (RangeBar) findViewById(R.id.rangebarview);
 
-        final TextView leftIndexValue = (TextView) findViewById(R.id.leftIndexValue);
-        final TextView rightIndexValue = (TextView) findViewById(R.id.rightIndexValue);
+       final TextView leftIndexValue = (TextView) findViewById(R.id.leftIndexValue);
+       final TextView rightIndexValue = (TextView) findViewById(R.id.rightIndexValue);
 
-        leftIndexValue.setText("" + rangeBar.getLeftIndex());
-        rightIndexValue.setText("" + rangeBar.getRightIndex());
+       leftIndexValue.setText("" + rangeBar.getLeftIndex());
+       rightIndexValue.setText("" + rangeBar.getRightIndex());
 
-        findViewById(R.id.mylayout).requestFocus();
-    }
+       findViewById(R.id.mylayout).requestFocus();
+   }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
+   @Override
+   protected void onCreate(Bundle savedInstanceState){
+       super.onCreate(savedInstanceState);
 
-        // Removes title bar and sets content view
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+       // Removes title bar and sets content view
+       this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+       setContentView(R.layout.activity_main);
 
-        // Sets fonts for all
-        Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf");
-        ViewGroup root = (ViewGroup) findViewById(R.id.mylayout);
-        setFont(root, font);
+       // Sets fonts for all
+       Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf");
+       ViewGroup root = (ViewGroup) findViewById(R.id.mylayout);
+       setFont(root, font);
 
-        final Button barColor = (Button) findViewById(R.id.barColor);
-        final Button connectingLineColor = (Button) findViewById(R.id.connectingLineColor);
-        final Button thumbColorNormal = (Button) findViewById(R.id.thumbColorNormal);
-        final Button thumbColorPressed = (Button) findViewById(R.id.thumbColorPressed);
-        final Button resetThumbColors = (Button) findViewById(R.id.resetThumbColors);
-        final Button refreshButton = (Button) findViewById(R.id.refresh);
-    }*/
+       final Button barColor = (Button) findViewById(R.id.barColor);
+       final Button connectingLineColor = (Button) findViewById(R.id.connectingLineColor);
+       final Button thumbColorNormal = (Button) findViewById(R.id.thumbColorNormal);
+       final Button thumbColorPressed = (Button) findViewById(R.id.thumbColorPressed);
+       final Button resetThumbColors = (Button) findViewById(R.id.resetThumbColors);
+       final Button refreshButton = (Button) findViewById(R.id.refresh);
+   }*/
 }

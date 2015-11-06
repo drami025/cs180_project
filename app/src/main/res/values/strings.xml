@@ -156,7 +156,7 @@
 
     <!-- =========== ANDROID Double Seekbar STRINGS ============== -->
     <string name="title">RangeBar</string>
-    <string name="tickCount">tickCount = 7</string>
+    <string name="tickCount">tickCount = 37</string>
     <string name="tickHeight">tickHeight = 24</string>
     <string name="barWeight">barWeight = 2</string>
     <string name="barColor">barColor = #CCCCCC</string>
@@ -169,9 +169,9 @@
     <string name="confirmDefaultColor">Default</string>
     <string name="colorPickerTitle">Select a Color</string>
     <string name="resetThumbColors">Reset Thumb Colors</string>
-    <string name="leftIndexValue">0</string>
+    <string name="leftIndexValue">18</string>
     <string name="leftIndex">leftIndex</string>
-    <string name="rightIndexValue">6</string>
+    <string name="rightIndexValue">55+</string>
     <string name="rightIndex">rightIndex</string>
     <string name="refresh">Refresh Indices</string>
 
