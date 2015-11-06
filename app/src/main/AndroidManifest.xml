@@ -101,12 +101,6 @@
             android:theme="@style/AppTheme.Base" >
         </activity>
         <activity
-            android:name=".ui.MatchedMessageActivity"
-            android:label="@string/title_activity_matched_message"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" >
-        </activity>
-        <activity
             android:name=".ui.ConversationActivity"
             android:label="@string/title_activity_matched_message"
             android:screenOrientation="portrait"

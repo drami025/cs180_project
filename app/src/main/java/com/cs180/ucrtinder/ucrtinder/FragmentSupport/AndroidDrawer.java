@@ -15,7 +15,6 @@ import android.widget.ListView;
 import com.cs180.ucrtinder.ucrtinder.ui.ConversationActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.LoginActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
-import com.cs180.ucrtinder.ucrtinder.ui.MatchedMessageActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.R;

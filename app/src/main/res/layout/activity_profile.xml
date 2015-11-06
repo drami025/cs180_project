@@ -18,12 +18,14 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
+
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/atlas_delimeter_gray"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            android:popupTheme="@style/Theme.AppCompat.Light">
+            android:theme="@style/ToolBarStyle"
+            android:popupTheme="@style/Theme.AppCompat.Light"
+            >
 
 
         </android.support.v7.widget.Toolbar>
