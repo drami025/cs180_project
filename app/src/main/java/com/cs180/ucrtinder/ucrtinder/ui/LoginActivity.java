@@ -118,18 +118,19 @@ public class LoginActivity extends FragmentActivity {
 
     public void getUserDetailsFromFB(JSONObject json){
         ParseUser user = ParseUser.getCurrentUser();
-        mProfile = Profile.getCurrentProfile();
+        //mProfile = Profile.getCurrentProfile();
 
         Log.e("CHECK" , json.toString());
 
         try{
             String gender = json.getString("gender");
-            String name = mProfile.getFirstName();
+            String name = json.getString("name");
+            String firstName = name.substring(0, name.indexOf(' '));
             String id = json.getString("id");
             String birthday = json.getString("birthday");
 
             user.put("gender", gender);
-            user.put(ParseConstants.KEY_NAME, name);
+            user.put(ParseConstants.KEY_NAME, firstName);
             user.put("facebookId", id);
             user.put("birthday", birthday);
 
@@ -147,7 +148,7 @@ public class LoginActivity extends FragmentActivity {
 
             user.put(ParseConstants.KEY_DISTANCE, 20);
 
-            Log.e("FIELDS", gender + " " + name + " " + id + " " + birthday);
+            Log.e("FIELDS", gender + " " + firstName + " " + id + " " + birthday);
 
             user.saveInBackground();
 

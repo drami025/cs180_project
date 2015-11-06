@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,6 +36,9 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -42,6 +46,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 // Daniel removed the call to the login
 
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     private AndroidDrawer mAndroidDrawer;
     private Toolbar mToolbar;
     int currentCandidate = 0;
+    private ImageView mImage;
 
     private Button likebtn;
     private Button dislikebtn;
@@ -75,6 +83,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         user = ParseUser.getCurrentUser();
 
         // Creating an android drawer to slide in from the left side
+
+        mImage = (ImageView) findViewById(R.id.main_profile_drawer_pic);
+
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        es.execute(new ProfileImageRunnable());
+
         mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_main, R.id.left_drawer_main);
 
         //Set up toolbar
@@ -134,6 +148,33 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 }
             }
         });
+    }
+
+    class ProfileImageRunnable implements Runnable {
+        @Override
+        public void run() {
+            final Bitmap bmp;
+
+            try {
+                ParseUser user = ParseUser.getCurrentUser();
+                String urlString = user.getString("photo0");
+                URL url = new URL(urlString);
+                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mImage.setImageBitmap(bmp);
+                    }
+                });
+            }
+            catch(MalformedURLException e){
+                e.printStackTrace();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     public void pullCandidates(){
