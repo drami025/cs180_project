@@ -3,16 +3,11 @@ package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +15,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
-import com.cs180.ucrtinder.ucrtinder.Services.GeoLocationService;
 import com.cs180.ucrtinder.ucrtinder.tindercard.Data;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
@@ -40,14 +33,11 @@ import com.parse.ParseUser;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -64,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     private AndroidDrawer mAndroidDrawer;
     private Toolbar mToolbar;
     int currentCandidate = 0;
-    private ImageView mImage;
+    private ImageView mProfileImage;
 
     private Button likebtn;
     private Button dislikebtn;
@@ -85,11 +75,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
         // Start Location when this activity is open
         Log.d(getClass().getSimpleName(), "Started the geolocation service");
-        startService(new Intent(this, GeoLocationService.class));
+        //startService(new Intent(this, GeoLocationService.class));
 
         // Creating an android drawer to slide in from the left side
 
-        mImage = (ImageView) findViewById(R.id.main_profile_drawer_pic);
+        mProfileImage = (ImageView) findViewById(R.id.main_profile_drawer_pic);
 
         ExecutorService es = Executors.newFixedThreadPool(1);
         es.execute(new ProfileImageRunnable());
@@ -169,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mImage.setImageBitmap(bmp);
+                        mProfileImage.setImageBitmap(bmp);
                     }
                 });
             }
@@ -385,6 +375,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     @Override
     public void onResume(){
         super.onResume();
-        pullCandidates();
+        //pullCandidates();
     }
 }

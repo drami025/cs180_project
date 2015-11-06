@@ -1,8 +1,10 @@
 package com.cs180.ucrtinder.ucrtinder.Parse;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -176,5 +178,10 @@ public class YouWhoApplication extends Application {
         }
     }
 
+    @Override
+    protected void attachBaseContext(Context base){
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
 }

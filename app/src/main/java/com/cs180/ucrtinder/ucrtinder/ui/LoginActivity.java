@@ -94,9 +94,9 @@ public class LoginActivity extends FragmentActivity {
                         Log.e("RESPONSE", jsonObject.toString());
 
 
-                        if(isNewUser) {
-                            getUserDetailsFromFB(jsonObject);
-                        }
+
+                        getUserDetailsFromFB(jsonObject);
+
 
                         mActivity.runOnUiThread(new Runnable() {
                             @Override
@@ -159,7 +159,7 @@ public class LoginActivity extends FragmentActivity {
             for(int i = 0; i < profileArray.length(); i++) {
                 JSONObject obj = profileArray.getJSONObject(i);
 
-                if (obj.getString("name").equals("Profile Pictures")) {
+                if (obj.getString("name").toLowerCase().equals("profile pictures")) {
                     profileAlbumID = obj.getString("id");
                     break;
                 }
