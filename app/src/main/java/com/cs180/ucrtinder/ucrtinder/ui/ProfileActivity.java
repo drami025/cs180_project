@@ -31,6 +31,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView text;
 
+    public static final String KEY_USERPROFILE = "userprofile";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         text.setText(in);
 
-        SwipePhotoAdapter adapter = new SwipePhotoAdapter();
+        SwipePhotoAdapter adapter = new SwipePhotoAdapter(ProfileActivity.KEY_USERPROFILE, "");
         myPager = (ViewPager) findViewById(R.id.viewpager_layout);
         myPager.setAdapter(adapter);
         myPager.setCurrentItem(0);

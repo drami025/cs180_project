@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     private Button likebtn;
     private Button dislikebtn;
 
+    public static final String CARD_BUNDLE = "cardBundle";
+    public static final String CARD_USER = "cardUser";
+
     public static void removeBackground() {
 
 
@@ -109,6 +112,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 Toast.makeText(getApplicationContext(), "Clicked card", Toast.LENGTH_SHORT).show();
 
                 Intent cardProfileIntent = new Intent(getApplicationContext(), CardProfileActivity.class);
+                Bundle b = new Bundle();
+
+                // Get card user parse String
+                b.putString(CARD_USER,  al.get(itemPosition).getUserString());
+                cardProfileIntent.putExtra(CARD_BUNDLE, b);
                 startActivity(cardProfileIntent);
             }
         });
@@ -177,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         al = new ArrayList<>();
         for (int i = 0; i < candidates.size(); ++i) {
             al.add(new Data(candidates.get(i).getString("profilePictureUrl"), candidates.get(i).getString("name") +
-                    ", " + candidates.get(i).getNumber("age")));
+                    ", " + candidates.get(i).getNumber("age"), candidates.get(i).getObjectId()));
         }
         myAppAdapter = new MyAppAdapter(al, MainActivity.this);
         flingContainer.setAdapter(myAppAdapter);

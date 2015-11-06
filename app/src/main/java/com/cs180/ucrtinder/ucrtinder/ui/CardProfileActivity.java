@@ -1,5 +1,6 @@
 package com.cs180.ucrtinder.ucrtinder.ui;
 
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ public class CardProfileActivity extends AppCompatActivity {
 
     ParseUser currentUser = ParseUser.getCurrentUser(); //need to generalize this somehow
     private ViewPager myPager;
+
+    public static final String KEY_CARDPROFILE = "cardprofile";
 
 
     @Override
@@ -74,7 +77,14 @@ public class CardProfileActivity extends AppCompatActivity {
         }
         text.setText(in);
 
-        SwipePhotoAdapter adapter = new SwipePhotoAdapter();
+
+        // Get intent with card user string data
+        Intent intent = getIntent();
+        Bundle b = intent.getBundleExtra(MainActivity.CARD_BUNDLE);
+        String userString = b.getString(MainActivity.CARD_USER, "");
+
+        // Update photos on photoslider
+        SwipePhotoAdapter adapter = new SwipePhotoAdapter(KEY_CARDPROFILE, userString);
         myPager = (ViewPager) findViewById(R.id.viewpager_layout);
         myPager.setAdapter(adapter);
         myPager.setCurrentItem(0);

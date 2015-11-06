@@ -6,12 +6,13 @@ package com.cs180.ucrtinder.ucrtinder.tindercard;
 public class Data {
 
     private String description;
-
     private String imagePath;
+    private String UserString;
 
-    public Data(String imagePath, String description) {
+    public Data(String imagePath, String description, String userString) {
         this.imagePath = imagePath;
         this.description = description;
+        this.UserString = userString;
     }
 
     public String getDescription() {
@@ -20,6 +21,10 @@ public class Data {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public String getUserString() {
+        return UserString;
     }
 
 

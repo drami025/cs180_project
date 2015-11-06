@@ -50,6 +50,8 @@ import com.google.zxing.integration.android.IntentIntegrator;
 /**
  * @author Oleg Orlov
  * @since 14 Apr 2015
+ *
+ * Edited by Aaron Peery
  */
 public class ConversationActivity extends AppCompatActivity {
     private static final String TAG = ConversationActivity.class.getSimpleName();
