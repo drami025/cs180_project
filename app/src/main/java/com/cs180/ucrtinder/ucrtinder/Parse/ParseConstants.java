@@ -4,6 +4,7 @@ package com.cs180.ucrtinder.ucrtinder.Parse;
  * Created by bananapanda on 10/23/15.
  */
 public final class ParseConstants {
+    public static final String KEY_OBJECTID = "objectId";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_NAME = "name";

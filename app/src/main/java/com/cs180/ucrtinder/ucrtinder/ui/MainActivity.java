@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
     public static final String CARD_BUNDLE = "cardBundle";
     public static final String CARD_USER = "cardUser";
+    public static final String CARD_NAME = "cardName";
 
     public static void removeBackground() {
 
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 view.findViewById(R.id.background).setAlpha(0);
 
                 myAppAdapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "Clicked card", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), "Clicked card", Toast.LENGTH_SHORT).show();
 
                 Intent cardProfileIntent = new Intent(getApplicationContext(), CardProfileActivity.class);
                 Bundle b = new Bundle();
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 // Get card user parse String
                 b.putString(CARD_USER, al.get(itemPosition).getUserString());
                 cardProfileIntent.putExtra(CARD_BUNDLE, b);
+
                 startActivity(cardProfileIntent);
             }
         });

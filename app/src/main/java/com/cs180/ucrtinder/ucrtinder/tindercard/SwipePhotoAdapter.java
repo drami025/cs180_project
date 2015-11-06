@@ -18,12 +18,14 @@ import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.ui.CardProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 /**
  * Created by bananapanda on 10/22/15.
@@ -33,6 +35,7 @@ public class SwipePhotoAdapter extends PagerAdapter {
     public static Bitmap bmap;
     public static String ActivityType = "";
     public static String User = "";
+    private List<ParseUser> profileUser;
 
     public SwipePhotoAdapter() {
     }
@@ -60,17 +63,24 @@ public class SwipePhotoAdapter extends PagerAdapter {
                 resId = R.layout.profile_photo3;
                 break;
         }
-        
+
         View view = inflater.inflate(resId, null);
 
 
         ParseUser parseUser = null;
         // Select the image to place on the view
-        if (ActivityType.equals(ProfileActivity.KEY_USERPROFILE) || ActivityType.equals("")) {
+        if (ActivityType.equals(ProfileActivity.KEY_USERPROFILE) || ActivityType.equals("")) { //current user
             parseUser = ParseUser.getCurrentUser();
-        } else if (ActivityType.equals(CardProfileActivity.KEY_CARDPROFILE)) {
+        } else if (ActivityType.equals(CardProfileActivity.KEY_CARDPROFILE)) { //card user
             if (!User.equals("")) {
-                parseUser = ParseUser.getCurrentUser().getParseUser(User);
+               ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
+                mainQuery.whereEqualTo(ParseConstants.KEY_OBJECTID, User);
+                try {
+                    profileUser = mainQuery.find();
+                } catch (Exception e) {}
+                if(profileUser != null) {
+                    parseUser = profileUser.get(0);
+                }
             } else {
                 parseUser = null;
             }
@@ -79,53 +89,48 @@ public class SwipePhotoAdapter extends PagerAdapter {
         Bitmap bitmap = null;
 
         if (parseUser != null) {
-            if (ActivityType.equals(ProfileActivity.KEY_USERPROFILE)) {
-                if (resId == R.layout.profile_photo1) {
-                    // Set picture from parse onto picture slider
-                    imageView = (ImageView) view.findViewById(R.id.imageView1);
-                    String url = null;
-                    try {
-                        url = parseUser.getString(ParseConstants.KEY_PHOTO0);
-                    } catch (NullPointerException n) {
-                        n.printStackTrace();
-                    }
-                    if (url == null || (url.equals(""))) {
-                        url = parseUser.getString(ParseConstants.KEY_PROFILEPIC);
-                    }
-                    bitmap = getBitmapFromURL(url);
-
-                } else if (resId == R.layout.profile_photo2) {
-                    // Set picture from parse onto picture slider
-                    imageView = (ImageView) view.findViewById(R.id.imageView2);
-
-                    String url = null;
-                    try {
-                        url = parseUser.getString(ParseConstants.KEY_PHOTO1);
-                    } catch (NullPointerException n) {
-                        n.printStackTrace();
-                    }
-                    if (url == null || (url.equals(""))) {
-                        url = parseUser.getString(ParseConstants.KEY_PROFILEPIC);
-                    }
-                    bitmap = getBitmapFromURL(url);
-
-                } else if (resId == R.layout.profile_photo3) {
-                    // Set picture from parse onto picture slider
-                    imageView = (ImageView) view.findViewById(R.id.imageView3);
-
-                    String url = null;
-                    try {
-                        url = parseUser.getString(ParseConstants.KEY_PHOTO2);
-                    } catch (NullPointerException n) {
-                        n.printStackTrace();
-                    }
-
-                    if (url == null || (url.equals(""))) {
-                        url = parseUser.getString(ParseConstants.KEY_PROFILEPIC);
-                    }
-                    bitmap = getBitmapFromURL(url);
-
+            if (resId == R.layout.profile_photo1) {
+                // Set picture from parse onto picture slider
+                imageView = (ImageView) view.findViewById(R.id.imageView1);
+                String url = null;
+                try {
+                    url = parseUser.getString(ParseConstants.KEY_PHOTO0);
+                } catch (NullPointerException n) {
+                    n.printStackTrace();
                 }
+                if (url == null || (url.equals(""))) {
+                    url = parseUser.getString(ParseConstants.KEY_PROFILEPIC);
+                }
+                bitmap = getBitmapFromURL(url);
+
+            } else if (resId == R.layout.profile_photo2) {
+                // Set picture from parse onto picture slider
+                imageView = (ImageView) view.findViewById(R.id.imageView2);
+                String url = null;
+                try {
+                    url = parseUser.getString(ParseConstants.KEY_PHOTO1);
+                } catch (NullPointerException n) {
+                    n.printStackTrace();
+                }
+                if (url == null || (url.equals(""))) {
+                    url = parseUser.getString(ParseConstants.KEY_PROFILEPIC);
+                }
+                bitmap = getBitmapFromURL(url);
+
+            } else if (resId == R.layout.profile_photo3) {
+                // Set picture from parse onto picture slider
+                imageView = (ImageView) view.findViewById(R.id.imageView3);
+                String url = null;
+                try {
+                    url = parseUser.getString(ParseConstants.KEY_PHOTO2);
+                } catch (NullPointerException n) {
+                    n.printStackTrace();
+                }
+
+                if (url == null || (url.equals(""))) {
+                    url = parseUser.getString(ParseConstants.KEY_PROFILEPIC);
+                }
+                bitmap = getBitmapFromURL(url);
             }
 
             // Set the picture on the view
@@ -133,8 +138,6 @@ public class SwipePhotoAdapter extends PagerAdapter {
                 imageView.setImageBitmap(bitmap);
             }
         }
-
-
 
         ((ViewPager) collection).addView(view, 0);
         return view;

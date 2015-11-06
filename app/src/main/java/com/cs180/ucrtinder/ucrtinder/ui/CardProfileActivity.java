@@ -10,14 +10,17 @@ import android.util.DisplayMetrics;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipePhotoAdapter;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,11 +31,11 @@ import java.util.ArrayList;
 
 public class CardProfileActivity extends AppCompatActivity {
 
-    ParseUser currentUser = ParseUser.getCurrentUser(); //need to generalize this somehow
+    ParseUser currentUser = ParseUser.getCurrentUser();
+    private List<ParseUser> profileUser;
     private ViewPager myPager;
 
     public static final String KEY_CARDPROFILE = "cardprofile";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,20 @@ public class CardProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_card_profile);
 
+
+        // Get intent with card user string data
+        Intent intent = getIntent();
+        Bundle b = intent.getBundleExtra(MainActivity.CARD_BUNDLE);
+        String userString = b.getString(MainActivity.CARD_USER, "");
+
+        ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
+        mainQuery.whereEqualTo(ParseConstants.KEY_OBJECTID, userString);
+        try {
+            profileUser = mainQuery.find();
+        } catch (Exception e) {}
+        if(profileUser != null) {
+            currentUser = profileUser.get(0);
+        }
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         toolbar.setTitle(currentUser.getString(ParseConstants.KEY_NAME));
@@ -50,20 +67,9 @@ public class CardProfileActivity extends AppCompatActivity {
             np.printStackTrace();
         }
 
-
         AndroidDrawer drawer = new AndroidDrawer
                 (this,R.id.drawer_layout_profile,R.id.left_drawer_card_profile, R.id.card_profile_drawer_pic);
 
-        /*this is how to update columns in parse
-        String[] testInterests = {"Trucks", "Cars", "Television", "Movies", "Ghosts", "Cats", "Ghostcats", "Penguins","Computers", "blah","blah"};
-        currentUser.put(ParseConstants.KEY_INTERESTS, Arrays.asList(testInterests));
-        currentUser.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-
-            }
-        });
-        */
         TextView text;
         text = (TextView) this.findViewById(R.id.name_textview);
         text.setText(currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE));
@@ -72,17 +78,14 @@ public class CardProfileActivity extends AppCompatActivity {
         text = (TextView) this.findViewById(R.id.interests_textview);
         ArrayList<String> array = (ArrayList<String>)currentUser.get(ParseConstants.KEY_INTERESTS);
         String in = "";
-        for(int i=0; i<array.size(); i++){
-            in = in.concat(array.get(i));
-            in = in.concat(", ");
+
+        if(array != null) {
+            for (int i = 0; i < array.size(); i++) {
+                in = in.concat(array.get(i));
+                in = in.concat(", ");
+            }
         }
         text.setText(in);
-
-
-        // Get intent with card user string data
-        Intent intent = getIntent();
-        Bundle b = intent.getBundleExtra(MainActivity.CARD_BUNDLE);
-        String userString = b.getString(MainActivity.CARD_USER, "");
 
         // Update photos on photoslider
         SwipePhotoAdapter adapter = new SwipePhotoAdapter(KEY_CARDPROFILE, userString);
