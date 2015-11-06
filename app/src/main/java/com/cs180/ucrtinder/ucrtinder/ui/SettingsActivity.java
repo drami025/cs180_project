@@ -24,7 +24,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         // Creating an android drawer to slide in from the left side
-        AndroidDrawer mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_settings, R.id.left_drawer_settings);
+        AndroidDrawer mAndroidDrawer = new AndroidDrawer
+                (this, R.id.drawer_layout_settings, R.id.left_drawer_settings, R.id.settings_profile_drawer_pic);
 
 
         newMatches = (Switch) findViewById(R.id.matchesswitch);

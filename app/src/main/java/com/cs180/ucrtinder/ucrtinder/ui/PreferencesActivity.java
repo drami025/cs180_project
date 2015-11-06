@@ -47,7 +47,8 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
 
 
         // Creating an android drawer to slide in from the left side
-        AndroidDrawer mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_preferences, R.id.left_drawer_preferences);
+        AndroidDrawer mAndroidDrawer = new AndroidDrawer
+                (this, R.id.drawer_layout_preferences, R.id.left_drawer_preferences, R.id.preferences_profile_drawer_pic);
 
         if (savedInstanceState != null) {
             savedInstanceState.putInt("BAR_COLOR", mBarColor);

@@ -51,7 +51,8 @@ public class CardProfileActivity extends AppCompatActivity {
         }
 
 
-        AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_profile,R.id.left_drawer_profile);
+        AndroidDrawer drawer = new AndroidDrawer
+                (this,R.id.drawer_layout_profile,R.id.left_drawer_card_profile, R.id.card_profile_drawer_pic);
 
         /*this is how to update columns in parse
         String[] testInterests = {"Trucks", "Cars", "Television", "Movies", "Ghosts", "Cats", "Ghostcats", "Penguins","Computers", "blah","blah"};

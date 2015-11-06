@@ -115,7 +115,8 @@ public class AtlasMessagesScreen extends AppCompatActivity {
 
         // Android drawer init
         // Creating an android drawer to slide in from the left side
-        AndroidDrawer mDrawer = new AndroidDrawer(this, R.id.drawer_layout_messages, R.id.left_drawer_messages);
+        AndroidDrawer mDrawer = new AndroidDrawer
+                (this, R.id.drawer_layout_messages, R.id.left_drawer_messages, R.id.messages_profile_drawer_pic);
 
 
         boolean convIsNew = getIntent().getBooleanExtra(EXTRA_CONVERSATION_IS_NEW, false);

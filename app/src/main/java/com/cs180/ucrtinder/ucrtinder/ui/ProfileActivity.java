@@ -38,7 +38,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_profile,R.id.left_drawer_profile);
+        AndroidDrawer drawer = new AndroidDrawer
+                (this,R.id.drawer_layout_profile,R.id.left_drawer_profile, R.id.profile_profile_drawer_pic);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         toolbar.setTitle(currentUser.getString(ParseConstants.KEY_NAME));

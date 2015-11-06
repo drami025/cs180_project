@@ -79,7 +79,8 @@ public class ConversationActivity extends AppCompatActivity {
 
         // Android drawer init
         // Creating an android drawer to slide in from the left side
-        AndroidDrawer mDrawer = new AndroidDrawer(this, R.id.drawer_layout_conversation_screen, R.id.left_drawer_conversation_screen);
+        AndroidDrawer mDrawer = new AndroidDrawer
+                (this, R.id.drawer_layout_conversation_screen, R.id.left_drawer_conversation_screen, R.id.conversation_profile_drawer_pic);
     }
 
 

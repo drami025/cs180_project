@@ -50,7 +50,8 @@ public class AtlasParticipantPickersScreen extends AppCompatActivity {
 
         // Android drawer init
         // Creating an android drawer to slide in from the left side
-        AndroidDrawer mDrawer = new AndroidDrawer(this, R.id.drawer_layout_participants_picker, R.id.left_drawer_participants_picker);
+        AndroidDrawer mDrawer = new AndroidDrawer
+                (this, R.id.drawer_layout_participants_picker, R.id.left_drawer_participants_picker, R.id.participants_profile_drawer_pic);
 
 
         String[] skipUserIds = getIntent().getExtras().getStringArray(EXTRA_KEY_USERIDS_SKIP);

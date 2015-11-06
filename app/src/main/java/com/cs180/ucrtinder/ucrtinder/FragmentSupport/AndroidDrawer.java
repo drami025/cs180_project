@@ -2,6 +2,8 @@ package com.cs180.ucrtinder.ucrtinder.FragmentSupport;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.preference.PreferenceActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -10,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.cs180.ucrtinder.ucrtinder.ui.ConversationActivity;
@@ -21,6 +24,12 @@ import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity;
 import com.parse.ParseUser;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Created by daniel on 10/23/15.
  */
@@ -30,14 +39,24 @@ public class AndroidDrawer {
     private ActionBarDrawerToggle mDrawerToggle;
     private int mPosition;
     private AppCompatActivity mActivity;
+    private ImageView mProfileImage;
 
-    public AndroidDrawer(AppCompatActivity activity, int drawer_layout, int left_drawer){
+    public AndroidDrawer(AppCompatActivity activity, int drawer_layout, int left_drawer, int profile_pic){
+        this(activity, drawer_layout, left_drawer, profile_pic, null);
+    }
+
+    public AndroidDrawer(AppCompatActivity activity, int drawer_layout, int left_drawer, int profile_pic, final Context context){
 
         mActivity = activity;
 
         mPosition = getPosition(activity);
         mDrawerLayout = (DrawerLayout) mActivity.findViewById(drawer_layout);
         mDrawerLayout.setBackgroundColor(Color.WHITE);
+
+        mProfileImage = (ImageView) mActivity.findViewById(profile_pic);
+        mProfileImage.setOnClickListener(new PhotoClickListener());
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        es.execute(new ProfileImageRunnable());
 
         mDrawerList = (ListView) mActivity.findViewById(left_drawer);
         String[] naviItems = mActivity.getResources().getStringArray(R.array.menu_items);
@@ -56,6 +75,11 @@ public class AndroidDrawer {
             public void onDrawerOpened(View drawerView){
                 super.onDrawerOpened(drawerView);
                 mActivity.invalidateOptionsMenu();
+
+                if(context != null) {
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
+                }
             }
         };
 
@@ -70,46 +94,15 @@ public class AndroidDrawer {
         });
     }
 
-    public AndroidDrawer(AppCompatActivity activity, int drawer_layout, int left_drawer, final Context context){
+    private class PhotoClickListener implements ImageView.OnClickListener{
 
-        mActivity = activity;
-
-        mPosition = getPosition(activity);
-        mDrawerLayout = (DrawerLayout) mActivity.findViewById(drawer_layout);
-        mDrawerLayout.setBackgroundColor(Color.WHITE);
-
-        mDrawerList = (ListView) mActivity.findViewById(left_drawer);
-        String[] naviItems = mActivity.getResources().getStringArray(R.array.menu_items);
-        String[] descriptionItems = mActivity.getResources().getStringArray(R.array.menu_descriptions);
-
-        mDrawerList.setAdapter(new AndroidDrawerAdapter(mActivity, naviItems, descriptionItems, mPosition));
-
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, R.string.open, R.string.close){
-            public void onDrawerClosed(View view){
-                super.onDrawerClosed(view);
-                mActivity.invalidateOptionsMenu();
+        @Override
+        public void onClick(View view) {
+            if(mPosition != 0){
+                Intent intent = new Intent(mActivity, ProfileActivity.class);
+                mActivity.startActivity(intent);
             }
-
-            public void onDrawerOpened(View drawerView){
-                super.onDrawerOpened(drawerView);
-                mActivity.invalidateOptionsMenu();
-
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(drawerView.getWindowToken(), 0);
-            }
-        };
-
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        mDrawerLayout.post(new Runnable(){
-            @Override
-            public void run(){
-                mDrawerToggle.syncState();
-            }
-        });
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
@@ -182,6 +175,34 @@ public class AndroidDrawer {
         }
 
         return -1;
+    }
+
+    class ProfileImageRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            final Bitmap bmp;
+
+            try {
+                ParseUser user = ParseUser.getCurrentUser();
+                String urlString = user.getString("photo0");
+                URL url = new URL(urlString);
+                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mProfileImage.setImageBitmap(bmp);
+                    }
+                });
+            }
+            catch(MalformedURLException e){
+                e.printStackTrace();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 
 }

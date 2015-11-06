@@ -107,18 +107,33 @@
         </ScrollView>
     </LinearLayout>
 
-    <ListView android:id="@+id/left_drawer_profile"
+    <LinearLayout
         android:layout_width="180dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="0dp"
+        android:orientation="vertical"
         android:background="#ffffffff"
+        android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:clipToPadding="false"
-        >
-    </ListView>
+        android:clipToPadding="false">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/card_profile_drawer_pic"
+            android:layout_gravity="center"
+            android:contentDescription="@string/profile_pic"
+            />
+
+        <ListView android:id="@+id/left_drawer_card_profile"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_gravity="start"
+                  android:choiceMode="singleChoice"
+                  android:divider="@android:color/darker_gray"
+                  android:dividerHeight="0dp"
+                  android:background="#ffffffff" >
+        </ListView>
+    </LinearLayout>
 
 
 

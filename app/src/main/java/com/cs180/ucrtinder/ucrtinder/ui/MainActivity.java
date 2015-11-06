@@ -83,10 +83,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
         mProfileImage = (ImageView) findViewById(R.id.main_profile_drawer_pic);
 
-        ExecutorService es = Executors.newFixedThreadPool(1);
-        es.execute(new ProfileImageRunnable());
+//        ExecutorService es = Executors.newFixedThreadPool(1);
+//        es.execute(new ProfileImageRunnable(mProfileImage));
 
-        mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_main, R.id.left_drawer_main);
+        mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_main, R.id.left_drawer_main, R.id.main_profile_drawer_pic);
 
         //Set up toolbar
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -153,6 +153,13 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     }
 
     class ProfileImageRunnable implements Runnable {
+
+        private ImageView mProfileImage;
+
+        public ProfileImageRunnable(ImageView profileImage){
+            mProfileImage = profileImage;
+        }
+
         @Override
         public void run() {
             final Bitmap bmp;

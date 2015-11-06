@@ -30,7 +30,8 @@ public class EditProfileActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        AndroidDrawer drawer = new AndroidDrawer(this,R.id.drawer_layout_edit_profile,R.id.left_drawer_edit_profile, getApplicationContext());
+        AndroidDrawer drawer = new AndroidDrawer
+                (this,R.id.drawer_layout_edit_profile,R.id.left_drawer_edit_profile, R.id.edit_profile_drawer_pic, getApplicationContext());
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_edit_toolbar);
         toolbar.setTitle("Edit Profile");
