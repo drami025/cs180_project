@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -21,11 +22,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
+import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.tindercard.Data;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.FlingCardListener;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipeFlingAdapterView;
+import com.parse.FindCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -33,6 +36,7 @@ import com.parse.ParseUser;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 Bundle b = new Bundle();
 
                 // Get card user parse String
-                b.putString(CARD_USER,  al.get(itemPosition).getUserString());
+                b.putString(CARD_USER, al.get(itemPosition).getUserString());
                 cardProfileIntent.putExtra(CARD_BUNDLE, b);
                 startActivity(cardProfileIntent);
             }
@@ -196,8 +200,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
         al = new ArrayList<>();
         for (int i = 0; i < candidates.size(); ++i) {
-            al.add(new Data(candidates.get(i).getString("profilePictureUrl"), candidates.get(i).getString("name") +
-                    ", " + candidates.get(i).getNumber("age"), candidates.get(i).getObjectId()));
+            al.add(new Data(candidates.get(i).getString(ParseConstants.KEY_PHOTO0), candidates.get(i).getString(ParseConstants.KEY_NAME) +
+                    ", " + candidates.get(i).getNumber(ParseConstants.KEY_AGE), candidates.get(i).getObjectId()));
         }
         myAppAdapter = new MyAppAdapter(al, MainActivity.this);
         flingContainer.setAdapter(myAppAdapter);
@@ -273,11 +277,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     }
 
     public List<ParseUser> getCandidates()  {
+
         // local variables
         String gender = user.getString("gender");
         boolean men = user.getBoolean("men");
         boolean women = user.getBoolean("women");
-        int age = (int)user.getNumber("age");
+        int age = (int) user.getNumber("age");
         int minAge = (int)user.getNumber("minAge");
         int maxAge = (int)user.getNumber("maxAge");
         int maxDist = (int)user.getNumber("maxDist");
@@ -285,21 +290,21 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
         // set up query
         ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
-        if (men && women) {}
+/*        if (men && women) {}
         else if (men) mainQuery.whereEqualTo("gender", "male");
         else if (women) mainQuery.whereEqualTo("gender", "female");
         mainQuery.whereNotEqualTo("objectId", user.getObjectId());
         mainQuery.whereGreaterThanOrEqualTo("age", minAge);
         mainQuery.whereLessThanOrEqualTo("age", maxAge);
         mainQuery.whereWithinMiles("location", location, maxDist);
-
+*/
         // further filter candidates
         try {
             candidates = mainQuery.find();
         } catch (Exception e) {
             return null;
         }
-        Iterator<ParseUser> it = candidates.iterator();
+ /*       Iterator<ParseUser> it = candidates.iterator();
         while (it.hasNext()) {
             ParseUser candidate = it.next();
             if (age < (int)candidate.getNumber("minAge") || age > (int)candidate.getNumber("maxAge") ||
@@ -309,9 +314,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 it.remove();
             }
         }
-
+*/
         // sort candidates
-        Collections.sort(candidates, new Comparator<ParseUser>() {
+  /*      Collections.sort(candidates, new Comparator<ParseUser>() {
             public int compare(ParseUser l, ParseUser r) {
                 double lCount = 0, rCount = 0;
                 List<String> interests = ParseUser.getCurrentUser().getList("interests");
@@ -336,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         candidates.removeAll(likes);
         candidates.removeAll(dislikes);
         candidates.removeAll(matches);
-
+*/
         if(candidates == null){
             candidates = new ArrayList<>();
         }
