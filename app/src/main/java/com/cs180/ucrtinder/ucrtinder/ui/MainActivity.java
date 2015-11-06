@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user = ParseUser.getCurrentUser();
 
         // Start Location when this activity is open
         Log.d(getClass().getSimpleName(), "Started the geolocation service");
@@ -173,7 +172,13 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     }
 
     public void pullCandidates(){
+        user = ParseUser.getCurrentUser();
         candidates = getCandidates();
+
+        if(candidates == null){
+            return;
+        }
+
         al = new ArrayList<>();
         for (int i = 0; i < candidates.size(); ++i) {
             al.add(new Data(candidates.get(i).getString("profilePictureUrl"), candidates.get(i).getString("name") +
@@ -274,7 +279,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         mainQuery.whereWithinMiles("location", location, maxDist);
 
         // further filter candidates
-        List<ParseUser> candidates;
         try {
             candidates = mainQuery.find();
         } catch (Exception e) {
@@ -317,6 +321,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         candidates.removeAll(likes);
         candidates.removeAll(dislikes);
         candidates.removeAll(matches);
+
+        if(candidates == null){
+            candidates = new ArrayList<>();
+        }
+
         return candidates;
     }
 
@@ -375,6 +384,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     @Override
     public void onResume(){
         super.onResume();
-        //pullCandidates();
+        pullCandidates();
     }
 }

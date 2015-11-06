@@ -63,6 +63,8 @@ public class LoginActivity extends FragmentActivity {
             return;
         }
 
+        Log.e("LOGIN", "RETRIEVING INFO FROM FB");
+
         List<String> mPermissions = Arrays.asList("user_friends", "user_photos", "user_birthday", "email", "user_about_me", "user_photos" , "public_profile", "email");
 
         ParseFacebookUtils.logInWithReadPermissionsInBackground(mActivity, mPermissions, new LogInCallback() {
@@ -93,10 +95,7 @@ public class LoginActivity extends FragmentActivity {
 
                         Log.e("RESPONSE", jsonObject.toString());
 
-
-
                         getUserDetailsFromFB(jsonObject);
-
 
                         mActivity.runOnUiThread(new Runnable() {
                             @Override
