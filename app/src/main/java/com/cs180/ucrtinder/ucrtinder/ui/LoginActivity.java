@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -132,6 +133,22 @@ public class LoginActivity extends FragmentActivity {
             user.put(ParseConstants.KEY_NAME, firstName);
             user.put("facebookId", id);
             user.put("birthday", birthday);
+
+
+            List<ParseUser> likes = user.getList("likes");
+            if(likes == null) {
+                user.put("likes", new ArrayList<ParseUser>());
+            }
+
+            List<ParseUser> dislikes = user.getList("dislikes");
+            if(dislikes == null) {
+                user.put("dislikes", new ArrayList<ParseUser>());
+            }
+
+            List<ParseUser> matches = user.getList("matches");
+            if(matches == null) {
+                user.put("matches", new ArrayList<ParseUser>());
+            }
 
             int age = getAge(birthday);
             Log.e("AGE", age + "");
