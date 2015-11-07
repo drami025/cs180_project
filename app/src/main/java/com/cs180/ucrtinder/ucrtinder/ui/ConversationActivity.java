@@ -116,7 +116,7 @@ public class ConversationActivity extends AppCompatActivity {
             }
 
             // Added new message between people
-            /*
+
             btnNewConversation = findViewById(R.id.atlas_conversation_screen_new_conversation);
             btnNewConversation.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -126,7 +126,7 @@ public class ConversationActivity extends AppCompatActivity {
                     return;
                 }
             });
-            */
+
 
             prepareActionBar();
             isInitialized = true;

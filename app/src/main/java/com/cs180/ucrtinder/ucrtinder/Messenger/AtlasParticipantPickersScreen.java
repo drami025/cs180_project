@@ -15,7 +15,6 @@
  */
 package com.cs180.ucrtinder.ucrtinder.Messenger;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

@@ -46,7 +46,7 @@
 
         <include layout="@layout/atlas_actionbar_layout"/>
 
-        <!--
+
         <View
             android:id="@+id/atlas_conversation_screen_new_conversation"
             android:layout_width ="72dp"
@@ -58,7 +58,7 @@
             android:background="@drawable/atlas_ctl_btn_plus_big"
             />
 
-            -->
+
 
         <ImageView
             android:id="@+id/atlas_screen_login_splash"

@@ -22,12 +22,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
+import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasIdentityProvider;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.tindercard.Data;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.FlingCardListener;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipeFlingAdapterView;
+import com.layer.atlas.Atlas;
 import com.parse.FindCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -40,8 +42,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -392,6 +396,25 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                     candidates.get(currentCandidate).put("matches", targetMatches);
                     user.saveInBackground();
                     candidates.get(currentCandidate).saveInBackground();
+
+                    // Add this parseUser to the atlas message system list
+                    /*
+                    AtlasIdentityProvider atlasIdentityProvider = new AtlasIdentityProvider(getApplicationContext());
+                    AtlasIdentityProvider.Participant participant = (AtlasIdentityProvider.Participant) atlasIdentityProvider.getParticipant(
+                             candidates.get(currentCandidate).getString("atlasMessengerId"));
+
+                    Map<String, Atlas.Participant> participants = new HashMap<>();
+                    participants = atlasIdentityProvider.getParticipants(null, participants);
+                    participants.put(participant.getId(), participant);
+
+                    */
+                    //atlasIdentityProvider.
+
+                    // Create a notification message here
+
+
+
+
                 }
                 ++currentCandidate;
             }
