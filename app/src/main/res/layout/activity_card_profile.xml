@@ -103,6 +103,32 @@
                     android:layout_below="@+id/interests_title_text"
                     android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"/>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/mutual_friend_divider"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mutual_friends_card_tag"
+                    android:id="@+id/mutual_friend_card_text"
+                    android:textColor="#FF000000"
+                    />
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card_profile_hsv"/>
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
