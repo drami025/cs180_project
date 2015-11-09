@@ -306,7 +306,6 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         void onItemClicked(int itemPosition, Object dataObject);
     }
 
-
     public interface onFlingListener {
         void removeFirstObjectInAdapter();
 

@@ -34,7 +34,16 @@
             android:orientation="vertical"
             >
 
-            <include layout="@layout/atlas_actionbar_stub"/>
+            <!-- <include layout="@layout/atlas_actionbar_stub"/> -->
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/atlas_delimeter_gray"
+                android:elevation="4dp"
+                android:theme="@style/ToolBarStyle"
+                android:popupTheme="@style/Theme.AppCompat.Light" />
 
             <com.layer.atlas.AtlasConversationsList
                 android:id="@+id/atlas_screen_conversations_conversations_list"
@@ -44,7 +53,7 @@
 
         </LinearLayout>
 
-        <include layout="@layout/atlas_actionbar_layout"/>
+        <!-- <include layout="@layout/atlas_actionbar_layout"/> -->
 
 
         <View
@@ -59,7 +68,7 @@
             />
 
 
-
+        <!--
         <ImageView
             android:id="@+id/atlas_screen_login_splash"
             android:layout_width="match_parent"
@@ -67,6 +76,7 @@
             android:background="@color/atlas_background_blue_dark"
             android:padding="32dp"
             android:src="@drawable/atlas_logo_splash"/>
+            -->
 
     </FrameLayout>
 

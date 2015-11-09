@@ -434,7 +434,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         public void onScroll(float scrollProgressPercent) {
 
             View view = flingContainer.getSelectedView();
-            view.findViewById(R.id.background).setAlpha(0);
+            if (view.findViewById(R.id.background) != null) {
+                view.findViewById(R.id.background).setAlpha(0);
+            }
             view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
             view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
         }

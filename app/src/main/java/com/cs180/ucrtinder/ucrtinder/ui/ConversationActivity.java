@@ -22,9 +22,8 @@ package com.cs180.ucrtinder.ucrtinder.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
 import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasLoginScreen;
 import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasMessagesScreen;
 import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasQRCaptureScreen;
@@ -81,6 +81,18 @@ public class ConversationActivity extends AppCompatActivity {
         // Creating an android drawer to slide in from the left side
         AndroidDrawer mDrawer = new AndroidDrawer
                 (this, R.id.drawer_layout_conversation_screen, R.id.left_drawer_conversation_screen, R.id.conversation_profile_drawer_pic);
+
+
+        // Initialize toolbar
+        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        toolbar.setTitle("Matched");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new NavigationListener(mDrawer));
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException np) {
+            np.printStackTrace();
+        }
     }
 
 
@@ -128,7 +140,7 @@ public class ConversationActivity extends AppCompatActivity {
             });
 
 
-            prepareActionBar();
+            //prepareActionBar();
             isInitialized = true;
         }
         app.getLayerClient().registerEventListener(conversationsList);
@@ -182,11 +194,12 @@ public class ConversationActivity extends AppCompatActivity {
 
         // Can we continue in this Activity?
         if ((app.getAppId() != null) && (app.getLayerClient() != null) && app.getLayerClient().isAuthenticated()) {
-            findViewById(R.id.atlas_screen_login_splash).setVisibility(View.GONE);
+            //findViewById(R.id.atlas_screen_login_splash).setVisibility(View.GONE);
             initializeViews();
             return;
         }
 
+        /*
         // Must route.
         if (showSplash) {
             showSplash = false;
@@ -200,6 +213,7 @@ public class ConversationActivity extends AppCompatActivity {
             findViewById(R.id.atlas_screen_login_splash).setVisibility(View.GONE);
             route();
         }
+        */
     }
 
     private void route() {
@@ -225,7 +239,7 @@ public class ConversationActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_LOGIN_SCREEN);
             return;
         }
-        findViewById(R.id.atlas_screen_login_splash).setVisibility(View.GONE);
+        //findViewById(R.id.atlas_screen_login_splash).setVisibility(View.GONE);
         initializeViews();
     }
 
