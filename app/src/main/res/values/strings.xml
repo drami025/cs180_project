@@ -174,5 +174,8 @@
     <string name="rightIndexValue">55+</string>
     <string name="rightIndex">rightIndex</string>
     <string name="refresh">Refresh Indices</string>
+    <string name="mutual_friends_tag">mutual friends:</string>
+    <string name="mutual_friends_card_tag">Mutual Friends</string>
+    <string name="example_mutual_friend_name">EXAMPLE NAME</string>
 
 </resources>
