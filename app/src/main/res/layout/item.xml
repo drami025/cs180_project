@@ -68,23 +68,31 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:gravity="top|center_horizontal"
             android:orientation="horizontal">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/bookText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:gravity="center"
+                android:paddingRight="60dp"
+                android:paddingEnd="60dp"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:textColor="#787878"
+                android:textSize="20sp"
+                tools:text="@string/abc_action_mode_done" />
 
-                <TextView
-                    android:id="@+id/bookText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:textColor="#787878"
-                    android:textSize="20sp"
-                    tools:text="@string/abc_action_mode_done" />
-            </ScrollView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/mutual_friend_count"
+                android:gravity="center"
+                android:layout_gravity="end"
+                android:textColor="#787878"
+                android:textSize="15sp"
+                android:text="@string/mutual_friends_tag"/>
         </LinearLayout>
 
     </LinearLayout>
