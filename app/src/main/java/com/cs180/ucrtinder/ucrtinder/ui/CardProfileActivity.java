@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,8 +17,16 @@ import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipePhotoAdapter;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +57,25 @@ public class CardProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle b = intent.getBundleExtra(MainActivity.CARD_BUNDLE);
         String userString = b.getString(MainActivity.CARD_USER, "");
+        String profileId = b.getString(MainActivity.CARD_ID, "");
+
+        Log.e("PROFILE ID", profileId);
+
+        if(profileId.contains("[")){
+            profileId = "";
+        }
+
+        getMutualFriendIDs(profileId);
 
         ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
         mainQuery.whereEqualTo(ParseConstants.KEY_OBJECTID, userString);
+
         try {
             profileUser = mainQuery.find();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if(profileUser != null) {
             currentUser = profileUser.get(0);
         }
@@ -111,4 +133,43 @@ public class CardProfileActivity extends AppCompatActivity {
         });
     }
 
+
+    public void getMutualFriendIDs(final String userId){
+
+        Bundle params = new Bundle();
+        params.putString("fields", "context.fields(mutual_friends)");
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/" + userId, params, HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+
+                        Log.e("RESPONSE", graphResponse.toString());
+
+                        try {
+                            ArrayList<String> names = new ArrayList<String>();
+                            ArrayList<String> ids = new ArrayList<String>();
+
+                            JSONObject contextObj = graphResponse.getJSONObject().getJSONObject("context");
+                            JSONObject mutualFriendsObj = contextObj.getJSONObject("mutual_friends");
+                            JSONArray friendData = mutualFriendsObj.getJSONArray("data");
+
+                            for(int i = 0; i < friendData.length(); i++){
+                                JSONObject obj = friendData.getJSONObject(i);
+                                names.add(obj.getString("name"));
+                                ids.add(obj.getString("id"));
+                            }
+
+                            getMutualFriendPictures(names, ids);
+                        }
+                        catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }).executeAsync();
+    }
+
+    public void getMutualFriendPictures(ArrayList<String> names, ArrayList<String> ids){
+
+    }
 }

@@ -38,7 +38,9 @@ public class SwipePhotoAdapter extends PagerAdapter {
     private List<ParseUser> profileUser;
 
     public SwipePhotoAdapter() {
+
     }
+
     public SwipePhotoAdapter(String type, String user) {
         ActivityType = type;
         User = user;

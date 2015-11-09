@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.OnCardsLoadedListener;
 import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasIdentityProvider;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.tindercard.Data;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // Daniel removed the call to the login
 
@@ -62,7 +64,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     private AndroidDrawer mAndroidDrawer;
     private Toolbar mToolbar;
     int currentCandidate = 0;
-    private ImageView mProfileImage;
+    MainActivity mActivity;
+    private AtomicInteger mCounter = new AtomicInteger(0);
+    private AtomicInteger mLimit;
+
+    private OnCardsLoadedListener mCardsCompleteListener;
 
     private Button likebtn;
     private Button dislikebtn;
@@ -70,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public static final String CARD_BUNDLE = "cardBundle";
     public static final String CARD_USER = "cardUser";
     public static final String CARD_NAME = "cardName";
+    public static final String CARD_ID = "cardID";
 
     public static void removeBackground() {
 
@@ -84,13 +91,14 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mActivity = this;
+
         // Start Location when this activity is open
         Log.d(getClass().getSimpleName(), "Started the geolocation service");
         //startService(new Intent(this, GeoLocationService.class));
 
         // Creating an android drawer to slide in from the left side
 
-        mProfileImage = (ImageView) findViewById(R.id.main_profile_drawer_pic);
 
 //        ExecutorService es = Executors.newFixedThreadPool(1);
 //        es.execute(new ProfileImageRunnable(mProfileImage));
@@ -107,6 +115,49 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
         pullCandidates();
+    }
+
+    public void pullCandidates(){
+        user = ParseUser.getCurrentUser();
+        candidates = getCandidates();
+
+        if(candidates == null){
+            return;
+        }
+
+        mCardsCompleteListener = new OnCardsLoadedListener() {
+            @Override
+            public void onCardsLoaded() {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mCounter.addAndGet(1) == mLimit.get()) {
+                            myAppAdapter = new MyAppAdapter(al, MainActivity.this);
+                            flingContainer.setAdapter(myAppAdapter);
+                            setContainerListeners();
+                            myAppAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        };
+
+        al = new ArrayList<>();
+        mLimit = new AtomicInteger(candidates.size());
+        for (int i = 0; i < candidates.size(); ++i) {
+
+            if(candidates.get(i).getString("facebookId") == null){
+                mLimit.decrementAndGet();
+            }
+
+            al.add(new Data(candidates.get(i).getString(ParseConstants.KEY_PHOTO0), candidates.get(i).getString(ParseConstants.KEY_NAME) +
+                    ", " + candidates.get(i).getNumber(ParseConstants.KEY_AGE), candidates.get(i).getObjectId(),
+                    candidates.get(i).getString("facebookId"), mCardsCompleteListener, i));
+        }
+    }
+
+    void setContainerListeners(){
+        flingContainer.setFlingListener(new CardSwipeListener());
 
         // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
@@ -117,13 +168,14 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 view.findViewById(R.id.background).setAlpha(0);
 
                 myAppAdapter.notifyDataSetChanged();
-              //  Toast.makeText(getApplicationContext(), "Clicked card", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getApplicationContext(), "Clicked card", Toast.LENGTH_SHORT).show();
 
                 Intent cardProfileIntent = new Intent(getApplicationContext(), CardProfileActivity.class);
                 Bundle b = new Bundle();
 
                 // Get card user parse String
                 b.putString(CARD_USER, al.get(itemPosition).getUserString());
+                b.putString(CARD_ID, al.get(itemPosition).getID());
                 cardProfileIntent.putExtra(CARD_BUNDLE, b);
 
                 startActivity(cardProfileIntent);
@@ -162,58 +214,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         });
     }
 
-    class ProfileImageRunnable implements Runnable {
-
-        private ImageView mProfileImage;
-
-        public ProfileImageRunnable(ImageView profileImage){
-            mProfileImage = profileImage;
-        }
-
-        @Override
-        public void run() {
-            final Bitmap bmp;
-
-            try {
-                ParseUser user = ParseUser.getCurrentUser();
-                String urlString = user.getString("photo0");
-                URL url = new URL(urlString);
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProfileImage.setImageBitmap(bmp);
-                    }
-                });
-            }
-            catch(MalformedURLException e){
-                e.printStackTrace();
-            }
-            catch(IOException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void pullCandidates(){
-        user = ParseUser.getCurrentUser();
-        candidates = getCandidates();
-
-        if(candidates == null){
-            return;
-        }
-
-        al = new ArrayList<>();
-        for (int i = 0; i < candidates.size(); ++i) {
-            al.add(new Data(candidates.get(i).getString(ParseConstants.KEY_PHOTO0), candidates.get(i).getString(ParseConstants.KEY_NAME) +
-                    ", " + candidates.get(i).getNumber(ParseConstants.KEY_AGE), candidates.get(i).getObjectId()));
-        }
-        myAppAdapter = new MyAppAdapter(al, MainActivity.this);
-        flingContainer.setAdapter(myAppAdapter);
-        flingContainer.setFlingListener(new CardSwipeListener());
-    }
-
     @Override
     public void onActionDownPerform() {
         Log.e("action", "bingo");
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         public static FrameLayout background;
         public TextView DataText;
         public ImageView cardImage;
-
+        public TextView mutualFriendText;
 
     }
 
@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 viewHolder.DataText = (TextView) rowView.findViewById(R.id.bookText);
                 viewHolder.background = (FrameLayout) rowView.findViewById(R.id.background);
                 viewHolder.cardImage = (ImageView) rowView.findViewById(R.id.cardImage);
+                viewHolder.mutualFriendText = (TextView) rowView.findViewById(R.id.mutual_friend_count);
 
                 rowView.setTag(viewHolder);
 
@@ -275,6 +276,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             viewHolder.DataText.setText(parkingList.get(position).getDescription() + "");
+            viewHolder.mutualFriendText.setText(viewHolder.mutualFriendText.getText().toString() + " " +
+                    parkingList.get(position).getMutualFriendCount());
 
             Glide.with(MainActivity.this).load(parkingList.get(position).getImagePath()).into(viewHolder.cardImage);
 
@@ -292,6 +295,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         int minAge = (int)user.getNumber("minAge");
         int maxAge = (int)user.getNumber("maxAge");
         int maxDist = (int)user.getNumber("maxDist");
+        String id = user.getString("id");
+
         ParseGeoPoint location = user.getParseGeoPoint("location");
 
         // set up query
