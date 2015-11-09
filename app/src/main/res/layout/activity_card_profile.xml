@@ -127,7 +127,13 @@
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/card_profile_hsv"/>
+                    android:id="@+id/card_profile_hsv">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/card_profile_hsv_layout"/>
+                </HorizontalScrollView>
 
             </LinearLayout>
         </ScrollView>

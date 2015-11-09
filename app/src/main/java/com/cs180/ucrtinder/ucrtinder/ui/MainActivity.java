@@ -370,13 +370,13 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         public void onLeftCardExit(Object dataObject) {
             al.remove(0);
             myAppAdapter.notifyDataSetChanged();
-            List<ParseUser> dislikes = user.getList("dislikes");
+            /*List<ParseUser> dislikes = user.getList("dislikes");
             int i = currentCandidate;
             if(i++ < candidates.size() ) {
                 dislikes.add(candidates.get(currentCandidate++));
             }
             user.put("dislikes", dislikes);
-            user.saveInBackground();
+            user.saveInBackground();*/
         }
 
         @Override
@@ -384,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
             al.remove(0);
             myAppAdapter.notifyDataSetChanged();
-            List<ParseUser> likes = user.getList("likes");
+            /*List<ParseUser> likes = user.getList("likes");
             int i = currentCandidate;
             if(i++ < candidates.size() ) {
                 likes.add(candidates.get(currentCandidate));
@@ -420,9 +420,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
 
 
-                }
-                ++currentCandidate;
-            }
+                //}
+                //++currentCandidate;
+            //}
         }
 
         @Override
