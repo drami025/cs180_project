@@ -40,6 +40,7 @@ import com.cs180.ucrtinder.ucrtinder.Parse.YouWhoApplication;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.layer.atlas.Atlas;
 import com.layer.atlas.AtlasConversationsList;
+import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
@@ -98,7 +99,7 @@ public class ConversationActivity extends AppCompatActivity {
 
     private synchronized void initializeViews() {
         if (app.getLayerClient() == null) {
-            //return;
+            return;
         }
 
         if (!isInitialized) {
@@ -111,9 +112,9 @@ public class ConversationActivity extends AppCompatActivity {
             });
             conversationsList.setLongClickListener(new AtlasConversationsList.ConversationLongClickListener() {
                 public void onItemLongClick(Conversation conversation) {
-//                    conversation.delete(DeletionMode.ALL_PARTICIPANTS);
-//                    updateValues();
-//                    Toast.makeText(AtlasConversationsScreen.this, "Deleted: " + conversation, Toast.LENGTH_SHORT).show();
+                    conversation.delete(LayerClient.DeletionMode.ALL_PARTICIPANTS);
+                    updateValues();
+                    //Toast.makeText(ConversationActivity.this, "Deleted: " + conversation, Toast.LENGTH_SHORT).show();
                 }
             });
             if (USE_QUERY) {
@@ -132,8 +133,11 @@ public class ConversationActivity extends AppCompatActivity {
             btnNewConversation = findViewById(R.id.atlas_conversation_screen_new_conversation);
             btnNewConversation.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    // Adding a new conversation
                     Intent intent = new Intent(v.getContext(), AtlasMessagesScreen.class);
                     intent.putExtra(AtlasMessagesScreen.EXTRA_CONVERSATION_IS_NEW, true);
+
+
                     startActivity(intent);
                     return;
                 }
@@ -199,6 +203,8 @@ public class ConversationActivity extends AppCompatActivity {
             return;
         }
 
+        // Route it to the messaging conversation list
+        route();
         /*
         // Must route.
         if (showSplash) {

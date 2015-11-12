@@ -3,8 +3,7 @@ package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,43 +11,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.OnCardsLoadedListener;
-import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasIdentityProvider;
+import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasMessagesScreen;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.tindercard.Data;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.FlingCardListener;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipeFlingAdapterView;
-import com.layer.atlas.Atlas;
-import com.parse.FindCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 // Daniel removed the call to the login
@@ -150,9 +134,14 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 mLimit.decrementAndGet();
             }
 
-            al.add(new Data(candidates.get(i).getString(ParseConstants.KEY_PHOTO0), candidates.get(i).getString(ParseConstants.KEY_NAME) +
-                    ", " + candidates.get(i).getNumber(ParseConstants.KEY_AGE), candidates.get(i).getObjectId(),
-                    candidates.get(i).getString("facebookId"), mCardsCompleteListener, i));
+            al.add(new Data(
+                    candidates.get(i).getString(ParseConstants.KEY_PHOTO0),
+                    candidates.get(i).getString(ParseConstants.KEY_NAME) + ", " + candidates.get(i).getNumber(ParseConstants.KEY_AGE),
+                    candidates.get(i).getObjectId(),
+                    candidates.get(i).getString("facebookId"),
+                    mCardsCompleteListener,
+                    i,
+                    candidates.get(i).getString("layerId")));
         }
     }
 
@@ -370,13 +359,22 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         public void onLeftCardExit(Object dataObject) {
             al.remove(0);
             myAppAdapter.notifyDataSetChanged();
-            /*List<ParseUser> dislikes = user.getList("dislikes");
-            int i = currentCandidate;
-            if(i++ < candidates.size() ) {
-                dislikes.add(candidates.get(currentCandidate++));
-            }
-            user.put("dislikes", dislikes);
-            user.saveInBackground();*/
+
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<ParseUser> dislikes = user.getList("dislikes");
+                    int i = currentCandidate;
+                    if(i++ < candidates.size() ) {
+                        dislikes.add(candidates.get(currentCandidate++));
+                    }
+                    user.put("dislikes", dislikes);
+                    user.saveInBackground();
+                }
+            });
+
+            t.setPriority(Thread.MIN_PRIORITY);
+            t.start();
         }
 
         @Override
@@ -384,45 +382,39 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
             al.remove(0);
             myAppAdapter.notifyDataSetChanged();
-            /*List<ParseUser> likes = user.getList("likes");
-            int i = currentCandidate;
-            if(i++ < candidates.size() ) {
-                likes.add(candidates.get(currentCandidate));
-            }
 
-            if(currentCandidate < candidates.size()) {
-                List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
-                if (targetlikes.contains(user)) {
-                    List<ParseUser> matches = user.getList("matches");
-                    List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
-                    matches.add(candidates.get(currentCandidate));
-                    targetMatches.add(user);
-                    user.put("matches", matches);
-                    candidates.get(currentCandidate).put("matches", targetMatches);
-                    user.saveInBackground();
-                    candidates.get(currentCandidate).saveInBackground();
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<ParseUser> likes = user.getList("likes");
+                    int i = currentCandidate;
+                    if(i+1 < candidates.size() ) {
+                        likes.add(candidates.get(currentCandidate));
+                    }
 
-                    // Add this parseUser to the atlas message system list
-                    /*
-                    AtlasIdentityProvider atlasIdentityProvider = new AtlasIdentityProvider(getApplicationContext());
-                    AtlasIdentityProvider.Participant participant = (AtlasIdentityProvider.Participant) atlasIdentityProvider.getParticipant(
-                             candidates.get(currentCandidate).getString("atlasMessengerId"));
+                    if(currentCandidate < candidates.size()) {
+                        List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
+                        if (targetlikes.contains(user)) {
+                            List<ParseUser> matches = user.getList("matches");
+                            List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
+                            matches.add(candidates.get(currentCandidate));
+                            targetMatches.add(user);
+                            user.put("matches", matches);
+                            candidates.get(currentCandidate).put("matches", targetMatches);
+                            user.saveInBackground();
+                            candidates.get(currentCandidate).saveInBackground();
+                        }
+                    }
 
-                    Map<String, Atlas.Participant> participants = new HashMap<>();
-                    participants = atlasIdentityProvider.getParticipants(null, participants);
-                    participants.put(participant.getId(), participant);
+                    ++currentCandidate;
+                }
+            });
 
-                    */
-                    //atlasIdentityProvider.
+            t.setPriority(Thread.MIN_PRIORITY);
+            t.start();
 
-                    // Create a notification message here
-
-
-
-
-                //}
-                //++currentCandidate;
-            //}
+            // Add the current card if it matches
+            addNewConversationWithThisCard();
         }
 
         @Override
@@ -434,8 +426,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         public void onScroll(float scrollProgressPercent) {
 
             View view = flingContainer.getSelectedView();
-            if (view.findViewById(R.id.background) != null) {
-                view.findViewById(R.id.background).setAlpha(0);
+            try {
+                if (view.findViewById(R.id.background) != null) {
+                    view.findViewById(R.id.background).setAlpha(0);
+                }
+            } catch (NullPointerException n) {
+                n.printStackTrace();
             }
             view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
             view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
@@ -447,4 +443,20 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         super.onResume();
         //pullCandidates();
     }
+
+
+    public void addNewConversationWithThisCard() {
+        try {
+            Object newUserId = ParseUser.getCurrentUser().get(ParseConstants.KEY_LAYERID);
+            if (newUserId != null) {
+                Intent intent = new Intent(getApplicationContext(), AtlasMessagesScreen.class);
+                intent.putExtra(AtlasMessagesScreen.EXTRA_CONVERSATION_IS_NEW, true);
+                intent.putExtra(AtlasMessagesScreen.EXTRA_NEW_USER, newUserId.toString());
+                startActivity(intent);
+            }
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+    }
+
 }

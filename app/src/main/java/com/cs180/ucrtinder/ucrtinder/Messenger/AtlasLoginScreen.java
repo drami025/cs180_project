@@ -25,11 +25,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.Parse.YouWhoApplication;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.exceptions.LayerException;
 import com.layer.sdk.listeners.LayerAuthenticationListener;
+import com.parse.ParseUser;
 
 /**
  * @author Oleg Orlov
@@ -51,6 +53,11 @@ public class AtlasLoginScreen extends Activity {
         loginText = (EditText) findViewById(R.id.atlas_screen_login_username);
         goButton = findViewById(R.id.atlas_screen_login_go_btn);
 
+        // Tryig to bypass the screens that make a delay in the atlas messenger
+        // immediately jump to the next activity using the ParseUser name on the database
+        // login();
+
+        // /*
         final TextView.OnEditorActionListener doneListener = new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -70,6 +77,7 @@ public class AtlasLoginScreen extends Activity {
         });
 
         loginText.requestFocus();
+        //*/
         
     }
 
@@ -89,9 +97,11 @@ public class AtlasLoginScreen extends Activity {
         final YouWhoApplication app = (YouWhoApplication) getApplication();
         final LayerClient layerClient = app.getLayerClient();
         final AtlasIdentityProvider identityProvider = app.getIdentityProvider();
+        ParseUser parseUser = ParseUser.getCurrentUser();
         
-        final String userName = loginText.getText().toString().trim();
-        
+        //final String userName = loginText.getText().toString().trim();
+        final String userName = parseUser.getString(ParseConstants.KEY_NAME);
+
         if (userName.isEmpty()) return;
         inProgress = true;
 
