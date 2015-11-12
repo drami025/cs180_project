@@ -438,8 +438,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             } catch (NullPointerException n) {
                 n.printStackTrace();
             }
-            view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-            view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+            if (view.findViewById(R.id.item_swipe_right_indicator) != null) {
+                view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
+            }
+            if (view.findViewById(R.id.item_swipe_left_indicator) != null) {
+                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+            }
         }
     }
 
