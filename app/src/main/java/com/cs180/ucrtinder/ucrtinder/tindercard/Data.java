@@ -25,13 +25,15 @@ public class Data {
     private OnCardsLoadedListener mCallback;
     private int mPosition;
     private boolean hasCount = false;
+    private String layerId;
 
-    public Data(String imagePath, String description, String userString, String id, OnCardsLoadedListener listener, int position) {
+    public Data(String imagePath, String description, String userString, String id, OnCardsLoadedListener listener, int position, String layerId) {
         this.imagePath = imagePath;
         this.description = description;
         this.UserString = userString;
         this.id = id;
         this.mutualFriends = "0";
+        this.layerId = layerId;
         mCallback = listener;
         mPosition = position;
 

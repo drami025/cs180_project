@@ -178,6 +178,8 @@ public class CardProfileActivity extends AppCompatActivity {
                         }
                         catch(JSONException e){
                             e.printStackTrace();
+                        } catch (NullPointerException n) {
+                            n.printStackTrace();
                         }
                     }
                 }).executeAsync();

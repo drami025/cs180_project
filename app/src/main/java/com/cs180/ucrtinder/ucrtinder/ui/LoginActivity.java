@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
+import com.cs180.ucrtinder.ucrtinder.Parse.YouWhoApplication;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -38,6 +39,7 @@ public class LoginActivity extends FragmentActivity {
 
     private LoginActivity mActivity;
     private Profile mProfile;
+    private YouWhoApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +79,16 @@ public class LoginActivity extends FragmentActivity {
                 else if(parseUser.isNew()){
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
                     loginSuccessful(true);
+                    parseUser.put(ParseConstants.KEY_LAYERID, app.getLayerClient().getAuthenticatedUserId());
                 }
                 else{
                     Log.d("MyApp", "User logged in through Facebook!");
                     loginSuccessful(false);
+                    String id = parseUser.getString(ParseConstants.KEY_LAYERID);
+                    if (id != null) {
+                        app.setAppId(id);
+                    }
+                    app.initLayerClient(app.getAppId());
                 }
             }
         });

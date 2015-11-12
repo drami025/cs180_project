@@ -483,4 +483,19 @@ public class AtlasParticipantPicker extends FrameLayout {
         }
     }
 
+    /**
+     *  Added By Aaron Peery
+     *  Add participants programmaticially instead of using the on screen list by touch
+     */
+    public void addParticipantEntry(String id) {
+        //ParticipantEntry entry = participantsForAdapter.get(position);
+
+        //selectedParticipantIds.add(entry.id);
+        selectedParticipantIds.add(id);
+        refreshParticipants(selectedParticipantIds);
+        textFilter.setText("");
+        textFilter.requestFocus();
+        filterParticipants("");
+    }
+
 }

@@ -17,6 +17,7 @@ public final class ParseConstants {
     public static final String KEY_LOCATION = "location";
     public static final String KEY_SMALLESTAGE = "minAge";
     public static final String KEY_LARGESTAGE = "maxAge";
+    public static final String KEY_LAYERID = "layerId";
 
     // Profile picture keys
     public static final String KEY_PHOTO0 = "photo0";

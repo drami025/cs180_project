@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,13 +85,14 @@ public class AtlasMessagesScreen extends AppCompatActivity {
     private static final boolean debug = false;
     
     public static final String EXTRA_CONVERSATION_IS_NEW = "conversation.new";
+    public static final String EXTRA_NEW_USER = "user.new";
     public static final String EXTRA_CONVERSATION_URI = keys.CONVERSATION_URI;
     
     public static final int REQUEST_CODE_SETTINGS = 101;
     public static final int REQUEST_CODE_GALLERY  = 111;
     public static final int REQUEST_CODE_CAMERA   = 112;
     
-    /** Switch it to <code>true</code> to see {@link #AtlasMessagesScreen()} Query support in action */
+    /** Switch it to <code>true</code> to see {@link )} Query support in action */
     private static final boolean USE_QUERY = false;
         
     private volatile Conversation conv;
@@ -127,10 +130,30 @@ public class AtlasMessagesScreen extends AppCompatActivity {
             ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancel(convUri.hashCode()); // Clear notifications for this Conversation
         }
 
+        // Get all the people you can message with
+        Map<String, Atlas.Participant> participantMap = new HashMap<>();
+        participantMap = app.getParticipantProvider().getParticipants(null, participantMap);
+
+        // Get the participant you want to talk to
+        String userID = getIntent().getStringExtra(EXTRA_NEW_USER);
+        Atlas.Participant participant = participantMap.get(userID);
+
+
         participantsPicker = (AtlasParticipantPicker) findViewById(R.id.atlas_screen_messages_participants_picker);
         participantsPicker.init(new String[]{app.getLayerClient().getAuthenticatedUserId()}, app.getParticipantProvider());
         if (convIsNew) {
             participantsPicker.setVisibility(View.VISIBLE);
+            String userIds[] = participantsPicker.getSelectedUserIds();
+            for (String s : userIds) {
+                Log.d(getClass().getSimpleName(), s);
+            }
+            // Instantiate a conversation on the list
+            if (participant != null) {
+                participantsPicker.addParticipantEntry(userID);
+                ensureConversationReady();
+                finish();
+            }
+
         }
         
         messageComposer = (AtlasMessageComposer) findViewById(R.id.atlas_screen_messages_message_composer);
