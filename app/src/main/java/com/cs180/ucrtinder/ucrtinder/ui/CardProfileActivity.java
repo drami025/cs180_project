@@ -178,7 +178,10 @@ public class CardProfileActivity extends AppCompatActivity {
                         }
                         catch(JSONException e){
                             e.printStackTrace();
+                        } catch(NullPointerException n){
+                            n.printStackTrace();
                         }
+
                     }
                 }).executeAsync();
     }
@@ -196,6 +199,8 @@ public class CardProfileActivity extends AppCompatActivity {
 
         TextView friendName = (TextView) v.findViewById(R.id.mutual_friend_name);
         ImageView friendPic = (ImageView) v.findViewById(R.id.mutual_friend_card_pic);
+
+
 
         friendName.setText(name);
 

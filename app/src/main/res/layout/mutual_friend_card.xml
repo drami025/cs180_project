@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:text="@string/example_mutual_friend_name"
         android:id="@+id/mutual_friend_name"
+        android:textColor="#FF000000"
         android:textSize="16sp"/>
     <ImageView
         android:layout_width="wrap_content"
