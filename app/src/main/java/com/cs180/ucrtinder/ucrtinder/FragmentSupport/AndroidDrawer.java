@@ -201,6 +201,8 @@ public class AndroidDrawer {
             }
             catch(IOException e){
                 e.printStackTrace();
+            } catch (NullPointerException n) {
+                n.printStackTrace();
             }
         }
     }

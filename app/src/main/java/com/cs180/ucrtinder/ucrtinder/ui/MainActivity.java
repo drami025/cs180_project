@@ -277,71 +277,76 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public List<ParseUser> getCandidates()  {
 
         // local variables
-        String gender = user.getString("gender");
-        boolean men = user.getBoolean("men");
-        boolean women = user.getBoolean("women");
-        int age = (int) user.getNumber("age");
-        int minAge = (int)user.getNumber("minAge");
-        int maxAge = (int)user.getNumber("maxAge");
-        int maxDist = (int)user.getNumber("maxDist");
-        String id = user.getString("id");
+        if (user != null) {
+            String gender = user.getString("gender");
+            boolean men = user.getBoolean("men");
+            boolean women = user.getBoolean("women");
+            int age = (int) user.getNumber("age");
+            int minAge = (int) user.getNumber("minAge");
+            int maxAge = (int) user.getNumber("maxAge");
+            int maxDist = (int) user.getNumber("maxDist");
+            String id = user.getString("id");
 
-        ParseGeoPoint location = user.getParseGeoPoint("location");
+            ParseGeoPoint location = user.getParseGeoPoint("location");
 
-        // set up query
-        ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
-/*        if (men && women) {}
-        else if (men) mainQuery.whereEqualTo("gender", "male");
-        else if (women) mainQuery.whereEqualTo("gender", "female");
-        mainQuery.whereNotEqualTo("objectId", user.getObjectId());
-        mainQuery.whereGreaterThanOrEqualTo("age", minAge);
-        mainQuery.whereLessThanOrEqualTo("age", maxAge);
-        mainQuery.whereWithinMiles("location", location, maxDist);
-*/
-        // further filter candidates
-        try {
-            candidates = mainQuery.find();
-        } catch (Exception e) {
-            return null;
-        }
- /*       Iterator<ParseUser> it = candidates.iterator();
-        while (it.hasNext()) {
-            ParseUser candidate = it.next();
-            if (age < (int)candidate.getNumber("minAge") || age > (int)candidate.getNumber("maxAge") ||
-                    location.distanceInMilesTo(candidate.getParseGeoPoint("location")) > (int)candidate.getNumber("maxDist") ||
-                    (gender.equals("male") && !candidate.getBoolean("men")) ||
-                    (gender.equals("female") && !candidate.getBoolean("women"))) {
-                it.remove();
+            // set up query
+            ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
+            /*
+            if (men && women) {}
+            else if (men) mainQuery.whereEqualTo("gender", "male");
+            else if (women) mainQuery.whereEqualTo("gender", "female");
+            mainQuery.whereNotEqualTo("objectId", user.getObjectId());
+            mainQuery.whereGreaterThanOrEqualTo("age", minAge);
+            mainQuery.whereLessThanOrEqualTo("age", maxAge);
+            mainQuery.whereWithinMiles("location", location, maxDist);
+            */
+            // further filter candidates
+            try {
+                candidates = mainQuery.find();
+            } catch (Exception e) {
+                return null;
             }
-        }
-*/
-        // sort candidates
-  /*      Collections.sort(candidates, new Comparator<ParseUser>() {
-            public int compare(ParseUser l, ParseUser r) {
-                double lCount = 0, rCount = 0;
-                List<String> interests = ParseUser.getCurrentUser().getList("interests");
-                List<String> lInterests = l.getList("interests");
-                List<String> rInterests = r.getList("interests");
-                for (int i = 0; i < interests.size(); ++i) {
-                    if (lInterests.contains(interests.get(i))) ++lCount;
-                    if (rInterests.contains(interests.get(i))) ++rCount;
+            /*
+            Iterator<ParseUser> it = candidates.iterator();
+            while (it.hasNext()) {
+                ParseUser candidate = it.next();
+                if (age < (int)candidate.getNumber("minAge") || age > (int)candidate.getNumber("maxAge") ||
+                        location.distanceInMilesTo(candidate.getParseGeoPoint("location")) > (int)candidate.getNumber("maxDist") ||
+                        (gender.equals("male") && !candidate.getBoolean("men")) ||
+                        (gender.equals("female") && !candidate.getBoolean("women"))) {
+                    it.remove();
                 }
-                double lPoints = lCount / lInterests.size() + lCount / interests.size();
-                double rPoints = rCount / rInterests.size() + rCount / interests.size();
-                if (lPoints < rPoints) return 1;
-                else if (lPoints > rPoints) return -1;
-                else return 0;
             }
-        });
+            */
+            // sort candidates
+            /*
+            Collections.sort(candidates, new Comparator<ParseUser>() {
+                public int compare(ParseUser l, ParseUser r) {
+                    double lCount = 0, rCount = 0;
+                    List<String> interests = ParseUser.getCurrentUser().getList("interests");
+                    List<String> lInterests = l.getList("interests");
+                    List<String> rInterests = r.getList("interests");
+                    for (int i = 0; i < interests.size(); ++i) {
+                        if (lInterests.contains(interests.get(i))) ++lCount;
+                        if (rInterests.contains(interests.get(i))) ++rCount;
+                    }
+                    double lPoints = lCount / lInterests.size() + lCount / interests.size();
+                    double rPoints = rCount / rInterests.size() + rCount / interests.size();
+                    if (lPoints < rPoints) return 1;
+                    else if (lPoints > rPoints) return -1;
+                    else return 0;
+                }
+            });
 
-        // remove likes, dislikes, matches
-        List<String> likes = user.getList("likes");
-        List<String> dislikes = user.getList("dislikes");
-        List<String> matches = user.getList("matches");
-        candidates.removeAll(likes);
-        candidates.removeAll(dislikes);
-        candidates.removeAll(matches);
-*/
+            // remove likes, dislikes, matches
+            List<String> likes = user.getList("likes");
+            List<String> dislikes = user.getList("dislikes");
+            List<String> matches = user.getList("matches");
+            candidates.removeAll(likes);
+            candidates.removeAll(dislikes);
+            candidates.removeAll(matches);
+            */
+        }
         if(candidates == null){
             candidates = new ArrayList<>();
         }
