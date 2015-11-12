@@ -109,6 +109,12 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
         disSeekBar = (SeekBar) findViewById(R.id.distanceseekBar);
         textView = (TextView) findViewById(R.id.distancetextView);
 
+        menSwitch.setChecked(menBool);
+        womanSwitch.setChecked(womanBool);
+        discovery.setChecked(discoveryBool);
+
+        disSeekBar.setProgress(progress);
+
         discovery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
