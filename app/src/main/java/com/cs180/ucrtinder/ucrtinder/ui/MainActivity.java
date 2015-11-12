@@ -31,8 +31,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 // Daniel removed the call to the login
@@ -51,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     MainActivity mActivity;
     private AtomicInteger mCounter = new AtomicInteger(0);
     private AtomicInteger mLimit;
+    Object newUserId = null;
 
     private OnCardsLoadedListener mCardsCompleteListener;
 
@@ -455,17 +454,24 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
 
     public void addNewConversationWithThisCard() {
-        try {
-            Object newUserId = ParseUser.getCurrentUser().get(ParseConstants.KEY_LAYERID);
-            if (newUserId != null) {
-                Intent intent = new Intent(getApplicationContext(), AtlasMessagesScreen.class);
-                intent.putExtra(AtlasMessagesScreen.EXTRA_CONVERSATION_IS_NEW, true);
-                intent.putExtra(AtlasMessagesScreen.EXTRA_NEW_USER, newUserId.toString());
-                startActivity(intent);
-            }
-        } catch (NullPointerException n) {
-            n.printStackTrace();
-        }
+
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        newUserId = ParseUser.getCurrentUser().get(ParseConstants.KEY_LAYERID);
+                        if (newUserId != null) {
+                            Intent intent = new Intent(getApplicationContext(), AtlasMessagesScreen.class);
+                            intent.putExtra(AtlasMessagesScreen.EXTRA_CONVERSATION_IS_NEW, true);
+                            intent.putExtra(AtlasMessagesScreen.EXTRA_NEW_USER, newUserId.toString());
+                            startActivity(intent);
+                        }
+                    } catch (NullPointerException n) {
+                        n.printStackTrace();
+                    }
+                }
+            });
+            t.start();
     }
 
 }

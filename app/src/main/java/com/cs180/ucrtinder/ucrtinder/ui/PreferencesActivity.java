@@ -1,5 +1,7 @@
 package com.cs180.ucrtinder.ucrtinder.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
+import com.parse.Parse;
 import com.parse.ParseUser;
 import com.edmodo.rangebar.RangeBar;
 
@@ -38,7 +41,18 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
     private int mThumbColorNormal = DEFAULT_THUMB_COLOR_NORMAL;
     private int mThumbColorPressed = DEFAULT_THUMB_COLOR_PRESSED;
 
+    private static final String PREF_SAVES = "pred_saves";
+    private static final String PREF_PROG = "pred_proG";
+    private static final String PREF_MEN = "pred_men";
+    private static final String PREF_WOMEN = "pred_woman";
+    private static final String PREF_DISC = "pred_disc";
+
     private RangeBar rangeBar;
+
+    public int progress;
+    public boolean discoveryBool;
+    public boolean menBool;
+    public boolean womanBool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +64,55 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
         AndroidDrawer mAndroidDrawer = new AndroidDrawer
                 (this, R.id.drawer_layout_preferences, R.id.left_drawer_preferences, R.id.preferences_profile_drawer_pic);
 
-        if (savedInstanceState != null) {
-            savedInstanceState.putInt("BAR_COLOR", mBarColor);
-            savedInstanceState.putInt("CONNECTING_LINE_COLOR", mConnectingLineColor);
-            savedInstanceState.putInt("THUMB_COLOR_NORMAL", mThumbColorNormal);
-            savedInstanceState.putInt("THUMB_COLOR_PRESSED", mThumbColorPressed);
+        //
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_SAVES, Context.MODE_PRIVATE);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            // Open up editor to write to local memory
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            progress = sharedPreferences.getInt(PREF_PROG, -1);
+            if (progress == -1) {
+
+                // Pull from parse to get the default progress value
+                progress =  currentUser.getInt(ParseConstants.KEY_DISTANCE);
+                editor.putInt(PREF_PROG, progress);
+            }
+            menBool = sharedPreferences.getBoolean(PREF_MEN, false);
+            if (!menBool) {
+                menBool = currentUser.getBoolean(ParseConstants.KEY_MEN);
+                editor.putBoolean(PREF_MEN, menBool);
+            }
+            womanBool = sharedPreferences.getBoolean(PREF_WOMEN, false);
+            if (!womanBool) {
+                womanBool = currentUser.getBoolean(ParseConstants.KEY_WOMEN);
+                editor.putBoolean(PREF_WOMEN, womanBool);
+            }
+            discoveryBool = sharedPreferences.getBoolean(PREF_DISC, false);
+            if (!discoveryBool) {
+
+            }
+
+            // Save all changes
+            editor.apply();
         }
+        // Get the previous progress information
+        progress = sharedPreferences.getInt(PREF_PROG, 0);
+        menBool = sharedPreferences.getBoolean(PREF_MEN, false);
+        womanBool = sharedPreferences.getBoolean(PREF_WOMEN, false);
+        discoveryBool = sharedPreferences.getBoolean(PREF_DISC, false);
+
 
         discovery = (Switch) findViewById(R.id.discoveryswitch);
         menSwitch = (Switch) findViewById(R.id.menswitch);
         womanSwitch = (Switch) findViewById(R.id.womanswitch);
         disSeekBar = (SeekBar) findViewById(R.id.distanceseekBar);
         textView = (TextView) findViewById(R.id.distancetextView);
-        final ParseUser currentUser = ParseUser.getCurrentUser();
 
         discovery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                discoveryBool = b;
                 Toast.makeText(getApplicationContext(), "Discovery Switch worked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -74,8 +120,7 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
         menSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                currentUser.put(ParseConstants.KEY_MEN,b);
-                currentUser.saveInBackground();
+               menBool = b;
                 Toast.makeText(getApplicationContext(), "Men Switch works", Toast.LENGTH_SHORT).show();
             }
         });
@@ -83,14 +128,13 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
         womanSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                currentUser.put(ParseConstants.KEY_WOMEN,b);
-                currentUser.saveInBackground();
+                womanBool = b;
                 Toast.makeText(getApplicationContext(), "Woman Switch works", Toast.LENGTH_SHORT).show();
             }
         });
 
         disSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int progress = 0;
+
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -105,9 +149,8 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                currentUser.put(ParseConstants.KEY_DISTANCE,progress);
+
                 textView.setText("Covered:" + progress + "/" + seekBar.getMax());
-                currentUser.saveInBackground();
                 Toast.makeText(getApplicationContext(), "Stopped tracking seekbar", Toast.LENGTH_SHORT).show();
             }
         });
@@ -157,4 +200,27 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
        final Button resetThumbColors = (Button) findViewById(R.id.resetThumbColors);
        final Button refreshButton = (Button) findViewById(R.id.refresh);
    }*/
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Get the current parse user
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // upload to parse using the current user
+                if (currentUser != null) {
+                    currentUser.put(ParseConstants.KEY_DISTANCE, progress);
+                    currentUser.put(ParseConstants.KEY_MEN, menBool);
+                    currentUser.put(ParseConstants.KEY_WOMEN, womanBool);
+                    //currentUser.put(ParseConstants.KEY_, discoveryBool);
+
+                    // Save all changes in the background
+                    currentUser.saveInBackground();
+                }
+            }
+        });
+    }
 }
