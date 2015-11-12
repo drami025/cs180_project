@@ -7,7 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/imageView2"
-        android:adjustViewBounds="true" android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         />
 
 </LinearLayout>

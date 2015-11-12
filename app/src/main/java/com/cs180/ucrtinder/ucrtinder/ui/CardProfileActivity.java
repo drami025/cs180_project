@@ -65,7 +65,6 @@ public class CardProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_card_profile);
 
-
         // Get intent with card user string data
         Intent intent = getIntent();
         Bundle b = intent.getBundleExtra(MainActivity.CARD_BUNDLE);
@@ -195,6 +194,7 @@ public class CardProfileActivity extends AppCompatActivity {
     public View mutualFriendView(String id, String name, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.mutual_friend_card, parent, false);
+        v.setBackgroundColor(0xfcf2fa);
 
         TextView friendName = (TextView) v.findViewById(R.id.mutual_friend_name);
         ImageView friendPic = (ImageView) v.findViewById(R.id.mutual_friend_card_pic);
