@@ -42,14 +42,15 @@ public class ProfileActivity extends AppCompatActivity {
                 (this,R.id.drawer_layout_profile,R.id.left_drawer_profile, R.id.profile_profile_drawer_pic);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        toolbar.setTitle(currentUser.getString(ParseConstants.KEY_NAME));
+        if (currentUser != null) {
+            toolbar.setTitle(currentUser.getString(ParseConstants.KEY_NAME));
+        }
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_drawer);
         toolbar.setNavigationOnClickListener(new NavigationListener(drawer));
 
 
-
-/*
+        /*
         //this is how to update columns in parse
         String[] testInterests = {"Trucks", "Cars", "Television", "Movies", "Ghosts", "Cats", "Ghostcats", "Penguins","Computers", "blah","blah"};
         currentUser.put(ParseConstants.KEY_INTERESTS, Arrays.asList(testInterests));
@@ -105,7 +106,6 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -131,7 +131,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onResume();
         text = (TextView) this.findViewById(R.id.Aboutyou_textview);
         text.setText(currentUser.getString(ParseConstants.KEY_ABOUTYOU));
-
     }
 
 }

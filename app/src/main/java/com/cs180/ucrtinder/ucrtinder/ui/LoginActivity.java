@@ -79,12 +79,15 @@ public class LoginActivity extends FragmentActivity {
                 else if(parseUser.isNew()){
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
                     loginSuccessful(true);
+                    /*
                     if (app != null) {
                         parseUser.put(ParseConstants.KEY_LAYERID, app.getLayerClient().getAuthenticatedUserId());
                     }
+                    */
                 }
                 else{
                     Log.d("MyApp", "User logged in through Facebook!");
+                    /*
                     String id = parseUser.getString(ParseConstants.KEY_LAYERID);
                     if (app != null) {
                         if (id != null) {
@@ -92,6 +95,7 @@ public class LoginActivity extends FragmentActivity {
                         }
                         app.initLayerClient(app.getAppId());
                     }
+                    */
                     loginSuccessful(false);
                 }
             }
