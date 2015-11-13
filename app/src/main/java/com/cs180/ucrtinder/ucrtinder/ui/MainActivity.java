@@ -369,7 +369,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 public void run() {
                     List<ParseUser> dislikes = user.getList("dislikes");
                     int i = currentCandidate;
-                    if(i++ < candidates.size() ) {
+                    i+=1;
+                    if(i < candidates.size() ) {
                         dislikes.add(candidates.get(currentCandidate++));
                     }
                     user.put("dislikes", dislikes);
@@ -392,7 +393,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 public void run() {
                     List<ParseUser> likes = user.getList("likes");
                     int i = currentCandidate;
-                    if(i+1 < candidates.size() ) {
+                    i+=1;
+                    if(i < candidates.size()) {
                         likes.add(candidates.get(currentCandidate));
                     }
 
@@ -434,14 +436,15 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 if (view.findViewById(R.id.background) != null) {
                     view.findViewById(R.id.background).setAlpha(0);
                 }
-            } catch (NullPointerException n) {
+                if (view.findViewById(R.id.item_swipe_right_indicator) != null) {
+                    view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
+                }
+                if (view.findViewById(R.id.item_swipe_left_indicator) != null) {
+                    view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
+                }
+            }
+            catch (NullPointerException n) {
                 n.printStackTrace();
-            }
-            if (view.findViewById(R.id.item_swipe_right_indicator) != null) {
-                view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-            }
-            if (view.findViewById(R.id.item_swipe_left_indicator) != null) {
-                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
             }
         }
     }
@@ -455,23 +458,25 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
     public void addNewConversationWithThisCard() {
 
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        newUserId = ParseUser.getCurrentUser().get(ParseConstants.KEY_LAYERID);
-                        if (newUserId != null) {
-                            Intent intent = new Intent(getApplicationContext(), AtlasMessagesScreen.class);
-                            intent.putExtra(AtlasMessagesScreen.EXTRA_CONVERSATION_IS_NEW, true);
-                            intent.putExtra(AtlasMessagesScreen.EXTRA_NEW_USER, newUserId.toString());
-                            startActivity(intent);
-                        }
-                    } catch (NullPointerException n) {
-                        n.printStackTrace();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    newUserId = ParseUser.getCurrentUser().get(ParseConstants.KEY_LAYERID);
+                    if (newUserId != null) {
+                        Intent intent = new Intent(getApplicationContext(), AtlasMessagesScreen.class);
+                        intent.putExtra(AtlasMessagesScreen.EXTRA_CONVERSATION_IS_NEW, true);
+                        intent.putExtra(AtlasMessagesScreen.EXTRA_NEW_USER, newUserId.toString());
+                        startActivity(intent);
                     }
+                } catch (NullPointerException n) {
+                    n.printStackTrace();
                 }
-            });
-            t.start();
+            }
+        });
+
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.start();
     }
 
 }

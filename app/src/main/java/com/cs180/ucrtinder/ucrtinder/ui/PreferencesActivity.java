@@ -127,7 +127,7 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                menBool = b;
-                Toast.makeText(getApplicationContext(), "Men Switch works", Toast.LENGTH_SHORT).show();
+               Toast.makeText(getApplicationContext(), "Men Switch works", Toast.LENGTH_SHORT).show();
             }
         });
 
