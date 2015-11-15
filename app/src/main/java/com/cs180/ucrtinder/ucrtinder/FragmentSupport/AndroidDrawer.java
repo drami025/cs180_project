@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.cs180.ucrtinder.ucrtinder.ui.ConversationActivity;
+import com.cs180.ucrtinder.ucrtinder.ui.LoadingScreenActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.LoginActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity;
@@ -124,7 +125,7 @@ public class AndroidDrawer {
 
         switch(position){
             case 0:
-                intent = new Intent(mActivity, ProfileActivity.class);
+                intent = new Intent(mActivity, LoadingScreenActivity.class);
                 break;
             case 1:
                 intent = new Intent(mActivity, MainActivity.class);
@@ -158,7 +159,7 @@ public class AndroidDrawer {
 
     public int getPosition(AppCompatActivity activity){
 
-        if(activity instanceof ProfileActivity){
+        if(activity instanceof LoadingScreenActivity){
             return 0;
         }
         else if(activity instanceof MainActivity){
@@ -195,11 +196,9 @@ public class AndroidDrawer {
                         mProfileImage.setImageBitmap(bmp);
                     }
                 });
-            }
-            catch(MalformedURLException e){
+            } catch(MalformedURLException e){
                 e.printStackTrace();
-            }
-            catch(IOException e){
+            } catch(IOException e){
                 e.printStackTrace();
             } catch (NullPointerException n) {
                 n.printStackTrace();

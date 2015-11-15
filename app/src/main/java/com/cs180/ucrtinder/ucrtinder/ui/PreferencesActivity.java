@@ -112,7 +112,6 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
         menSwitch.setChecked(menBool);
         womanSwitch.setChecked(womanBool);
         discovery.setChecked(discoveryBool);
-
         disSeekBar.setProgress(progress);
 
         discovery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -228,5 +227,14 @@ public class PreferencesActivity extends AppCompatActivity{ //} implements Color
                 }
             }
         });
+        t.start();
+
+        /*
+        try {
+            t.join();
+        } catch (InterruptedException i) {
+            i.printStackTrace();
+        }
+        */
     }
 }

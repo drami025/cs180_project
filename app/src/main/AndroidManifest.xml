@@ -173,6 +173,12 @@
             android:theme="@style/AppTheme" >
         </activity>
 
+        <activity
+            android:name=".ui.LoadingScreenActivity"
+            android:label="@string/loadingscreen"
+            android:theme="@style/AppTheme" >
+
+        </activity>
         <service
             android:name=".Services.GeoLocationService"
             android:enabled="true"

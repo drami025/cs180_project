@@ -12,38 +12,46 @@
     tools:context="com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity"
     android:weightSum="1"
     android:baselineAligned="false"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/atlas_background_gray"
+    >
 
     <Switch
         android:layout_width="match_parent"
         android:layout_height="41dp"
         android:text="New Match"
-        android:id="@+id/matchesswitch" />
+        android:id="@+id/matchesswitch"
+        android:textColor="@color/atlas_text_black"/>
 
     <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Message"
         android:id="@+id/messageswitch"
-        android:checked="false" />
+        android:checked="false"
+        android:textColor="@color/atlas_text_black"/>
 
     <Switch
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Moment Likes"
-        android:id="@+id/switch3" />
+        android:id="@+id/switch3"
+        android:textColor="@color/atlas_text_black"/>
 
     <CheckBox
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Show Distance in km."
-        android:id="@+id/checkBox" />
+        android:id="@+id/checkBox"
+        android:textColor="@color/atlas_text_black"/>
 
     <CheckBox
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Show Distance in Mi."
-        android:id="@+id/checkBox2" />
+        android:id="@+id/checkBox2"
+        android:textColor="@color/atlas_text_black"
+        />
 
     <Button
         android:layout_width="fill_parent"
