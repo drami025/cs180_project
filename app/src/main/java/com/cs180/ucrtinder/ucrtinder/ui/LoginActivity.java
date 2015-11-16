@@ -17,10 +17,14 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +39,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import bolts.Task;
+
 public class LoginActivity extends FragmentActivity {
 
     private LoginActivity mActivity;
@@ -47,7 +53,12 @@ public class LoginActivity extends FragmentActivity {
         setContentView(R.layout.activity_login);
         Button signInButton = (Button) findViewById(R.id.signInButton);
         mActivity = this;
-        beginLogin();
+
+        mProfile = Profile.getCurrentProfile();
+        if(mProfile != null){
+            Intent intent = new Intent(mActivity, MainActivity.class);
+            startActivity(intent);
+        }
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +72,16 @@ public class LoginActivity extends FragmentActivity {
         mProfile = Profile.getCurrentProfile();
 
         if(mProfile != null){
+            ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (e != null) {
+                    } else {
+                        ParseUser currentUser = (ParseUser) parseObject;
+                        currentUser.pinInBackground();
+                    }
+                }
+            });
             Intent intent = new Intent(mActivity, MainActivity.class);
             startActivity(intent);
             return;
@@ -73,10 +94,9 @@ public class LoginActivity extends FragmentActivity {
         ParseFacebookUtils.logInWithReadPermissionsInBackground(mActivity, mPermissions, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
-                if(parseUser == null){
+                if (parseUser == null) {
                     Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-                }
-                else if(parseUser.isNew()){
+                } else if (parseUser.isNew()) {
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
                     loginSuccessful(true);
                     /*
@@ -84,8 +104,7 @@ public class LoginActivity extends FragmentActivity {
                         parseUser.put(ParseConstants.KEY_LAYERID, app.getLayerClient().getAuthenticatedUserId());
                     }
                     */
-                }
-                else{
+                } else {
                     Log.d("MyApp", "User logged in through Facebook!");
                     /*
                     String id = parseUser.getString(ParseConstants.KEY_LAYERID);
@@ -100,6 +119,19 @@ public class LoginActivity extends FragmentActivity {
                 }
             }
         });
+
+        /*
+        ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e != null) {
+                } else {
+                    ParseUser currentUser = (ParseUser) parseObject;
+                    currentUser.pinInBackground();
+                }
+            }
+        });
+        */
     }
 
     public void loginSuccessful(final boolean isNewUser){
@@ -134,6 +166,9 @@ public class LoginActivity extends FragmentActivity {
 
     public void getUserDetailsFromFB(JSONObject json){
         ParseUser user = ParseUser.getCurrentUser();
+        if (user != null) {
+            Log.d(getClass().getSimpleName(), "UserName: " + user.get(ParseConstants.KEY_NAME));
+        }
         //mProfile = Profile.getCurrentProfile();
 
         Log.e("CHECK" , json.toString());
@@ -147,28 +182,28 @@ public class LoginActivity extends FragmentActivity {
 
             user.put("gender", gender);
             user.put(ParseConstants.KEY_NAME, firstName);
-            user.put("facebookId", id);
-            user.put("birthday", birthday);
+            user.put(ParseConstants.KEY_FACEBOOKID, id);
+            user.put(ParseConstants.KEY_BIRTHDAY, birthday);
 
 
-            List<ParseUser> likes = user.getList("likes");
+            List<ParseUser> likes = user.getList(ParseConstants.KEY_LIKES);
             if(likes == null) {
-                user.put("likes", new ArrayList<ParseUser>());
+                user.put(ParseConstants.KEY_LIKES, new ArrayList<ParseUser>());
             }
 
-            List<ParseUser> dislikes = user.getList("dislikes");
+            List<ParseUser> dislikes = user.getList(ParseConstants.KEY_DISLIKES);
             if(dislikes == null) {
-                user.put("dislikes", new ArrayList<ParseUser>());
+                user.put(ParseConstants.KEY_DISLIKES, new ArrayList<ParseUser>());
             }
 
-            List<ParseUser> matches = user.getList("matches");
+            List<ParseUser> matches = user.getList(ParseConstants.KEY_MATCHES);
             if(matches == null) {
-                user.put("matches", new ArrayList<ParseUser>());
+                user.put(ParseConstants.KEY_MATCHES, new ArrayList<ParseUser>());
             }
 
             int age = getAge(birthday);
             Log.e("AGE", age + "");
-            user.put("age", age);
+            user.put(ParseConstants.KEY_AGE, age);
 
             boolean is_looking_for_men = (gender.equals("female"));
 
@@ -182,7 +217,12 @@ public class LoginActivity extends FragmentActivity {
 
             Log.e("FIELDS", gender + " " + firstName + " " + id + " " + birthday);
 
-            user.saveInBackground();
+            user.saveEventually(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Log.d(getClass().getSimpleName(), "saved all login fields to local/parse web");
+                }
+            });
 
             JSONArray profileArray = json.getJSONObject("albums").getJSONArray("data");
 
@@ -206,6 +246,8 @@ public class LoginActivity extends FragmentActivity {
         }
         catch(java.text.ParseException e){
             e.printStackTrace();
+        } catch (NullPointerException n) {
+            n.printStackTrace();
         }
     }
 

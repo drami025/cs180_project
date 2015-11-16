@@ -70,9 +70,10 @@ public class Data {
                             JSONObject mutualFriendsObj = contextObj.getJSONObject("mutual_friends");
                             JSONObject summaryObj = mutualFriendsObj.getJSONObject("summary");
                             mutualFriends = summaryObj.getInt("total_count") + "";
-                        }
-                        catch(JSONException e){
+                        } catch(JSONException e){
                             e.printStackTrace();
+                        } catch (NullPointerException n) {
+                            n.printStackTrace();
                         }
 
                         mCallback.onCardsLoaded();

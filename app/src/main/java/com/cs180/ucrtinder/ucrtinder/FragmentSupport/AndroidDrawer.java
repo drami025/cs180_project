@@ -23,6 +23,7 @@ import com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.io.IOException;
@@ -185,17 +186,25 @@ public class AndroidDrawer {
             final Bitmap bmp;
 
             try {
-                ParseUser user = ParseUser.getCurrentUser();
-                String urlString = user.getString("photo0");
-                URL url = new URL(urlString);
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                ParseUser currentUser = null;
+                try {
+                    currentUser = ParseUser.getCurrentUser();
+                } catch(NullPointerException n) {
+                    n.printStackTrace();
+                }
 
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProfileImage.setImageBitmap(bmp);
-                    }
-                });
+                if (currentUser != null) {
+                    String urlString = currentUser.getString("photo0");
+                    URL url = new URL(urlString);
+                    bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mProfileImage.setImageBitmap(bmp);
+                        }
+                    });
+                }
             } catch(MalformedURLException e){
                 e.printStackTrace();
             } catch(IOException e){

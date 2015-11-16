@@ -3,7 +3,6 @@ package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,19 +20,26 @@ import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.OnCardsLoadedListener;
 import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasMessagesScreen;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
+import com.cs180.ucrtinder.ucrtinder.Services.GeoLocationService;
 import com.cs180.ucrtinder.ucrtinder.tindercard.Data;
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.FlingCardListener;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipeFlingAdapterView;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-// Daniel removed the call to the login
 
 public class MainActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface {
 
@@ -49,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     MainActivity mActivity;
     private AtomicInteger mCounter = new AtomicInteger(0);
     private AtomicInteger mLimit;
-    Object newUserId = null;
+    String newUserId = null;
 
     private OnCardsLoadedListener mCardsCompleteListener;
 
@@ -62,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public static final String CARD_ID = "cardID";
 
     public static void removeBackground() {
-
-
         viewHolder.background.setVisibility(View.GONE);
         myAppAdapter.notifyDataSetChanged();
 
@@ -78,13 +82,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
         // Start Location when this activity is open
         Log.d(getClass().getSimpleName(), "Started the geolocation service");
-        //startService(new Intent(this, GeoLocationService.class));
+        startService(new Intent(this, GeoLocationService.class));
 
-        // Creating an android drawer to slide in from the left side
-
-
-//        ExecutorService es = Executors.newFixedThreadPool(1);
-//        es.execute(new ProfileImageRunnable(mProfileImage));
+        // ExecutorService es = Executors.newFixedThreadPool(1);
+        // es.execute(new ProfileImageRunnable(mProfileImage));
 
         mAndroidDrawer = new AndroidDrawer(this, R.id.drawer_layout_main, R.id.left_drawer_main, R.id.main_profile_drawer_pic);
 
@@ -100,13 +101,32 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         pullCandidates();
     }
 
-    public void pullCandidates(){
-        user = ParseUser.getCurrentUser();
-        candidates = getCandidates();
 
-        if(candidates == null){
-            return;
-        }
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d(getClass().getSimpleName(), "Stopped the geolocation service");
+        // Start geolocation update service
+        startService(new Intent(this, GeoLocationService.class));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(getClass().getSimpleName(), "Stopped the geolocation service");
+        // Stop geolocation update service
+        stopService(new Intent(this, GeoLocationService.class));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(getClass().getSimpleName(), "Stopped the geolocation service");
+        // Stop geolocation update service
+        stopService(new Intent(this, GeoLocationService.class));
+    }
+
+    public void pullCandidates(){
 
         mCardsCompleteListener = new OnCardsLoadedListener() {
             @Override
@@ -125,22 +145,43 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             }
         };
 
-        al = new ArrayList<>();
-        mLimit = new AtomicInteger(candidates.size());
-        for (int i = 0; i < candidates.size(); ++i) {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
 
-            if(candidates.get(i).getString("facebookId") == null){
-                mLimit.decrementAndGet();
+                try {
+                    user = ParseUser.getCurrentUser();
+                } catch (NullPointerException n) {
+                    n.printStackTrace();
+                }
+
+                al = new ArrayList<>();
+                candidates = getCandidates();
+                if (candidates == null) {
+                    return;
+                }
+
+                mLimit = new AtomicInteger(candidates.size());
+                for (int i = 0; i < candidates.size(); ++i) {
+
+                    if (candidates.get(i).getString(ParseConstants.KEY_FACEBOOKID) == null) {
+                        mLimit.decrementAndGet();
+                    }
+
+                    al.add(new Data(
+                            candidates.get(i).getString(ParseConstants.KEY_PHOTO0),
+                            candidates.get(i).getString(ParseConstants.KEY_NAME) + ", " + candidates.get(i).getNumber(ParseConstants.KEY_AGE),
+                            candidates.get(i).getObjectId(),
+                            candidates.get(i).getString(ParseConstants.KEY_FACEBOOKID),
+                            mCardsCompleteListener,
+                            i,
+                            candidates.get(i).getString(ParseConstants.KEY_LAYERID)));
+                }
             }
-
-            al.add(new Data(
-                    candidates.get(i).getString(ParseConstants.KEY_PHOTO0),
-                    candidates.get(i).getString(ParseConstants.KEY_NAME) + ", " + candidates.get(i).getNumber(ParseConstants.KEY_AGE),
-                    candidates.get(i).getObjectId(),
-                    candidates.get(i).getString("facebookId"),
-                    mCardsCompleteListener,
-                    i,
-                    candidates.get(i).getString("layerId")));
+        });
+        if (!executor.isShutdown()) {
+            executor.shutdown();
         }
     }
 
@@ -245,10 +286,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         public View getView(final int position, View convertView, ViewGroup parent) {
 
             View rowView = convertView;
-
-
             if (rowView == null) {
-
                 LayoutInflater inflater = getLayoutInflater();
                 rowView = inflater.inflate(R.layout.item, parent, false);
                 // configure view holder
@@ -263,9 +301,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.DataText.setText(parkingList.get(position).getDescription() + "");
-            viewHolder.mutualFriendText.setText(viewHolder.mutualFriendText.getText().toString() + " " +
-                    parkingList.get(position).getMutualFriendCount());
+
+            // Update texts
+            String dataText = parkingList.get(position).getDescription() + "";
+            String mutualText = viewHolder.mutualFriendText.getText().toString() + " " + parkingList.get(position).getMutualFriendCount();
+            viewHolder.DataText.setText(dataText);
+            viewHolder.mutualFriendText.setText(mutualText);
 
             Glide.with(MainActivity.this).load(parkingList.get(position).getImagePath()).into(viewHolder.cardImage);
 
@@ -277,27 +318,27 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
         // local variables
         if (user != null) {
-            String gender = user.getString("gender");
-            boolean men = user.getBoolean("men");
-            boolean women = user.getBoolean("women");
-            int age = (int) user.getNumber("age");
-            int minAge = (int) user.getNumber("minAge");
-            int maxAge = (int) user.getNumber("maxAge");
-            int maxDist = (int) user.getNumber("maxDist");
-            String id = user.getString("id");
+            String gender = user.getString(ParseConstants.KEY_GENDER);
+            boolean men = user.getBoolean(ParseConstants.KEY_MEN);
+            boolean women = user.getBoolean(ParseConstants.KEY_WOMEN);
+            int age = (int) user.getNumber(ParseConstants.KEY_AGE);
+            int minAge = (int) user.getNumber(ParseConstants.KEY_SMALLESTAGE);
+            int maxAge = (int) user.getNumber(ParseConstants.KEY_LARGESTAGE);
+            int maxDist = (int) user.getNumber(ParseConstants.KEY_DISTANCE);
+            String id = user.getString(ParseConstants.KEY_ID);
 
-            ParseGeoPoint location = user.getParseGeoPoint("location");
+            ParseGeoPoint location = user.getParseGeoPoint(ParseConstants.KEY_LOCATION);
 
             // set up query
             ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
             /*
             if (men && women) {}
-            else if (men) mainQuery.whereEqualTo("gender", "male");
-            else if (women) mainQuery.whereEqualTo("gender", "female");
-            mainQuery.whereNotEqualTo("objectId", user.getObjectId());
-            mainQuery.whereGreaterThanOrEqualTo("age", minAge);
-            mainQuery.whereLessThanOrEqualTo("age", maxAge);
-            mainQuery.whereWithinMiles("location", location, maxDist);
+            else if (men) mainQuery.whereEqualTo(ParseConstants.KEY_GENDER, "male");
+            else if (women) mainQuery.whereEqualTo(ParseConstants.KEY_GENDER, "female");
+            mainQuery.whereNotEqualTo(VParseConstants.KEY_OBJECTID, user.getObjectId());
+            mainQuery.whereGreaterThanOrEqualTo(ParseConstants.KEY_AGE, minAge);
+            mainQuery.whereLessThanOrEqualTo(ParseConstants.KEY_AGE, maxAge);
+            mainQuery.whereWithinMiles(ParseConstants.KEY_LOCATION, location, maxDist);
             */
             // further filter candidates
             try {
@@ -309,10 +350,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             Iterator<ParseUser> it = candidates.iterator();
             while (it.hasNext()) {
                 ParseUser candidate = it.next();
-                if (age < (int)candidate.getNumber("minAge") || age > (int)candidate.getNumber("maxAge") ||
-                        location.distanceInMilesTo(candidate.getParseGeoPoint("location")) > (int)candidate.getNumber("maxDist") ||
-                        (gender.equals("male") && !candidate.getBoolean("men")) ||
-                        (gender.equals("female") && !candidate.getBoolean("women"))) {
+                if (age < (int)candidate.getNumber(ParseConstants.KEY_SMALLESTAGE) || age > (int)candidate.getNumber(ParseConstants.KEY_LARGESTAGE) ||
+                        location.distanceInMilesTo(candidate.getParseGeoPoint(ParseConstants.KEY_LOCATION)) > (int)candidate.getNumber(ParseConstants.KEY_DISTANCE) ||
+                        (gender.equals("male") && !candidate.getBoolean(ParseConstants.KEY_MEN)) ||
+                        (gender.equals("female") && !candidate.getBoolean(ParseConstants.KEY_WOMEN))) {
                     it.remove();
                 }
             }
@@ -322,9 +363,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             Collections.sort(candidates, new Comparator<ParseUser>() {
                 public int compare(ParseUser l, ParseUser r) {
                     double lCount = 0, rCount = 0;
-                    List<String> interests = ParseUser.getCurrentUser().getList("interests");
-                    List<String> lInterests = l.getList("interests");
-                    List<String> rInterests = r.getList("interests");
+                    List<String> interests = ParseUser.getCurrentUser().getList(ParseConstants.KEY_INTERESTS);
+                    List<String> lInterests = l.getList(ParseConstants.KEY_INTERESTS);
+                    List<String> rInterests = r.getList(ParseConstants.KEY_INTERESTS);
                     for (int i = 0; i < interests.size(); ++i) {
                         if (lInterests.contains(interests.get(i))) ++lCount;
                         if (rInterests.contains(interests.get(i))) ++rCount;
@@ -338,9 +379,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             });
 
             // remove likes, dislikes, matches
-            List<String> likes = user.getList("likes");
-            List<String> dislikes = user.getList("dislikes");
-            List<String> matches = user.getList("matches");
+            List<String> likes = user.getList(ParseConstants.KEY_LIKES);
+            List<String> dislikes = user.getList(ParseConstants.KEY_DISLIKES);
+            List<String> matches = user.getList(ParseConstants.KEY_MATCHES);
             candidates.removeAll(likes);
             candidates.removeAll(dislikes);
             candidates.removeAll(matches);
@@ -361,66 +402,111 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
         @Override
         public void onLeftCardExit(Object dataObject) {
-            al.remove(0);
-            myAppAdapter.notifyDataSetChanged();
 
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    List<ParseUser> dislikes = user.getList("dislikes");
-                    int i = currentCandidate;
-                    i+=1;
-                    if(i < candidates.size() ) {
-                        dislikes.add(candidates.get(currentCandidate++));
+            if (!al.isEmpty()) {
+                al.remove(0);
+                myAppAdapter.notifyDataSetChanged();
+
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<ParseUser> dislikes = user.getList(ParseConstants.KEY_DISLIKES);
+                        int i = currentCandidate;
+                        i += 1;
+                        if (i < candidates.size()) {
+                            dislikes.add(candidates.get(currentCandidate++));
+                        }
+                        user.put("dislikes", dislikes);
+                        user.saveEventually(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.d(getClass().getSimpleName(), "Saved left swipe data successfully");
+                            }
+                        });
                     }
-                    user.put("dislikes", dislikes);
-                    user.saveInBackground();
-                }
-            });
+                });
 
-            t.setPriority(Thread.MIN_PRIORITY);
-            t.start();
+                t.setPriority(Thread.MIN_PRIORITY);
+                t.start();
+            }
         }
 
         @Override
         public void onRightCardExit(Object dataObject) {
 
-            al.remove(0);
-            myAppAdapter.notifyDataSetChanged();
+            if (!al.isEmpty()) {
+                al.remove(0);
+                myAppAdapter.notifyDataSetChanged();
 
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    List<ParseUser> likes = user.getList("likes");
-                    int i = currentCandidate;
-                    i+=1;
-                    if(i < candidates.size()) {
-                        likes.add(candidates.get(currentCandidate));
-                    }
-
-                    if(currentCandidate < candidates.size()) {
-                        List<ParseUser> targetlikes = candidates.get(currentCandidate).getList("likes");
-                        if (targetlikes.contains(user)) {
-                            List<ParseUser> matches = user.getList("matches");
-                            List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
-                            matches.add(candidates.get(currentCandidate));
-                            targetMatches.add(user);
-                            user.put("matches", matches);
-                            candidates.get(currentCandidate).put("matches", targetMatches);
-                            user.saveInBackground();
-                            candidates.get(currentCandidate).saveInBackground();
+                ExecutorService executor = Executors.newFixedThreadPool(1);
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<ParseUser> likes = user.getList(ParseConstants.KEY_LIKES);
+                        int i = currentCandidate;
+                        i += 1;
+                        if (i < candidates.size()) {
+                            likes.add(candidates.get(currentCandidate));
                         }
+
+                        if (currentCandidate < candidates.size()) {
+                            List<ParseUser> targetlikes = candidates.get(currentCandidate).getList(ParseConstants.KEY_LIKES);
+                            if (targetlikes.contains(user)) {
+                                // Get the current Candidate
+                                Iterator<ParseUser> candidateIter = candidates.iterator();
+                                int index = 0;
+                                while (candidateIter.hasNext() && candidates.size() > currentCandidate) {
+                                    if (index == currentCandidate) {
+                                        break;
+                                    }
+                                    candidateIter.next();
+                                    index++;
+                                }
+                                ParseUser currCandidate = candidateIter.next();
+
+                                // Get matches list for current user and candidate
+                                List<ParseUser> matches = user.getList(ParseConstants.KEY_MATCHES);
+                                List<ParseUser> targetMatches = currCandidate.getList(ParseConstants.KEY_MATCHES);
+                                //List<ParseUser> targetMatches = candidates.get(currentCandidate).getList("matches");
+
+                                // Update each list for matched likes
+                                matches.add(currCandidate);
+                                //matches.add(candidates.get(currentCandidate));
+                                targetMatches.add(user);
+                                user.put(ParseConstants.KEY_MATCHES, matches);
+                                currCandidate.put(ParseConstants.KEY_MATCHES, targetMatches);
+                                //candidates.get(currentCandidate).put("matches", targetMatches);
+
+                                // Save in the background
+                                user.saveEventually(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        Log.d(getClass().getSimpleName(), "Saved right swipe(currentUser) data successfully");
+                                    }
+                                });
+                                currCandidate.saveEventually(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        Log.d(getClass().getSimpleName(), "Saved right swipe(currCandidate) data successfully");
+                                    }
+                                });
+                                //candidates.get(currentCandidate).saveInBackground();
+                            }
+                        }
+
+                        ++currentCandidate;
                     }
-
-                    ++currentCandidate;
+                });
+                if (!executor.isShutdown()) {
+                    executor.shutdown();
                 }
-            });
 
-            t.setPriority(Thread.MIN_PRIORITY);
-            t.start();
+                //t.setPriority(Thread.MIN_PRIORITY);
+                //t.start();
 
-            // Add the current card if it matches
-            addNewConversationWithThisCard();
+                // Add the current card if it matches
+                addNewConversationWithThisCard();
+            }
         }
 
         @Override
@@ -449,24 +535,30 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         }
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        //pullCandidates();
-    }
-
-
     public void addNewConversationWithThisCard() {
 
-        Thread t = new Thread(new Runnable() {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    newUserId = ParseUser.getCurrentUser().get(ParseConstants.KEY_LAYERID);
+                    ParseUser currentUser = null;
+
+                    try {
+                        currentUser = ParseUser.getCurrentUser();
+                        if (currentUser != null) {
+                            Log.d(getClass().getSimpleName(), "Username: " + currentUser.get(ParseConstants.KEY_NAME));
+                        }
+                        newUserId = currentUser.getString(ParseConstants.KEY_LAYERID);
+                    } catch (NullPointerException n) {
+                        n.printStackTrace();
+                    }
+
+
                     if (newUserId != null) {
                         Intent intent = new Intent(getApplicationContext(), AtlasMessagesScreen.class);
                         intent.putExtra(AtlasMessagesScreen.EXTRA_CONVERSATION_IS_NEW, true);
-                        intent.putExtra(AtlasMessagesScreen.EXTRA_NEW_USER, newUserId.toString());
+                        intent.putExtra(AtlasMessagesScreen.EXTRA_NEW_USER, newUserId);
                         startActivity(intent);
                     }
                 } catch (NullPointerException n) {
@@ -474,9 +566,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 }
             }
         });
+        if (!executor.isShutdown()) {
+            executor.shutdown();
+        }
 
-        t.setPriority(Thread.MIN_PRIORITY);
-        t.start();
+        //t.setPriority(Thread.MIN_PRIORITY);
+        //t.start();
     }
 
 }

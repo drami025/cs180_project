@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout_preferences">
 
+
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,184 +18,214 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         tools:context="com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity"
-        android:background="#dddcdc">
+        android:background="#dddcdc"
+        >
 
-        <Switch
-            android:layout_width="fill_parent"
-            android:layout_height="8dp"
-            android:text="Discovery"
-            android:id="@+id/discoveryswitch"
-            android:textColor="@android:color/black"
-            android:background="@android:color/white"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:buttonTint="#f60707"
-            />
-
-        <TextView
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black_overlay"
-            android:textSize="15sp"
-            android:text="disabling discovery prevents others from seeing you. This has no effect on your existing matches."
-            android:id="@+id/discoveryTextView"/>
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/atlas_delimeter_gray"
+            android:elevation="4dp"
+            android:theme="@style/ToolBarStyle"
+            android:popupTheme="@style/Theme.AppCompat.Light" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="100">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp">
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:text="  Discovery"
+                android:id="@+id/discoveryswitch"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:text="Show Me:"/>
+                android:background="@android:color/white"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:buttonTint="#f60707"
+                android:layout_marginTop="10dp"
+                />
+    
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black_overlay"
+                android:textSize="15sp"
+                android:text="@string/discovery_text"
+                android:id="@+id/discoveryTextView"
+                />
+    
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="100">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="50"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="Show Me:"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="Sex"
+                    android:layout_weight="50"/>
+            </LinearLayout>
+    
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  Men"
+                android:id="@+id/menswitch"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:text="Sex"
-                android:layout_weight="50"/>
-        </LinearLayout>
+                android:background="@android:color/white"/>
+    
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  Woman"
+                android:id="@+id/womanswitch"
+                android:textColor="@android:color/black"
+                android:background="@android:color/white"/>
+    
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="100">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="50"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="Search Distance:"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="Dist"
+                    android:layout_weight="50"/>
+            </LinearLayout>
+    
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/distanceseekBar"
+                android:background="@android:color/white"
+                android:clickable="false"
+                android:max="100"
+                android:progressTint="@android:color/black"
+                android:secondaryProgressTint="@android:color/black" />
 
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Men"
-            android:id="@+id/menswitch"
-            android:textColor="@android:color/black"
-            android:background="@android:color/white"/>
+            <!-- #dddcdc gray -->
 
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Woman"
-            android:id="@+id/womanswitch"
-            android:textColor="@android:color/black"
-            android:background="@android:color/white"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="100">
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="50"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:text="Search Distance:"/>
-            <TextView
-                android:layout_width="0dp"
+                android:text="New Text"
+                android:id="@+id/distancetextView"
+                android:textColor="@android:color/black"/>
+    
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:text="dist"
-                android:layout_weight="50"/>
-        </LinearLayout>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/distanceseekBar"
-            android:background="#25864f"
-            android:clickable="false"
-            android:max="100"
-            android:progressBackgroundTint="#ff7300"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/distancetextView"
-            android:textColor="@android:color/black"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="100">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="50"
+                android:weightSum="100">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="50"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="Show Ages:"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="age"
+                    android:layout_weight="50"/>
+            </LinearLayout>
+    
+            <com.edmodo.rangebar.RangeBar
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:text="Show Ages:"/>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:text="age"
-                android:layout_weight="50"/>
-        </LinearLayout>
-
-        <com.edmodo.rangebar.RangeBar
-            xmlns:custom="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rangebarview"
-            custom:tickCount="37"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal" >
+                android:id="@+id/rangebarview"
+                custom:tickCount="37"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+    
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/leftIndex"
-                    style="@style/RoboTheme"
-                    android:layout_marginTop="0dp"
-                    android:text="@string/leftIndex" />
-
-                <EditText
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/leftIndex"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:text="@string/leftIndex" />
+    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/leftIndexValue"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/leftIndexValue"
+                        android:textSize="35sp" />
+                </LinearLayout>
+    
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/leftIndexValue"
-                    style="@style/RoboTheme"
-                    android:layout_marginTop="0dp"
-                    android:inputType="number"
-                    android:text="@string/leftIndexValue"
-                    android:textSize="35sp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rightIndex"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:text="@string/rightIndex" />
+    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rightIndexValue"
+                        style="@style/RoboTheme"
+                        android:layout_marginTop="0dp"
+                        android:inputType="number"
+                        android:text="@string/rightIndexValue"
+                        android:textSize="35sp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rightIndex"
-                    style="@style/RoboTheme"
-                    android:layout_marginTop="0dp"
-                    android:text="@string/rightIndex" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rightIndexValue"
-                    style="@style/RoboTheme"
-                    android:layout_marginTop="0dp"
-                    android:inputType="number"
-                    android:text="@string/rightIndexValue"
-                    android:textSize="35sp" />
-            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="180dp"

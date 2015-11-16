@@ -25,7 +25,6 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
                                                            LocationListener {
 
     GoogleApiClient mGoogleApiClient;
-
     Location mLastLocation = null;
 
     Context mContext;
@@ -80,21 +79,29 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
                 startLocationUpdates();
             }
 
-            // Start Parse put request
-            ParseUser currentUser = ParseUser.getCurrentUser();
-            if (currentUser != null) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // Start Parse put request
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    if (currentUser != null) {
 
-                Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
-                ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
+                        Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
+                        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                        currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
 
-                currentUser.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Log.d(getClass().getSimpleName(), "Done saving geopoint");
+                        currentUser.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.d(getClass().getSimpleName(), "Done saving geopoint");
+                            }
+                        });
                     }
-                });
-            }
+                }
+            });
+            t.setPriority(Thread.MIN_PRIORITY);
+            t.start();
+
         }
 
     }
@@ -114,22 +121,31 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
     public void onLocationChanged(Location location) {
         mLastLocation = location;
 
-        // Start parse put request
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Start parse put request
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if (currentUser != null) {
 
-            ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
+                    ParseGeoPoint parseGeoPoint = new ParseGeoPoint(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                    currentUser.put(ParseConstants.KEY_LOCATION, parseGeoPoint);
 
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    Log.d(getClass().getSimpleName(), "Done saving geopoint");
+                    currentUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            Log.d(getClass().getSimpleName(), "Done saving geopoint");
+                        }
+                    });
+
+                    Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
                 }
-            });
+            }
+        });
 
-            Log.d(getClass().getSimpleName(), mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
-        }
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.start();
+
     }
 
     protected void startLocationUpdates() {
@@ -144,8 +160,10 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(20000);
-        mLocationRequest.setFastestInterval(15000);
+        mLocationRequest.setInterval(1 * 20 * 1000);        // 20 seconds for test
+        //mLocationRequest.setInterval(3 * 60 * 1000);      // 3 minute for real
+        mLocationRequest.setFastestInterval(1 * 20 * 1000); // 20 seconds for test
+        //mLocationRequest.setFastestInterval(3 * 60 * 1000);// 3 minute for real
         mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
     }
 
@@ -155,6 +173,7 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
 
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
+            mGoogleApiClient = null;
         }
     }
 

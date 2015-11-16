@@ -10,11 +10,18 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
+import com.layer.sdk.internal.persistence.sync.Load;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -23,7 +30,7 @@ import java.util.ArrayList;
 public class LoadingScreenActivity extends AppCompatActivity {
 
     //Introduce an delay
-    private final int WAIT_TIME = 100;
+    private final int WAIT_TIME = 10;
 
     private Handler mHandler;
     private static ParseUser currentUser = null;
@@ -36,67 +43,74 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     private static Handler messageHandler;
 
+    private static final Integer MYTHREADS = 30;
+
+    private ExecutorService executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("LoadingScreenActivity  screen started");
         setContentView(R.layout.loading_screen);
         findViewById(R.id.mainSpinner1).setVisibility(View.VISIBLE);
 
 
+        AndroidDrawer drawer = new AndroidDrawer
+                (this,R.id.drawer_layout_loading,R.id.left_drawer_loading, R.id.loading_drawer_pic);
+
         messageHandler = new Handler();
 
-
-        final Thread t = new Thread(new Runnable() {
+        // Start runnables
+        executor = Executors.newFixedThreadPool(MYTHREADS);
+        executor.execute(new Runnable() {
             @Override
             public void run() {
-                currentUser = ParseUser.getCurrentUser();
 
-                // get all of the data for the next Activity then move on
                 try {
-                    toolBarTitle = currentUser.getString(ParseConstants.KEY_NAME);
-                    nameTextView = currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE);
-                    aboutyouTextView = currentUser.getString(ParseConstants.KEY_ABOUTYOU);
-
-                    // Interest
-                    ArrayList<String> array = (ArrayList<String>) currentUser.get(ParseConstants.KEY_INTERESTS);
-                    String in = "";
-
-                    if(array != null) {
-                        for (int i = 0; i < array.size(); i++) {
-                            in = in.concat(array.get(i));
-                            in = in.concat(", ");
-                        }
+                    currentUser = ParseUser.getCurrentUser();
+                    if (currentUser != null) {
+                        Log.d(getClass().getSimpleName(), "UserName: " + currentUser.get(ParseConstants.KEY_NAME));
                     }
-                    InterestTextView = in;
-
                 } catch (NullPointerException n) {
                     n.printStackTrace();
                 }
+
+                // get all of the data for the next Activity then move on
+                if (currentUser != null) {
+                    try {
+                        toolBarTitle = currentUser.getString(ParseConstants.KEY_NAME);
+                        nameTextView = currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE);
+                        aboutyouTextView = currentUser.getString(ParseConstants.KEY_ABOUTYOU);
+
+                        // Interest
+                        ArrayList<String> array = (ArrayList<String>) currentUser.get(ParseConstants.KEY_INTERESTS);
+                        String in = "";
+
+                        if (array != null) {
+                            for (int i = 0; i < array.size(); i++) {
+                                in = in.concat(array.get(i));
+                                in = in.concat(", ");
+                            }
+                        }
+                        InterestTextView = in;
+
+                    } catch (NullPointerException n) {
+                        n.printStackTrace();
+                    }
+                }
             }
         });
-        t.setPriority(Thread.MAX_PRIORITY);
+        executor.shutdown();
 
         startTime = System.currentTimeMillis();
 
-        messageHandler.postDelayed(new Runnable(){
+        messageHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Log.d(getClass().getSimpleName(), "Loading Screen running");
 
+                if (executor.isTerminated() || ParseUser.getCurrentUser() == null) {
+                    Log.d(getClass().getSimpleName(), "Executor finished");
 
-
-                if ((System.currentTimeMillis() - startTime) < 2*WAIT_TIME) {
-                    t.start();
-                }
-                try {
-                    t.join();
-                } catch (InterruptedException n) {
-                    n.printStackTrace();
-                }
-
-                if (!t.isAlive()) {
                      /* Create an Intent that will start the ProfileActivity. */
                     Intent mainIntent = new Intent(LoadingScreenActivity.this, ProfileActivity.class);
                     mainIntent.putExtra(ProfileActivity.KEY_USERTOOLBARTITLE, toolBarTitle);

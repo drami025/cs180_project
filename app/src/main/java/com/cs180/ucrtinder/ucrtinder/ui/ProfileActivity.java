@@ -1,6 +1,7 @@
 package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,7 @@ import java.util.Arrays;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    ParseUser currentUser = ParseUser.getCurrentUser(); //need to generalize this somehow
+    //ParseUser currentUser = ParseUser.getCurrentUser(); //need to generalize this somehow
     private ViewPager myPager;
     private TextView text;
     public static final String KEY_USERPROFILE = "userprofile";
@@ -35,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     public static final String KEY_USERTOOLBARTITLE = "usertoolbartitle";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_USERINTEREST = "userinterest";
+    public static final String USER_PROF = "userprof";
 
 
     private String toolBarTitle = "";
@@ -54,22 +56,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         jumpedToNew = false;
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            toolBarTitle = intent.getStringExtra(KEY_USERTOOLBARTITLE);
-            nameText = intent.getStringExtra(KEY_USERNAME);
-            aboutyouText = intent.getStringExtra(KEY_USERABOUTYOU);
-            InterestText = intent.getStringExtra(KEY_USERINTEREST);
-        } else {
-            toolBarTitle = "";
-            nameText = "";
-            aboutyouText = "";
-            InterestText = "";
-        }
-
+        // Update the strings on the for this profile - AP
+        getUpdatedStrings();
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        if (currentUser != null) {
+        if (toolBarTitle != null) {
             toolbar.setTitle(toolBarTitle);
         }
         setSupportActionBar(toolbar);
@@ -88,7 +79,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         */
-
 
         text = (TextView) this.findViewById(R.id.name_textview);
         //text.setText(currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE));
@@ -169,4 +159,53 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void getUpdatedStrings(){
+        String oldtoolBarTitle = "";
+        String oldnameText = "";
+        String oldaboutyouText = "";
+        String oldInterestText = "";
+
+        SharedPreferences preferences = getSharedPreferences(USER_PROF, MODE_PRIVATE);
+
+        oldtoolBarTitle = preferences.getString(KEY_USERTOOLBARTITLE, "");
+        oldnameText = preferences.getString(KEY_USERNAME, "");
+        oldaboutyouText = preferences.getString(KEY_USERABOUTYOU, "");
+        oldInterestText = preferences.getString(KEY_USERINTEREST, "");
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            toolBarTitle = intent.getStringExtra(KEY_USERTOOLBARTITLE);
+            nameText = intent.getStringExtra(KEY_USERNAME);
+            aboutyouText = intent.getStringExtra(KEY_USERABOUTYOU);
+            InterestText = intent.getStringExtra(KEY_USERINTEREST);
+
+            if (toolBarTitle != null && !toolBarTitle.equals(oldtoolBarTitle)) {
+                editor.putString(KEY_USERTOOLBARTITLE, toolBarTitle);
+            } else {
+                toolBarTitle = oldtoolBarTitle;
+            }
+            if (nameText != null && !nameText.equals(oldnameText)) {
+                editor.putString(KEY_USERNAME, nameText);
+            } else {
+                nameText = oldnameText;
+            }
+            if (aboutyouText != null && !aboutyouText.equals(oldaboutyouText)) {
+                editor.putString(KEY_USERABOUTYOU, aboutyouText);
+            } else {
+                aboutyouText = oldaboutyouText;
+            }
+            if (InterestText != null && !InterestText.equals(oldInterestText)) {
+                editor.putString(KEY_USERINTEREST, InterestText);
+            } else {
+                InterestText = oldInterestText;
+            }
+            editor.apply();
+        } else {
+            toolBarTitle = "";
+            nameText = "";
+            aboutyouText = "";
+            InterestText = "";
+        }
+    }
 }
