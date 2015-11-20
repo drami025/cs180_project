@@ -27,6 +27,7 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="loadingscreen">loadingScreen</string>
 
     <!-- =========== ANDROID DRAWER STRINGS ============== -->
 
@@ -99,6 +100,7 @@
 
     <string name="pref_discovery">Discovery</string>
     <string name="pref_description_discovery">Allows the user to show up in others feed</string>
+    <string name="discovery_text">disabling discovery prevents others from seeing you. This has no effect on your existing matches.</string>
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
@@ -178,5 +180,6 @@
     <string name="mutual_friends_card_tag">Mutual Friends</string>
     <string name="example_mutual_friend_name">EXAMPLE NAME</string>
     <string name="title_activity_igweb">IGWebActivity</string>
+    <string name="title_activity_matched_notifcation">MatchedNotifcationActivity</string>
 
 </resources>

@@ -11,6 +11,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
 import com.cs180.ucrtinder.ucrtinder.R;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -26,6 +27,12 @@ public class SettingsActivity extends AppCompatActivity {
         // Creating an android drawer to slide in from the left side
         AndroidDrawer mAndroidDrawer = new AndroidDrawer
                 (this, R.id.drawer_layout_settings, R.id.left_drawer_settings, R.id.settings_profile_drawer_pic);
+
+        // Setup Toolbar
+        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_drawer);
+        toolbar.setNavigationOnClickListener(new NavigationListener(mAndroidDrawer));
 
 
         newMatches = (Switch) findViewById(R.id.matchesswitch);

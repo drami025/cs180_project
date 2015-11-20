@@ -97,12 +97,23 @@ public class AtlasLoginScreen extends Activity {
         final YouWhoApplication app = (YouWhoApplication) getApplication();
         final LayerClient layerClient = app.getLayerClient();
         final AtlasIdentityProvider identityProvider = app.getIdentityProvider();
-        ParseUser parseUser = ParseUser.getCurrentUser();
-        
-        //final String userName = loginText.getText().toString().trim();
-        final String userName = parseUser.getString(ParseConstants.KEY_NAME);
 
-        if (userName.isEmpty()) return;
+        String userNameTemp = "";
+        try {
+            ParseUser parseUser = ParseUser.getCurrentUser();
+
+            if (parseUser != null) {
+                //final String userName = loginText.getText().toString().trim();
+                userNameTemp = parseUser.getString(ParseConstants.KEY_NAME);
+            }
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+
+        final String userName = userNameTemp;
+        if (userName.isEmpty()) {
+            return;
+        }
         inProgress = true;
 
         layerClient.registerAuthenticationListener(new LayerAuthenticationListener() {

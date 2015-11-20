@@ -9,6 +9,8 @@ public final class ParseConstants {
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_NAME = "name";
     public static final String KEY_AGE = "age";
+    public static final String KEY_BIRTHDAY = "birthday";
+    public static final String KEY_GENDER = "gender";
     public static final String KEY_INTERESTS = "interests";
     public static final String KEY_ABOUTYOU = "about";
     public static final String KEY_MEN = "men";
@@ -18,6 +20,11 @@ public final class ParseConstants {
     public static final String KEY_SMALLESTAGE = "minAge";
     public static final String KEY_LARGESTAGE = "maxAge";
     public static final String KEY_LAYERID = "layerId";
+    public static final String KEY_FACEBOOKID = "facebookId";
+    public static final String KEY_DISLIKES = "dislikes";
+    public static final String KEY_LIKES = "likes";
+    public static final String KEY_MATCHES = "matches";
+    public static final String KEY_ID = "id";
 
     // Profile picture keys
     public static final String KEY_PHOTO0 = "photo0";

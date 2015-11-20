@@ -17,12 +17,14 @@ import android.widget.ListView;
 
 import com.cs180.ucrtinder.ucrtinder.ui.ConversationActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.IGWebActivity;
+import com.cs180.ucrtinder.ucrtinder.ui.LoadingScreenActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.LoginActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.ProfileActivity;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.ui.SettingsActivity;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.io.IOException;
@@ -125,7 +127,7 @@ public class AndroidDrawer {
 
         switch(position){
             case 0:
-                intent = new Intent(mActivity, ProfileActivity.class);
+                intent = new Intent(mActivity, LoadingScreenActivity.class);
                 break;
             case 1:
                 intent = new Intent(mActivity, MainActivity.class);
@@ -162,7 +164,7 @@ public class AndroidDrawer {
 
     public int getPosition(AppCompatActivity activity){
 
-        if(activity instanceof ProfileActivity){
+        if(activity instanceof LoadingScreenActivity){
             return 0;
         }
         else if(activity instanceof MainActivity){
@@ -188,23 +190,31 @@ public class AndroidDrawer {
             final Bitmap bmp;
 
             try {
-                ParseUser user = ParseUser.getCurrentUser();
-                String urlString = user.getString("photo0");
-                URL url = new URL(urlString);
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                ParseUser currentUser = null;
+                try {
+                    currentUser = ParseUser.getCurrentUser();
+                } catch(NullPointerException n) {
+                    n.printStackTrace();
+                }
 
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProfileImage.setImageBitmap(bmp);
-                    }
-                });
-            }
-            catch(MalformedURLException e){
+                if (currentUser != null) {
+                    String urlString = currentUser.getString("photo0");
+                    URL url = new URL(urlString);
+                    bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mProfileImage.setImageBitmap(bmp);
+                        }
+                    });
+                }
+            } catch(MalformedURLException e){
                 e.printStackTrace();
-            }
-            catch(IOException e){
+            } catch(IOException e){
                 e.printStackTrace();
+            } catch (NullPointerException n) {
+                n.printStackTrace();
             }
         }
     }

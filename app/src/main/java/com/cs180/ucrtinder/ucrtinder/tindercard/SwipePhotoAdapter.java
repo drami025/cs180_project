@@ -182,6 +182,8 @@ public class SwipePhotoAdapter extends PagerAdapter {
                     } catch (IOException e) {
                         // Log exception
                         bmap = null;
+                    } catch (OutOfMemoryError e) {
+                        e.printStackTrace();
                     }
                 }
             });
