@@ -177,5 +177,6 @@
     <string name="mutual_friends_tag">mutual friends:</string>
     <string name="mutual_friends_card_tag">Mutual Friends</string>
     <string name="example_mutual_friend_name">EXAMPLE NAME</string>
+    <string name="title_activity_igweb">IGWebActivity</string>
 
 </resources>

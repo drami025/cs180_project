@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.cs180.ucrtinder.ucrtinder.ui.ConversationActivity;
+import com.cs180.ucrtinder.ucrtinder.ui.IGWebActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.LoginActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.MainActivity;
 import com.cs180.ucrtinder.ucrtinder.ui.PreferencesActivity;
@@ -137,6 +138,9 @@ public class AndroidDrawer {
                 break;
             case 4:
                 intent = new Intent(mActivity, SettingsActivity.class);
+                break;
+            case 5:
+                intent = new Intent(mActivity, IGWebActivity.class);
                 break;
             case 7:
                 ParseUser.logOut();

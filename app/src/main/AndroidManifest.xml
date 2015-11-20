@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 
     <!-- GCM -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -183,23 +184,27 @@
             android:name=".Receivers.StartupReceiver"
             android:enabled="true"
             android:exported="true" >
-
             <intent-filter>
                 <action android:name="Action.MainActivity" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".Messenger.MessengerPushReceiver" >
             <intent-filter>
                 <action android:name="com.layer.sdk.PUSH" />
+
                 <category android:name="com.layer.atlas.messenger" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="com.layer.atlas.messenger" />
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".ui.IGWebActivity"
+            android:label="@string/title_activity_igweb" >
+        </activity>
     </application>
 
 </manifest>

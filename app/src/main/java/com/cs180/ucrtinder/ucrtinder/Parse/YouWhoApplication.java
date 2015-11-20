@@ -50,6 +50,19 @@ public class YouWhoApplication extends Application {
     private String appId = LAYER_APP_ID;
 
 
+    public final static String IG_CLIENT_ID = "fe7be7345f39493b82cf28a01284f733";
+    public final static String IG_CLIENT_SECRET = "a70922ee31fe4fd0b5da0a5274958a7f";
+    public final static String IG_CALLBACK_URL = "http://google.com";
+
+    public final static String IG_AUTHURL = "https://api.instagram.com/oauth/authorize/?client_id="
+                + IG_CLIENT_ID + "&redirect_uri=" + IG_CALLBACK_URL
+                + "&response_type=code&display=touch&scope=likes+comments+relationships";
+
+    public final static String IG_TOKENURL = "https://api.instagram.com/oauth/access_token"
+            + "?client_id=" + IG_CLIENT_ID + "&client_secret=" + IG_CLIENT_SECRET + "&redirect_uri="
+            + IG_CALLBACK_URL + "&grant_type=authorization_code";
+
+
 
     @Override
     public void onCreate() {
