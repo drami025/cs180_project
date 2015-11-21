@@ -46,5 +46,5 @@ Milestone 1
 	[in progress, Daniel, Katherine, Julia]
 	
 Additional Info:
-*   Front-end libraries/frameworks: android, Facebook Api, Google Api, Instagram Api
+*   Front-end libraries/frameworks: android, Facebook Api, Google Api, Instagram Api, Atlas-Layer api, FlingSwipeCard 
 
