@@ -43,9 +43,11 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
     private static Handler messageHandler;
 
-    private static final Integer MYTHREADS = 30;
+    private static final Integer MYTHREADS = 1;
 
     private ExecutorService executor;
+
+    private LoadingScreenActivity mAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,33 +55,48 @@ public class LoadingScreenActivity extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
         findViewById(R.id.mainSpinner1).setVisibility(View.VISIBLE);
 
+        try {
+            Log.e("ENTER", "Going to get user");
+            currentUser = ParseUser.getCurrentUser();
+            if (currentUser != null) {
+                Log.d(getClass().getSimpleName(), "UserName: " + currentUser.get(ParseConstants.KEY_NAME));
+            }
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+
+        mAct = this;
 
         AndroidDrawer drawer = new AndroidDrawer
                 (this,R.id.drawer_layout_loading,R.id.left_drawer_loading, R.id.loading_drawer_pic);
 
-        messageHandler = new Handler();
-
+//        messageHandler = new Handler();
+//
         // Start runnables
         executor = Executors.newFixedThreadPool(MYTHREADS);
         executor.execute(new Runnable() {
             @Override
             public void run() {
 
-                try {
-                    currentUser = ParseUser.getCurrentUser();
-                    if (currentUser != null) {
-                        Log.d(getClass().getSimpleName(), "UserName: " + currentUser.get(ParseConstants.KEY_NAME));
-                    }
-                } catch (NullPointerException n) {
-                    n.printStackTrace();
-                }
+//                try {
+//                    Log.e("ENTER", "Going to get user");
+//                    currentUser = ParseUser.getCurrentUser();
+//                    if (currentUser != null) {
+//                        Log.d(getClass().getSimpleName(), "UserName: " + currentUser.get(ParseConstants.KEY_NAME));
+//                    }
+//                } catch (NullPointerException n) {
+//                    n.printStackTrace();
+//                }
 
                 // get all of the data for the next Activity then move on
                 if (currentUser != null) {
                     try {
                         toolBarTitle = currentUser.getString(ParseConstants.KEY_NAME);
+                        Log.e("CHECKPOINT", "ONE");
                         nameTextView = currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE);
+                        Log.e("CHECKPOINT", "TWO");
                         aboutyouTextView = currentUser.getString(ParseConstants.KEY_ABOUTYOU);
+                        Log.e("CHECKPOINT", "THREE");
 
                         // Interest
                         ArrayList<String> array = (ArrayList<String>) currentUser.get(ParseConstants.KEY_INTERESTS);
@@ -87,6 +104,7 @@ public class LoadingScreenActivity extends AppCompatActivity {
 
                         if (array != null) {
                             for (int i = 0; i < array.size(); i++) {
+                                Log.e("CHECKTHIS", array.get(i));
                                 in = in.concat(array.get(i));
                                 in = in.concat(", ");
                             }
@@ -97,32 +115,53 @@ public class LoadingScreenActivity extends AppCompatActivity {
                         n.printStackTrace();
                     }
                 }
-            }
-        });
-        executor.shutdown();
 
-        startTime = System.currentTimeMillis();
-
-        messageHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(getClass().getSimpleName(), "Loading Screen running");
-
-                if (executor.isTerminated() || ParseUser.getCurrentUser() == null) {
-                    Log.d(getClass().getSimpleName(), "Executor finished");
+                mAct.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(getClass().getSimpleName(), "Executor finished");
 
                      /* Create an Intent that will start the ProfileActivity. */
-                    Intent mainIntent = new Intent(LoadingScreenActivity.this, ProfileActivity.class);
-                    mainIntent.putExtra(ProfileActivity.KEY_USERTOOLBARTITLE, toolBarTitle);
-                    mainIntent.putExtra(ProfileActivity.KEY_USERNAME, nameTextView);
-                    mainIntent.putExtra(ProfileActivity.KEY_USERABOUTYOU, aboutyouTextView);
-                    mainIntent.putExtra(ProfileActivity.KEY_USERINTEREST, InterestTextView);
+                        Intent mainIntent = new Intent(LoadingScreenActivity.this, ProfileActivity.class);
+                        mainIntent.putExtra(ProfileActivity.KEY_USERTOOLBARTITLE, toolBarTitle);
+                        mainIntent.putExtra(ProfileActivity.KEY_USERNAME, nameTextView);
+                        mainIntent.putExtra(ProfileActivity.KEY_USERABOUTYOU, aboutyouTextView);
+                        mainIntent.putExtra(ProfileActivity.KEY_USERINTEREST, InterestTextView);
 
-                    LoadingScreenActivity.this.startActivity(mainIntent);
-                    LoadingScreenActivity.this.finish();
-                }
+                        LoadingScreenActivity.this.startActivity(mainIntent);
+                        LoadingScreenActivity.this.finish();
+                    }
+                });
             }
-        }, WAIT_TIME);
+        });
+//        executor.shutdown();
+
+//        startTime = System.currentTimeMillis();
+//
+//        messageHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d(getClass().getSimpleName(), "Loading Screen running");
+//
+//                if (executor.isTerminated() || ParseUser.getCurrentUser() == null) {
+//                    messageHandler.removeCallbacks(this);
+//                    Log.d(getClass().getSimpleName(), "Executor finished");
+//
+//                     /* Create an Intent that will start the ProfileActivity. */
+//                    Intent mainIntent = new Intent(LoadingScreenActivity.this, ProfileActivity.class);
+//                    mainIntent.putExtra(ProfileActivity.KEY_USERTOOLBARTITLE, toolBarTitle);
+//                    mainIntent.putExtra(ProfileActivity.KEY_USERNAME, nameTextView);
+//                    mainIntent.putExtra(ProfileActivity.KEY_USERABOUTYOU, aboutyouTextView);
+//                    mainIntent.putExtra(ProfileActivity.KEY_USERINTEREST, InterestTextView);
+//
+//                    LoadingScreenActivity.this.startActivity(mainIntent);
+//                    LoadingScreenActivity.this.finish();
+//                    return;
+//                }
+//
+//                messageHandler.postDelayed(this, WAIT_TIME);
+//            }
+//        }, WAIT_TIME);
 
     }
 }

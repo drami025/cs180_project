@@ -70,13 +70,18 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public static void removeBackground() {
         viewHolder.background.setVisibility(View.GONE);
         myAppAdapter.notifyDataSetChanged();
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            user = ParseUser.getCurrentUser();
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
 
         mActivity = this;
 
@@ -137,13 +142,15 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                         if(mCounter.addAndGet(1) == mLimit.get()) {
                             myAppAdapter = new MyAppAdapter(al, MainActivity.this);
                             flingContainer.setAdapter(myAppAdapter);
-                            setContainerListeners();
                             myAppAdapter.notifyDataSetChanged();
+                            setContainerListeners();
                         }
                     }
                 });
             }
         };
+
+
 
         ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.execute(new Runnable() {
@@ -186,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     }
 
     void setContainerListeners(){
+
         flingContainer.setFlingListener(new CardSwipeListener());
 
         // Optionally add an OnItemClickListener
@@ -417,12 +425,13 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                             dislikes.add(candidates.get(currentCandidate++));
                         }
                         user.put("dislikes", dislikes);
-                        user.saveEventually(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                Log.d(getClass().getSimpleName(), "Saved left swipe data successfully");
-                            }
-                        });
+
+                        try {
+                            user.save();
+                        }
+                        catch(Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -478,18 +487,13 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                                 //candidates.get(currentCandidate).put("matches", targetMatches);
 
                                 // Save in the background
-                                user.saveEventually(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        Log.d(getClass().getSimpleName(), "Saved right swipe(currentUser) data successfully");
-                                    }
-                                });
-                                currCandidate.saveEventually(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        Log.d(getClass().getSimpleName(), "Saved right swipe(currCandidate) data successfully");
-                                    }
-                                });
+                                try {
+                                    user.save();
+                                    currCandidate.save();
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                }
                                 //candidates.get(currentCandidate).saveInBackground();
                             }
                         }

@@ -182,23 +182,23 @@ public class PreferencesActivity extends AppCompatActivity{
 
     @Override
     protected void onStop() {
-        try {
-            executor.execute(new saveRunnable());
-            executor.shutdown();
-        } catch (RejectedExecutionException r) {
-            r.printStackTrace();
-        }
+//        try {
+//            executor.execute(new saveRunnable());
+//            executor.shutdown();
+//        } catch (RejectedExecutionException r) {
+//            r.printStackTrace();
+//        }
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        try {
-            executor.execute(new saveRunnable());
-            executor.shutdown();
-        } catch (RejectedExecutionException r) {
-            r.printStackTrace();
-        }
+//        try {
+//            executor.execute(new saveRunnable());
+//            executor.shutdown();
+//        } catch (RejectedExecutionException r) {
+//            r.printStackTrace();
+//        }
         super.onDestroy();
     }
 

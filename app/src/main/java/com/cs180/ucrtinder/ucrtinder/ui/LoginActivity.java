@@ -113,7 +113,7 @@ public class LoginActivity extends FragmentActivity {
                     if (id != null) {
                         app.setAppId(id);
                     }
-                    app.initLayerClient(app.getAppId());
+                    //app.initLayerClient(app.getAppId());
                 }
             }
         });
@@ -150,6 +150,7 @@ public class LoginActivity extends FragmentActivity {
                                 Intent intent = new Intent(mActivity, MainActivity.class);
                                 intent.putExtra("user_data", jsonObject.toString());
                                 startActivity(intent);
+                                Log.e("START", "AFTER LOGIN");
                             }
                         });
                     }
@@ -215,12 +216,7 @@ public class LoginActivity extends FragmentActivity {
 
             Log.e("FIELDS", gender + " " + firstName + " " + id + " " + birthday);
 
-            user.saveEventually(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    Log.d(getClass().getSimpleName(), "saved all login fields to local/parse web");
-                }
-            });
+            user.save();
 
             JSONArray profileArray = json.getJSONObject("albums").getJSONArray("data");
 
@@ -239,13 +235,8 @@ public class LoginActivity extends FragmentActivity {
             getPhotosFromAlbum(profileAlbumID);
 
         }
-        catch(JSONException e){
+        catch(Exception e){
             e.printStackTrace();
-        }
-        catch(java.text.ParseException e){
-            e.printStackTrace();
-        } catch (NullPointerException n) {
-            n.printStackTrace();
         }
     }
 
@@ -295,9 +286,9 @@ public class LoginActivity extends FragmentActivity {
                     String photoUrl = graphResponse.getJSONObject().getString("source");
                     Log.e("PHOTO URL", photoUrl);
                     user.put(key, photoUrl);
-                    user.saveInBackground();
+                    user.save();
                 }
-                catch (JSONException e){
+                catch (Exception e){
                     e.printStackTrace();
                 }
             }
