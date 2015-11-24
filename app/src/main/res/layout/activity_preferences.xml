@@ -25,10 +25,11 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/atlas_delimeter_gray"
+            android:background="@color/dark_gray_toolbar"
             android:elevation="4dp"
             android:theme="@style/ToolBarStyle"
-            android:popupTheme="@style/Theme.AppCompat.Light" />
+            android:popupTheme="@style/Theme.AppCompat.Light"
+            android:navigationIcon="@drawable/three_black_bars_small"/>
 
         <LinearLayout
             android:layout_width="match_parent"

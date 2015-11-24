@@ -1,6 +1,7 @@
 package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,11 +55,13 @@ public class LoginActivity extends FragmentActivity {
         Button signInButton = (Button) findViewById(R.id.signInButton);
         mActivity = this;
 
+        /*
         mProfile = Profile.getCurrentProfile();
         if(mProfile != null){
             Intent intent = new Intent(mActivity, MainActivity.class);
             startActivity(intent);
         }
+        */
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,19 +75,24 @@ public class LoginActivity extends FragmentActivity {
         mProfile = Profile.getCurrentProfile();
 
         if(mProfile != null){
-            ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseObject>() {
-                @Override
-                public void done(ParseObject parseObject, ParseException e) {
-                    if (e != null) {
-                    } else {
-                        ParseUser currentUser = (ParseUser) parseObject;
-                        currentUser.pinInBackground();
+            try {
+                ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject parseObject, ParseException e) {
+                        if (e != null) {
+                        } else {
+                            ParseUser currentUser = (ParseUser) parseObject;
+                            currentUser.pinInBackground();
+                        }
                     }
-                }
-            });
-            Intent intent = new Intent(mActivity, MainActivity.class);
-            startActivity(intent);
-            return;
+                });
+                Intent intent = new Intent(mActivity, MainActivity.class);
+                startActivity(intent);
+                LoginActivity.this.finish();
+                return;
+            } catch (NullPointerException np) {
+                //np.printStackTrace();
+            }
         }
 
         Log.e("LOGIN", "RETRIEVING INFO FROM FB");
@@ -96,6 +104,7 @@ public class LoginActivity extends FragmentActivity {
             public void done(ParseUser parseUser, ParseException e) {
                 if (parseUser == null) {
                     Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                    return;
                 } else if (parseUser.isNew()) {
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
 //                    parseUser.put(ParseConstants.KEY_LAYERID, app.getLayerClient().getAuthenticatedUserId());
@@ -115,24 +124,29 @@ public class LoginActivity extends FragmentActivity {
                     }
                     //app.initLayerClient(app.getAppId());
                 }
+
+                parseUser.pinInBackground();
+                parseUser.saveInBackground();
             }
         });
 
-        /*
-        ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (e != null) {
-                } else {
-                    ParseUser currentUser = (ParseUser) parseObject;
-                    currentUser.pinInBackground();
+         /*
+            parseUser.fetchInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (e != null) {
+                    } else {
+                        ParseUser currentUser = (ParseUser) parseObject;
+                        currentUser.pinInBackground();
+                    }
                 }
-            }
-        });
+            });
         */
+
     }
 
     public void loginSuccessful(final boolean isNewUser){
+
 
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -150,6 +164,7 @@ public class LoginActivity extends FragmentActivity {
                                 Intent intent = new Intent(mActivity, MainActivity.class);
                                 intent.putExtra("user_data", jsonObject.toString());
                                 startActivity(intent);
+                                LoginActivity.this.finish();
                                 Log.e("START", "AFTER LOGIN");
                             }
                         });

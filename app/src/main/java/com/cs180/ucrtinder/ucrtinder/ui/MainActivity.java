@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public static final String CARD_NAME = "cardName";
     public static final String CARD_ID = "cardID";
 
+    public static final String CANDIDATE_ID = "candidateId";
+    public static final String MATCHED_BUNDLE = "matchedBundle";
+
     public static void removeBackground() {
         viewHolder.background.setVisibility(View.GONE);
         myAppAdapter.notifyDataSetChanged();
@@ -76,12 +79,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        try {
-            user = ParseUser.getCurrentUser();
-        } catch (NullPointerException n) {
-            n.printStackTrace();
-        }
 
         mActivity = this;
 
@@ -99,6 +96,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer);
         mToolbar.setNavigationOnClickListener(new NavigationListener(mAndroidDrawer));
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException np) {
+            np.printStackTrace();
+        }
 
         // Builds Fling card container
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
@@ -207,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 myAppAdapter.notifyDataSetChanged();
                 //  Toast.makeText(getApplicationContext(), "Clicked card", Toast.LENGTH_SHORT).show();
 
-                Intent cardProfileIntent = new Intent(getApplicationContext(), CardProfileActivity.class);
+                Intent cardProfileIntent = new Intent(MainActivity.this, CardProfileActivity.class);
                 Bundle b = new Bundle();
 
                 // Get card user parse String
@@ -427,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                         user.put("dislikes", dislikes);
 
                         try {
-                            user.save();
+                            user.saveInBackground();
                         }
                         catch(Exception e){
                             e.printStackTrace();
@@ -441,9 +443,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         }
 
         @Override
-        public void onRightCardExit(Object dataObject) {
+        public void onRightCardExit(final Object dataObject) {
 
             if (!al.isEmpty()) {
+                final Data data = al.get(0);
                 al.remove(0);
                 myAppAdapter.notifyDataSetChanged();
 
@@ -488,8 +491,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
                                 // Save in the background
                                 try {
-                                    user.save();
-                                    currCandidate.save();
+                                    user.saveInBackground();
+                                    currCandidate.saveInBackground();
                                 }
                                 catch (Exception e){
                                     e.printStackTrace();
@@ -499,6 +502,23 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                         }
 
                         ++currentCandidate;
+
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Make a notification
+                                Intent intent = new Intent(MainActivity.this, MatchedNotifcationActivity.class);
+                                Bundle b = new Bundle();
+                                // Get card user parse String
+                                b.putString(CARD_USER, data.getImagePath());
+                                //b.putString(CARD_USER, currCandidate.getString(ParseConstants.KEY_PHOTO0));
+                                b.putString(CARD_ID, data.getID());
+                                //b.putString(CARD_ID, currCandidate.getObjectId());
+                                intent.putExtra(CARD_BUNDLE, b);
+                                startActivity(intent);
+                            }
+                        });
+
                     }
                 });
                 if (!executor.isShutdown()) {

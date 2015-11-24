@@ -27,6 +27,6 @@
     
     <color name="indicator_4">#fff</color>
 
-
+    <color name="dark_gray_toolbar">#333333</color>
 
 </resources>

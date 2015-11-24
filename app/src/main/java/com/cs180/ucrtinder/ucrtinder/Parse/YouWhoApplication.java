@@ -5,22 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.cs180.ucrtinder.ucrtinder.Messenger.AtlasIdentityProvider;
 import com.layer.atlas.Atlas;
 import com.layer.sdk.LayerClient;
-import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
-
-import java.util.Arrays;
+import com.parse.ParseInstallation;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
@@ -28,7 +20,7 @@ import java.util.UUID;
 /**
  * Created by bananapanda on 10/22/15.
  */
-public class YouWhoApplication extends Application {
+public class YouWhoApplication extends MultiDexApplication {
 
     //==============================================================================================
     // LAYER CONFIGURATION
@@ -73,6 +65,8 @@ public class YouWhoApplication extends Application {
         Parse.initialize(this, "o66AszQHjZRyH1nY7XMeHL9t9oAKeSe5hWDfRYEH", "9lo4BUYpKJGmNTN6jtoPD8LoYN4R1m7TKHIaDxYG");
 
         ParseFacebookUtils.initialize(this);
+
+        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         // Messaging system through Layer.com
         LayerClient.enableLogging(this);

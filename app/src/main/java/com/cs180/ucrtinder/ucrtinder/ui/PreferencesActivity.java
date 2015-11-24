@@ -1,6 +1,7 @@
 package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -66,15 +67,27 @@ public class PreferencesActivity extends AppCompatActivity{
     private ExecutorService executor;
     private static final Integer MYTHREADS = 3;
 
+    private ParseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
 
+        try {
+            user = ParseUser.getCurrentUser();
+            if (user == null) {
+                startActivity(new Intent(this, LoginActivity.class));
+            }
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+
 
         // Set up executor to handle the saving of data
         executor = Executors.newFixedThreadPool(MYTHREADS);
         executor.execute(new getDataRunnable());
+        executor.shutdown();
 
         // Creating an android drawer to slide in from the left side
         AndroidDrawer mAndroidDrawer = new AndroidDrawer
@@ -85,6 +98,11 @@ public class PreferencesActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_drawer);
         toolbar.setNavigationOnClickListener(new NavigationListener(mAndroidDrawer));
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException np) {
+            np.printStackTrace();
+        }
 
 
         discovery = (Switch) findViewById(R.id.discoveryswitch);
@@ -172,6 +190,8 @@ public class PreferencesActivity extends AppCompatActivity{
     @Override
     public void onPause() {
         try {
+            executor = null;
+            executor = Executors.newFixedThreadPool(1);
             executor.execute(new saveRunnable());
             executor.shutdown();
         } catch (RejectedExecutionException r) {
@@ -182,23 +202,27 @@ public class PreferencesActivity extends AppCompatActivity{
 
     @Override
     protected void onStop() {
-//        try {
-//            executor.execute(new saveRunnable());
-//            executor.shutdown();
-//        } catch (RejectedExecutionException r) {
-//            r.printStackTrace();
-//        }
+        /*
+        try {
+            executor.execute(new saveRunnable());
+            executor.shutdown();
+        } catch (RejectedExecutionException r) {
+            r.printStackTrace();
+        }
+        */
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-//        try {
-//            executor.execute(new saveRunnable());
-//            executor.shutdown();
-//        } catch (RejectedExecutionException r) {
-//            r.printStackTrace();
-//        }
+        /*
+        try {
+            executor.execute(new saveRunnable());
+            executor.shutdown();
+        } catch (RejectedExecutionException r) {
+            r.printStackTrace();
+        }
+        */
         super.onDestroy();
     }
 
@@ -226,7 +250,7 @@ public class PreferencesActivity extends AppCompatActivity{
                 //currentUser.put(ParseConstants.KEY_, discoveryBool);
 
                 // Save all changes in the background
-                currentUser.saveEventually(new SaveCallback() {
+                currentUser.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         Log.d(getClass().getSimpleName(), "Saved preferences data locally/on the web");

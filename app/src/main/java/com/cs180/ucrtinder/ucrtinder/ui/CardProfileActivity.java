@@ -3,6 +3,7 @@ package com.cs180.ucrtinder.ucrtinder.ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cs180.ucrtinder.ucrtinder.FragmentSupport.AndroidDrawer;
+import com.cs180.ucrtinder.ucrtinder.FragmentSupport.NavigationListener;
 import com.cs180.ucrtinder.ucrtinder.Parse.ParseConstants;
 import com.cs180.ucrtinder.ucrtinder.R;
 import com.cs180.ucrtinder.ucrtinder.tindercard.SwipePhotoAdapter;
@@ -28,6 +30,7 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.parse.Parse;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -52,23 +55,45 @@ import java.util.concurrent.Executors;
 
 public class CardProfileActivity extends AppCompatActivity {
 
-    ParseUser currentUser = ParseUser.getCurrentUser();
+    ParseUser currentUser;
     private List<ParseUser> profileUser;
     private ViewPager myPager;
     private LinearLayout mMutualFriendsView;
 
     public static final String KEY_CARDPROFILE = "cardprofile";
 
+    ArrayList<String> array = new ArrayList<>();
+
+    private String aboutYouText = "";
+    private String userStringText = "";
+    private String toolbarTitle = "";
+
+    private Handler mHandler;
+    final static int WAIT_TIME = 100;
+    private SwipePhotoAdapter adapter;
+
+    private ParseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_card_profile);
+
+        try {
+            user = ParseUser.getCurrentUser();
+            if (user == null) {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            }
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+
 
         // Get intent with card user string data
         Intent intent = getIntent();
         Bundle b = intent.getBundleExtra(MainActivity.CARD_BUNDLE);
-        String userString = b.getString(MainActivity.CARD_USER, "");
+        final String userString = b.getString(MainActivity.CARD_USER, "");
         String profileId = b.getString(MainActivity.CARD_ID, "");
 
         Log.e("PROFILE ID", profileId);
@@ -80,70 +105,116 @@ public class CardProfileActivity extends AppCompatActivity {
 
         mMutualFriendsView = (LinearLayout) findViewById(R.id.card_profile_hsv_layout);
 
-        ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
-        mainQuery.whereEqualTo(ParseConstants.KEY_OBJECTID, userString);
+        AndroidDrawer drawer = new AndroidDrawer
+                (this,R.id.drawer_layout_profile,R.id.left_drawer_card_profile, R.id.card_profile_drawer_pic);
 
-        try {
-            profileUser = mainQuery.find();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if(profileUser != null) {
-            currentUser = profileUser.get(0);
-        }
-
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        toolbar.setTitle(currentUser.getString(ParseConstants.KEY_NAME));
+        final Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        toolbar.setTitle(toolbarTitle);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_drawer);
+        toolbar.setNavigationOnClickListener(new NavigationListener(drawer));
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException np) {
             np.printStackTrace();
         }
 
-        AndroidDrawer drawer = new AndroidDrawer
-                (this,R.id.drawer_layout_profile,R.id.left_drawer_card_profile, R.id.card_profile_drawer_pic);
-
-        TextView text;
-        text = (TextView) this.findViewById(R.id.name_textview);
-        text.setText(currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE));
-        text = (TextView) this.findViewById(R.id.Aboutyou_textview);
-        text.setText(currentUser.getString(ParseConstants.KEY_ABOUTYOU));
-        text = (TextView) this.findViewById(R.id.interests_textview);
-        ArrayList<String> array = (ArrayList<String>)currentUser.get(ParseConstants.KEY_INTERESTS);
-        String in = "";
-
-        if(array != null) {
-            for (int i = 0; i < array.size(); i++) {
-                in = in.concat(array.get(i));
-                in = in.concat(", ");
-            }
-        }
-        text.setText(in);
-
-        // Update photos on photoslider
-        SwipePhotoAdapter adapter = new SwipePhotoAdapter(KEY_CARDPROFILE, userString);
-        myPager = (ViewPager) findViewById(R.id.viewpager_layout);
-        myPager.setAdapter(adapter);
-        myPager.setCurrentItem(0);
-
-        ViewTreeObserver viewTreeObserver = myPager.getViewTreeObserver();
-        final DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        executor.execute(new Runnable() {
             @Override
-            public void onGlobalLayout() {
+            public void run() {
+                currentUser = ParseUser.getCurrentUser();
+                ParseQuery<ParseUser> mainQuery = ParseUser.getQuery();
+                mainQuery.whereEqualTo(ParseConstants.KEY_OBJECTID, userString);
 
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400);
-                float dpheight = displayMetrics.heightPixels / 3 * 2;
-                int width = myPager.getWidth();
+                try {
+                    profileUser = mainQuery.find();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                params.width = width;
-                params.height = (int) dpheight;
+                if (profileUser != null) {
+                    currentUser = profileUser.get(0);
+                }
 
-                myPager.setLayoutParams(params);
+                toolbarTitle = currentUser.getString(ParseConstants.KEY_NAME);
+                userStringText = currentUser.getString(ParseConstants.KEY_NAME) + ", " + currentUser.getInt(ParseConstants.KEY_AGE);
+                aboutYouText = currentUser.getString(ParseConstants.KEY_ABOUTYOU);
+                array = (ArrayList<String>) currentUser.get(ParseConstants.KEY_INTERESTS);
+
+                CardProfileActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toolbar.setTitle(toolbarTitle);
+
+                        TextView text;
+                        text = (TextView) findViewById(R.id.name_textview);
+                        text.setText(userStringText);
+                        text = (TextView) findViewById(R.id.Aboutyou_textview);
+                        text.setText(aboutYouText);
+                        text = (TextView) findViewById(R.id.interests_textview);
+
+                        String in = "";
+
+                        if (array != null) {
+                            for (int i = 0; i < array.size(); i++) {
+                                in = in.concat(array.get(i));
+                                in = in.concat(", ");
+                            }
+                        }
+                        text.setText(in);
+                    }
+                });
             }
         });
+        executor.shutdown();
+
+
+        // Update photos on photoslider
+        adapter = new SwipePhotoAdapter(KEY_CARDPROFILE, userString);
+        adapter.pullPhotos();
+
+        mHandler = new Handler();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (adapter.getCandidateUserPhotoBool() || !adapter.getAllNullBool()) {
+                    Log.e(getClass().getSimpleName(), "Updated images in the slider");
+                    mHandler.removeCallbacks(this);
+
+
+                    myPager = (ViewPager) findViewById(R.id.viewpager_layout);
+                    myPager.setAdapter(adapter);
+                    myPager.setCurrentItem(0);
+                    adapter.notifyDataSetChanged();
+                    myPager.destroyDrawingCache();
+
+                    ViewTreeObserver viewTreeObserver = myPager.getViewTreeObserver();
+                    final DisplayMetrics displayMetrics = CardProfileActivity.this.getResources().getDisplayMetrics();
+                    viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400);
+                            float dpheight = (displayMetrics.heightPixels / 3) * 2;
+                            int width = myPager.getWidth();
+
+                            params.width = width;
+                            params.height = (int) dpheight;
+                            myPager.setLayoutParams(params);
+                        }
+                    });
+                    //adapter.notifyDataSetChanged();
+                } else {
+                    mHandler.postDelayed(this, WAIT_TIME);
+                }
+            }
+        }, WAIT_TIME);
     }
 
 

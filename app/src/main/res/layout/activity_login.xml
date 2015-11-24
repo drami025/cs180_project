@@ -1,12 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/atlas_messenger_activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/atlas_messenger_activity_horizontal_margin"
     android:paddingRight="@dimen/atlas_messenger_activity_horizontal_margin"
     android:paddingTop="@dimen/atlas_messenger_activity_vertical_margin"
     android:paddingBottom="@dimen/atlas_messenger_activity_vertical_margin"
     tools:context=".LoginActivity"
     android:background="#FFFFFFFF">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:src="@drawable/login_icon_black"
+        android:layout_above="@+id/signInButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="56dp" />
 
     <Button
 
@@ -18,5 +28,6 @@
         android:id="@+id/signInButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="81dp"/>
+        android:layout_marginBottom="81dp"
+        android:background="#99FF0000"/>
 </RelativeLayout>

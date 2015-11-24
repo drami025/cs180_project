@@ -9,6 +9,7 @@ import android.preference.PreferenceActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -60,6 +61,7 @@ public class AndroidDrawer {
         mProfileImage.setOnClickListener(new PhotoClickListener());
         ExecutorService es = Executors.newFixedThreadPool(1);
         es.execute(new ProfileImageRunnable());
+        es.shutdown();
 
         mDrawerList = (ListView) mActivity.findViewById(left_drawer);
         String[] naviItems = mActivity.getResources().getStringArray(R.array.menu_items);
@@ -145,14 +147,21 @@ public class AndroidDrawer {
                 intent = new Intent(mActivity, IGWebActivity.class);
                 break;
             case 7:
-                ParseUser.logOut();
+                if (ParseUser.getCurrentUser() != null) {
+                    Log.e(getClass().getSimpleName(), "LOGGED OUT SUCCESSFULLY");
+                    ParseUser.logOut();
+                }
                 intent = new Intent(mActivity, LoginActivity.class);
             default:
                 break;
         }
 
-        if(intent != null)
+        if(intent != null) {
             mActivity.startActivity(intent);
+            if (!(mActivity instanceof MainActivity)) {
+                mActivity.finish();
+            }
+        }
     }
 
 

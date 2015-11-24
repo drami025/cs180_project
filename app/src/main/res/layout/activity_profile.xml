@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawer_layout_profile">
+    android:id="@+id/drawer_layout_profile"
+    android:background="@color/atlas_background_white">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,12 +21,12 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/atlas_delimeter_gray"
+            android:background="@color/dark_gray_toolbar"
             android:elevation="4dp"
             android:theme="@style/ToolBarStyle"
             android:popupTheme="@style/Theme.AppCompat.Light"
+            android:navigationIcon="@mipmap/ic_drawer"
             >
-
 
         </android.support.v7.widget.Toolbar>
 

@@ -29,7 +29,7 @@
         android:layout_height="56dp"
         android:orientation="horizontal"
         android:padding="4dp" 
-        android:background="@color/atlas_background_gray"
+        android:background="@color/atlas_background_blue"
         >
         <FrameLayout
             android:id="@+id/atlas_actionbar_left"
@@ -62,7 +62,7 @@
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:textColor="@color/atlas_text_white"
+                android:textColor="@color/atlas_text_black"
                 android:textSize="@dimen/atlas_text_size_title"
                 android:singleLine="true"
                 android:text="Atlas"

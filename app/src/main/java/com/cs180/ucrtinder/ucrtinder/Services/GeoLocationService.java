@@ -24,7 +24,7 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
                                                            GoogleApiClient.OnConnectionFailedListener,
                                                            LocationListener {
 
-    GoogleApiClient mGoogleApiClient;
+    GoogleApiClient mGoogleApiClient = null;
     Location mLastLocation = null;
 
     Context mContext;
@@ -60,7 +60,6 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
             createLocationRequest();
             startLocationUpdates();
         }
-
 
         return START_STICKY;
     }
@@ -108,7 +107,6 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
         stopLocationUpdates();
     }
 
@@ -150,19 +148,21 @@ public class GeoLocationService extends Service implements GoogleApiClient.Conne
 
     protected void startLocationUpdates() {
         Log.d(getClass().getSimpleName(), "Started location updates");
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient, mLocationRequest, this);
+
     }
 
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
     }
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1 * 20 * 1000);        // 20 seconds for test
-        //mLocationRequest.setInterval(3 * 60 * 1000);      // 3 minute for real
-        mLocationRequest.setFastestInterval(1 * 20 * 1000); // 20 seconds for test
+        mLocationRequest.setInterval(1 * 20 * 1000);         // 20 seconds for test
+        //mLocationRequest.setInterval(3 * 60 * 1000);       // 3 minute for real
+        mLocationRequest.setFastestInterval(1 * 20 * 1000);  // 20 seconds for test
         //mLocationRequest.setFastestInterval(3 * 60 * 1000);// 3 minute for real
         mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
     }

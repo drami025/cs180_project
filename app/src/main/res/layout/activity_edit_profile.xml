@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout_edit_profile">
 
-<LinearLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,16 +15,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.cs180.ucrtinder.ucrtinder.ui.EditProfileActivity">
+        tools:context="com.cs180.ucrtinder.ucrtinder.ui.EditProfileActivity"
+        android:background="@color/atlas_background_white">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_edit_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/atlas_delimeter_gray"
+            android:background="@color/dark_gray_toolbar"
             android:elevation="4dp"
             android:theme="@style/ToolBarStyle"
-            android:popupTheme="@style/Theme.AppCompat.Light" />
+            android:popupTheme="@style/Theme.AppCompat.Light"
+            android:navigationIcon="@drawable/three_black_bars_small"/>
 
         <ScrollView
             android:layout_width="match_parent"

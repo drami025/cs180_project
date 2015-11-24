@@ -2,11 +2,16 @@ package com.cs180.ucrtinder.ucrtinder.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
@@ -46,10 +51,27 @@ public class ProfileActivity extends AppCompatActivity {
 
     boolean jumpedToNew;
 
+    final static int WAIT_TIME = 10;
+    private Handler mHandler;
+    private SwipePhotoAdapter adapter;
+
+    private ParseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        try {
+            user = ParseUser.getCurrentUser();
+            if (user == null) {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            }
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
+
 
         AndroidDrawer drawer = new AndroidDrawer
                 (this,R.id.drawer_layout_profile,R.id.left_drawer_profile, R.id.profile_profile_drawer_pic);
@@ -66,6 +88,11 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_drawer);
         toolbar.setNavigationOnClickListener(new NavigationListener(drawer));
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException np) {
+            np.printStackTrace();
+        }
 
 
         /*
@@ -100,33 +127,22 @@ public class ProfileActivity extends AppCompatActivity {
         //text.setText(in);
         text.setText(InterestText);
 
-        SwipePhotoAdapter adapter = new SwipePhotoAdapter(ProfileActivity.KEY_USERPROFILE, "");
-        myPager = (ViewPager) findViewById(R.id.viewpager_layout);
-        myPager.setAdapter(adapter);
-        myPager.setCurrentItem(0);
+        adapter = new SwipePhotoAdapter(ProfileActivity.KEY_USERPROFILE, "");
+        adapter.pullPhotos();
 
-        ViewTreeObserver viewTreeObserver = myPager.getViewTreeObserver();
-        final DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400);
-                float dpheight = displayMetrics.heightPixels / 3 * 2;
-                int width = myPager.getWidth();
-
-                params.width = width;
-                params.height = (int) dpheight;
-
-                myPager.setLayoutParams(params);
-            }
-        });
+        mHandler = new Handler();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem item = menu.getItem(0);
+        SpannableString s = new SpannableString(item.getTitle());
+        s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+        item.setTitle(s);
+
         return true;
     }
 
@@ -141,11 +157,58 @@ public class ProfileActivity extends AppCompatActivity {
         if (id == R.id.action_edit) {
             jumpedToNew = true;
             Intent intent = new Intent(this, EditProfileActivity.class);
+            text = (TextView) findViewById(R.id.Aboutyou_textview);
+            intent.putExtra("bioText", text.getText().toString());
             startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (adapter.getCurrentUserPhotoBool() || !adapter.getAllNullBool()) {
+                    Log.e(getClass().getSimpleName(), "Updated images in the slider");
+                    mHandler.removeCallbacks(this);
+
+
+                    myPager = (ViewPager) findViewById(R.id.viewpager_layout);
+                    myPager.setAdapter(adapter);
+                    myPager.setCurrentItem(0);
+
+                    adapter.notifyDataSetChanged();
+                    myPager.destroyDrawingCache();
+
+                    ViewTreeObserver viewTreeObserver = myPager.getViewTreeObserver();
+                    final DisplayMetrics displayMetrics = ProfileActivity.this.getResources().getDisplayMetrics();
+                    viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400);
+                            float dpheight = displayMetrics.heightPixels / 3 * 2;
+                            int width = myPager.getWidth();
+
+                            params.width = width;
+                            params.height = (int) dpheight;
+
+                            myPager.setLayoutParams(params);
+                        }
+                    });
+
+                    //adapter.notifyDataSetChanged();
+                } else {
+                    mHandler.postDelayed(this, WAIT_TIME);
+                }
+            }
+        }, WAIT_TIME);
+
     }
 
     @Override

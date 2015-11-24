@@ -47,6 +47,7 @@ import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.parse.ParseUser;
 
 /**
  * @author Oleg Orlov
@@ -61,7 +62,7 @@ public class ConversationActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_LOGIN_SCREEN = 191;
     private static final int REQUEST_CODE_SETTINGS_SCREEN = 192;
 
-    /** Switch it to <code>true</code> to see {@link #AtlasConversationsScreen} Query support in action */
+    /** Switch it to <code>true</code> to see {@link } Query support in action */
     private static final boolean USE_QUERY = false;
 
     private YouWhoApplication app;
@@ -72,11 +73,23 @@ public class ConversationActivity extends AppCompatActivity {
     private boolean forceLogout = false;
     private boolean showSplash = true;
 
+    private ParseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.atlas_screen_conversations);
         this.app = (YouWhoApplication) getApplication();
+
+        try {
+            user = ParseUser.getCurrentUser();
+            if (user == null) {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            }
+        } catch (NullPointerException n) {
+            n.printStackTrace();
+        }
 
         // Android drawer init
         // Creating an android drawer to slide in from the left side
@@ -88,6 +101,7 @@ public class ConversationActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         toolbar.setTitle("Matched");
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_drawer);
         toolbar.setNavigationOnClickListener(new NavigationListener(mDrawer));
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -267,7 +281,7 @@ public class ConversationActivity extends AppCompatActivity {
     private void prepareActionBar() {
         ((TextView)findViewById(R.id.atlas_actionbar_title_text)).setText("Matched");
         ImageView menuBtn = (ImageView) findViewById(R.id.atlas_actionbar_left_btn);
-        menuBtn.setImageResource(R.drawable.atlas_ctl_btn_menu);
+        menuBtn.setImageResource(R.mipmap.ic_drawer);
         menuBtn.setVisibility(View.VISIBLE);
         menuBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
